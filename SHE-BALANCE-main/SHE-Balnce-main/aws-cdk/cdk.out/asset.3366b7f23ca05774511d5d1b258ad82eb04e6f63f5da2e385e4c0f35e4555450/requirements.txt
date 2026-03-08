@@ -1,0 +1,7 @@
+# AWS Lambda Requirements for SkillScan AI
+# These packages are included in Lambda Python 3.11 runtime by default
+
+boto3>=1.28.0
+botocore>=1.31.0
+
+# No additional packages needed - all dependencies are in Lambda runtime

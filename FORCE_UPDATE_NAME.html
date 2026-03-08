@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Force Update Name - SheBalance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        
+        .status {
+            font-size: 18px;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f0f0f0;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffeaa7;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .info-box {
+            text-align: left;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .countdown {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🔧</div>
+        <h1>Force Update Name</h1>
+        
+        <div class="status warning" id="status">
+            <strong>Current Issue:</strong><br>
+            Dashboard shows "Rukaiya Ghadiali"<br>
+            Need to update to "Rukaiya Khan"
+        </div>
+        
+        <div class="info-box" id="currentInfo">
+            <strong>Checking current data...</strong>
+        </div>
+        
+        <button onclick="forceUpdate()" id="updateBtn">
+            ⚡ FORCE UPDATE NOW
+        </button>
+        
+        <div id="countdown"></div>
+    </div>
+    
+    <script>
+        // Check current data on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const infoBox = document.getElementById('currentInfo');
+            
+            try {
+                const userDataStr = localStorage.getItem('shebalance_user');
+                
+                if (!userDataStr) {
+                    infoBox.innerHTML = `
+                        <strong>⚠️ No user data found!</strong><br>
+                        You need to login first.<br>
+                        <br>
+                        <a href="http://localhost:8080/login.html" style="color: #667eea;">Go to Login Page</a>
+                    `;
+                    document.getElementById('updateBtn').disabled = true;
+                    return;
+                }
+                
+                const userData = JSON.parse(userDataStr);
+                
+                infoBox.innerHTML = `
+                    <strong>📊 Current Cached Data:</strong><br>
+                    <br>
+                    <strong>Name:</strong> ${userData.name || userData.fullName || 'Unknown'}<br>
+                    <strong>Email:</strong> ${userData.email || 'Unknown'}<br>
+                    <strong>Role:</strong> ${userData.role || 'Unknown'}<br>
+                    <br>
+                    ${userData.name === 'Rukaiya Khan' || userData.fullName === 'Rukaiya Khan' 
+                        ? '✅ <strong style="color: green;">Already showing "Rukaiya Khan"!</strong><br>Try refreshing your dashboard.' 
+                        : '❌ <strong style="color: red;">Showing wrong name!</strong><br>Click button below to fix.'}
+                `;
+                
+            } catch (error) {
+                infoBox.innerHTML = `
+                    <strong>❌ Error reading data:</strong><br>
+                    ${error.message}
+                `;
+            }
+        });
+        
+        function forceUpdate() {
+            const statusDiv = document.getElementById('status');
+            const infoBox = document.getElementById('currentInfo');
+            const countdownDiv = document.getElementById('countdown');
+            const updateBtn = document.getElementById('updateBtn');
+            
+            try {
+                // Get current user data
+                const userDataStr = localStorage.getItem('shebalance_user');
+                
+                if (!userDataStr) {
+                    statusDiv.className = 'status error';
+                    statusDiv.innerHTML = '<strong>❌ No user data found!</strong><br>Please login first.';
+                    return;
+                }
+                
+                const userData = JSON.parse(userDataStr);
+                
+                // Show before state
+                infoBox.innerHTML = `
+                    <strong>🔄 UPDATING...</strong><br>
+                    <br>
+                    <strong>Before:</strong> ${userData.name || userData.fullName}<br>
+                    <strong>After:</strong> Rukaiya Khan
+                `;
+                
+                // Update the name
+                userData.name = 'Rukaiya Khan';
+                userData.fullName = 'Rukaiya Khan';
+                
+                // Save back to localStorage
+                localStorage.setItem('shebalance_user', JSON.stringify(userData));
+                
+                // Success!
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = '<strong>✅ NAME UPDATED SUCCESSFULLY!</strong><br>Redirecting to dashboard...';
+                
+                infoBox.innerHTML = `
+                    <strong>✅ UPDATE COMPLETE!</strong><br>
+                    <br>
+                    <strong>Old Name:</strong> <s>Rukaiya Ghadiali</s><br>
+                    <strong>New Name:</strong> <strong style="color: green;">Rukaiya Khan</strong> ✅<br>
+                    <br>
+                    Dashboard will now show "Rukaiya Khan"!
+                `;
+                
+                updateBtn.disabled = true;
+                updateBtn.textContent = '✅ UPDATED!';
+                
+                // Countdown and redirect
+                let seconds = 3;
+                countdownDiv.className = 'countdown';
+                countdownDiv.textContent = `Redirecting in ${seconds}...`;
+                
+                const interval = setInterval(() => {
+                    seconds--;
+                    if (seconds > 0) {
+                        countdownDiv.textContent = `Redirecting in ${seconds}...`;
+                    } else {
+                        clearInterval(interval);
+                        countdownDiv.textContent = 'Redirecting now...';
+                        window.location.href = 'http://localhost:8080/dashboard.html';
+                    }
+                }, 1000);
+                
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = '<strong>❌ Error:</strong><br>' + error.message;
+                
+                infoBox.innerHTML = `
+                    <strong>❌ Update Failed!</strong><br>
+                    ${error.message}<br>
+                    <br>
+                    Try logging out and logging in again.
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

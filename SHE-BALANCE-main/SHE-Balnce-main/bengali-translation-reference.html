@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bengali Translation Reference - SheBalance</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #8D6E63 0%, #5D4037 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            color: #8D6E63;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #8D6E63;
+        }
+        
+        .section-header i {
+            font-size: 28px;
+            color: #8D6E63;
+        }
+        
+        .section-header h2 {
+            color: #5D4037;
+            font-size: 24px;
+        }
+        
+        .translation-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .translation-table th {
+            background: #F5F5DC;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #5D4037;
+            border-bottom: 2px solid #8D6E63;
+        }
+        
+        .translation-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .translation-table tr:hover {
+            background: #f9f9f9;
+        }
+        
+        .key-column {
+            font-family: monospace;
+            color: #666;
+            font-size: 13px;
+            width: 200px;
+        }
+        
+        .english-column {
+            color: #333;
+            font-weight: 500;
+            width: 300px;
+        }
+        
+        .bengali-column {
+            color: #8D6E63;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .badge-complete {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .search-box {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #8D6E63;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇮🇳 বাংলা (Bengali) Translation Reference</h1>
+            <p>Complete translation guide for SheBalance Artisan Dashboard</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">89+</div>
+                <div class="stat-label">Total Translations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Coverage</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8</div>
+                <div class="stat-label">Categories</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">✓</div>
+                <div class="stat-label">Production Ready</div>
+            </div>
+        </div>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Search translations... (e.g., 'dashboard', 'order', 'progress')">
+        </div>
+        
+        <!-- Navigation & Header -->
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-compass"></i>
+                <h2>Navigation & Header <span class="badge badge-complete">12 translations</span></h2>
+            </div>
+            <table class="translation-table">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>English</th>
+                        <th>Bengali (বাংলা)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="key-column">greeting</td>
+                        <td class="english-column">Hello</td>
+                        <td class="bengali-column">নমস্কার</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">dashboard</td>
+                        <td class="english-column">Dashboard</td>
+                        <td class="bengali-column">ড্যাশবোর্ড</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">aiSakhi</td>
+                        <td class="english-column">AI Sakhi Assistant</td>
+                        <td class="bengali-column">AI সখি সহায়ক</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">mySkills</td>
+                        <td class="english-column">My Skills</td>
+                        <td class="bengali-column">আমার দক্ষতা</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">opportunities</td>
+                        <td class="english-column">Opportunities</td>
+                        <td class="bengali-column">সুযোগ</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">foodMarketplace</td>
+                        <td class="english-column">Food Marketplace</td>
+                        <td class="bengali-column">খাদ্য বাজার</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">community</td>
+                        <td class="english-column">Community</td>
+                        <td class="bengali-column">সম্প্রদায়</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">progress</td>
+                        <td class="english-column">Progress</td>
+                        <td class="bengali-column">অগ্রগতি</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">settings</td>
+                        <td class="english-column">Settings</td>
+                        <td class="bengali-column">সেটিংস</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">logout</td>
+                        <td class="english-column">Logout</td>
+                        <td class="bengali-column">লগআউট</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">notifications</td>
+                        <td class="english-column">Notifications</td>
+                        <td class="bengali-column">বিজ্ঞপ্তি</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">voiceCommand</td>
+                        <td class="english-column">Voice Command</td>
+                        <td class="bengali-column">ভয়েস কমান্ড</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Bulk Orders -->
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-boxes"></i>
+                <h2>Bulk Orders Management <span class="badge badge-complete">15 translations</span></h2>
+            </div>
+            <table class="translation-table">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>English</th>
+                        <th>Bengali (বাংলা)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="key-column">bulkOrdersManagement</td>
+                        <td class="english-column">Bulk Orders Management</td>
+                        <td class="bengali-column">বাল্ক অর্ডার ব্যবস্থাপনা</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">updateProgress</td>
+                        <td class="english-column">Update Progress</td>
+                        <td class="bengali-column">অগ্রগতি আপডেট করুন</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">needHelp</td>
+                        <td class="english-column">Need Help</td>
+                        <td class="bengali-column">সাহায্য প্রয়োজন</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">actionRequired</td>
+                        <td class="english-column">Action Required!</td>
+                        <td class="bengali-column">পদক্ষেপ প্রয়োজন!</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">ordersNeedUpdate</td>
+                        <td class="english-column">order(s) need progress updates</td>
+                        <td class="bengali-column">অর্ডারগুলির অগ্রগতি আপডেট প্রয়োজন</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">noBulkOrders</td>
+                        <td class="english-column">No bulk orders yet</td>
+                        <td class="bengali-column">এখনও কোনও বাল্ক অর্ডার নেই</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">bulkOrdersWillAppear</td>
+                        <td class="english-column">Your bulk orders will appear here</td>
+                        <td class="bengali-column">আপনার বাল্ক অর্ডারগুলি এখানে প্রদর্শিত হবে</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">loadingOrders</td>
+                        <td class="english-column">Loading your orders...</td>
+                        <td class="bengali-column">অর্ডার লোড হচ্ছে...</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">pieces</td>
+                        <td class="english-column">pieces</td>
+                        <td class="bengali-column">টুকরা</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">daysSinceUpdate</td>
+                        <td class="english-column">days since update</td>
+                        <td class="bengali-column">আপডেটের পর থেকে দিন</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">progressPercentage</td>
+                        <td class="english-column">Progress</td>
+                        <td class="bengali-column">অগ্রগতি</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">reminderNeeded</td>
+                        <td class="english-column">Reminder Needed!</td>
+                        <td class="bengali-column">অনুস্মারক প্রয়োজন!</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">noProgressUpdate</td>
+                        <td class="english-column">No progress update for</td>
+                        <td class="bengali-column">কোনও অগ্রগতি আপডেট নেই</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">daysAgo</td>
+                        <td class="english-column">days ago</td>
+                        <td class="bengali-column">দিন আগে</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">hoursAgo</td>
+                        <td class="english-column">hours ago</td>
+                        <td class="bengali-column">ঘন্টা আগে</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Order Status -->
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-tasks"></i>
+                <h2>Order Status <span class="badge badge-complete">4 translations</span></h2>
+            </div>
+            <table class="translation-table">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>English</th>
+                        <th>Bengali (বাংলা)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="key-column">pending</td>
+                        <td class="english-column">Pending</td>
+                        <td class="bengali-column">মুলতুবি</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">inProgress</td>
+                        <td class="english-column">In Progress</td>
+                        <td class="bengali-column">চলমান</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">completed</td>
+                        <td class="english-column">Completed</td>
+                        <td class="bengali-column">সম্পন্ন</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">cancelled</td>
+                        <td class="english-column">Cancelled</td>
+                        <td class="bengali-column">বাতিল</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Common Actions -->
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-hand-pointer"></i>
+                <h2>Common Actions <span class="badge badge-complete">10 translations</span></h2>
+            </div>
+            <table class="translation-table">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>English</th>
+                        <th>Bengali (বাংলা)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="key-column">submit</td>
+                        <td class="english-column">Submit</td>
+                        <td class="bengali-column">জমা দিন</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">cancel</td>
+                        <td class="english-column">Cancel</td>
+                        <td class="bengali-column">বাতিল করুন</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">save</td>
+                        <td class="english-column">Save</td>
+                        <td class="bengali-column">সংরক্ষণ করুন</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">close</td>
+                        <td class="english-column">Close</td>
+                        <td class="bengali-column">বন্ধ করুন</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">loading</td>
+                        <td class="english-column">Loading...</td>
+                        <td class="bengali-column">লোড হচ্ছে...</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">error</td>
+                        <td class="english-column">Error</td>
+                        <td class="bengali-column">ত্রুটি</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">success</td>
+                        <td class="english-column">Success</td>
+                        <td class="bengali-column">সফলতা</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">apply</td>
+                        <td class="english-column">Apply</td>
+                        <td class="bengali-column">আবেদন করুন</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">selectLanguage</td>
+                        <td class="english-column">Select Language</td>
+                        <td class="bengali-column">ভাষা নির্বাচন করুন</td>
+                    </tr>
+                    <tr>
+                        <td class="key-column">languagePreference</td>
+                        <td class="english-column">Language Preference</td>
+                        <td class="bengali-column">ভাষা পছন্দ</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('.translation-table tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

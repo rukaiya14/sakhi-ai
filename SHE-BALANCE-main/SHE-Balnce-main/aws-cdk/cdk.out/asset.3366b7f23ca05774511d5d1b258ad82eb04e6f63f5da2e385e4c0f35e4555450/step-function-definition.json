@@ -1,0 +1,364 @@
+{
+  "Comment": "AI Sakhi - Behavioral Resilience Insurance Workflow",
+  "StartAt": "ScanArtisanActivity",
+  "States": {
+    "ScanArtisanActivity": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:REGION:ACCOUNT_ID:function:ScanArtisanActivity",
+        "Payload": {
+          "tableName": "ArtisanActivity",
+          "inactivityThreshold": 3
+        }
+      },
+      "ResultPath": "$.scanResult",
+      "Next": "CheckInactiveArtisans",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "LogError"
+        }
+      ]
+    },
+    "CheckInactiveArtisans": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.scanResult.Payload.inactiveArtisans",
+          "IsPresent": true,
+          "Next": "ProcessInactiveArtisans"
+        }
+      ],
+      "Default": "NoActionNeeded"
+    },
+    "ProcessInactiveArtisans": {
+      "Type": "Map",
+      "ItemsPath": "$.scanResult.Payload.inactiveArtisans",
+      "MaxConcurrency": 5,
+      "Iterator": {
+        "StartAt": "CheckThreshold1",
+        "States": {
+          "CheckThreshold1": {
+            "Type": "Choice",
+            "Choices": [
+              {
+                "Variable": "$.daysInactive",
+                "NumericGreaterThanEquals": 3,
+                "Next": "SendWhatsAppMessage"
+              }
+            ],
+            "Default": "SkipIntervention"
+          },
+          "SendWhatsAppMessage": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Parameters": {
+              "FunctionName": "arn:aws:lambda:REGION:ACCOUNT_ID:function:SendWhatsAppMessage",
+              "Payload": {
+                "artisanId.$": "$.artisanId",
+                "artisanName.$": "$.artisanName",
+                "phoneNumber.$": "$.phoneNumber",
+                "daysInactive.$": "$.daysInactive",
+                "messageType": "wellness_check"
+              }
+            },
+            "ResultPath": "$.whatsappResult",
+            "Next": "LogWhatsAppIntervention",
+            "Retry": [
+              {
+                "ErrorEquals": [
+                  "Lambda.ServiceException",
+                  "Lambda.AWSLambdaException"
+                ],
+                "IntervalSeconds": 5,
+                "MaxAttempts": 3,
+                "BackoffRate": 2
+              }
+            ],
+            "Catch": [
+              {
+                "ErrorEquals": ["States.ALL"],
+                "ResultPath": "$.whatsappError",
+                "Next": "LogWhatsAppFailure"
+              }
+            ]
+          },
+          "LogWhatsAppIntervention": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::dynamodb:putItem",
+            "Parameters": {
+              "TableName": "InterventionLog",
+              "Item": {
+                "interventionId": {
+                  "S.$": "States.UUID()"
+                },
+                "artisanId": {
+                  "S.$": "$.artisanId"
+                },
+                "timestamp": {
+                  "S.$": "$$.State.EnteredTime"
+                },
+                "interventionType": {
+                  "S": "whatsapp_message"
+                },
+                "status": {
+                  "S": "sent"
+                },
+                "daysInactive": {
+                  "N.$": "States.Format('{}', $.daysInactive)"
+                },
+                "messageId": {
+                  "S.$": "$.whatsappResult.Payload.messageId"
+                }
+              }
+            },
+            "ResultPath": "$.logResult",
+            "Next": "WaitForReply"
+          },
+          "WaitForReply": {
+            "Type": "Wait",
+            "Seconds": 86400,
+            "Next": "CheckReplyStatus"
+          },
+          "CheckReplyStatus": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Parameters": {
+              "FunctionName": "arn:aws:lambda:REGION:ACCOUNT_ID:function:CheckWhatsAppReply",
+              "Payload": {
+                "artisanId.$": "$.artisanId",
+                "messageId.$": "$.whatsappResult.Payload.messageId"
+              }
+            },
+            "ResultPath": "$.replyStatus",
+            "Next": "EvaluateReply"
+          },
+          "EvaluateReply": {
+            "Type": "Choice",
+            "Choices": [
+              {
+                "Variable": "$.replyStatus.Payload.hasReplied",
+                "BooleanEquals": true,
+                "Next": "InterventionSuccessful"
+              },
+              {
+                "Variable": "$.replyStatus.Payload.hasReplied",
+                "BooleanEquals": false,
+                "Next": "EscalateToVoiceCall"
+              }
+            ],
+            "Default": "EscalateToVoiceCall"
+          },
+          "EscalateToVoiceCall": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Parameters": {
+              "FunctionName": "arn:aws:lambda:REGION:ACCOUNT_ID:function:GenerateVoiceCall",
+              "Payload": {
+                "artisanId.$": "$.artisanId",
+                "artisanName.$": "$.artisanName",
+                "phoneNumber.$": "$.phoneNumber",
+                "daysInactive.$": "$.daysInactive",
+                "language": "hi-IN"
+              }
+            },
+            "ResultPath": "$.voiceCallResult",
+            "Next": "LogVoiceCallIntervention",
+            "Retry": [
+              {
+                "ErrorEquals": [
+                  "Lambda.ServiceException",
+                  "Lambda.AWSLambdaException"
+                ],
+                "IntervalSeconds": 10,
+                "MaxAttempts": 2,
+                "BackoffRate": 2
+              }
+            ],
+            "Catch": [
+              {
+                "ErrorEquals": ["States.ALL"],
+                "ResultPath": "$.voiceCallError",
+                "Next": "AlertCommunitySupport"
+              }
+            ]
+          },
+          "LogVoiceCallIntervention": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::dynamodb:putItem",
+            "Parameters": {
+              "TableName": "InterventionLog",
+              "Item": {
+                "interventionId": {
+                  "S.$": "States.UUID()"
+                },
+                "artisanId": {
+                  "S.$": "$.artisanId"
+                },
+                "timestamp": {
+                  "S.$": "$$.State.EnteredTime"
+                },
+                "interventionType": {
+                  "S": "voice_call"
+                },
+                "status": {
+                  "S": "completed"
+                },
+                "daysInactive": {
+                  "N.$": "States.Format('{}', $.daysInactive)"
+                },
+                "callId": {
+                  "S.$": "$.voiceCallResult.Payload.callId"
+                },
+                "audioUrl": {
+                  "S.$": "$.voiceCallResult.Payload.audioUrl"
+                }
+              }
+            },
+            "ResultPath": "$.voiceLogResult",
+            "Next": "UpdateResilienceMetric"
+          },
+          "AlertCommunitySupport": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Parameters": {
+              "FunctionName": "arn:aws:lambda:REGION:ACCOUNT_ID:function:AlertCommunitySupport",
+              "Payload": {
+                "artisanId.$": "$.artisanId",
+                "artisanName.$": "$.artisanName",
+                "severity": "high",
+                "reason": "no_response_to_automated_interventions"
+              }
+            },
+            "ResultPath": "$.communityAlertResult",
+            "Next": "UpdateResilienceMetric"
+          },
+          "InterventionSuccessful": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::dynamodb:updateItem",
+            "Parameters": {
+              "TableName": "ArtisanActivity",
+              "Key": {
+                "artisanId": {
+                  "S.$": "$.artisanId"
+                }
+              },
+              "UpdateExpression": "SET interventionStatus = :status, lastInterventionDate = :date",
+              "ExpressionAttributeValues": {
+                ":status": {
+                  "S": "responded"
+                },
+                ":date": {
+                  "S.$": "$$.State.EnteredTime"
+                }
+              }
+            },
+            "ResultPath": "$.updateResult",
+            "Next": "UpdateResilienceMetric"
+          },
+          "UpdateResilienceMetric": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Parameters": {
+              "FunctionName": "arn:aws:lambda:REGION:ACCOUNT_ID:function:UpdateResilienceMetric",
+              "Payload": {
+                "artisanId.$": "$.artisanId",
+                "interventionType.$": "$.interventionType",
+                "responseTime.$": "$.responseTime",
+                "outcome.$": "$.outcome"
+              }
+            },
+            "ResultPath": "$.metricResult",
+            "End": true
+          },
+          "LogWhatsAppFailure": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::dynamodb:putItem",
+            "Parameters": {
+              "TableName": "InterventionLog",
+              "Item": {
+                "interventionId": {
+                  "S.$": "States.UUID()"
+                },
+                "artisanId": {
+                  "S.$": "$.artisanId"
+                },
+                "timestamp": {
+                  "S.$": "$$.State.EnteredTime"
+                },
+                "interventionType": {
+                  "S": "whatsapp_message"
+                },
+                "status": {
+                  "S": "failed"
+                },
+                "error": {
+                  "S.$": "$.whatsappError.Error"
+                }
+              }
+            },
+            "ResultPath": "$.failureLogResult",
+            "Next": "EscalateToVoiceCall"
+          },
+          "SkipIntervention": {
+            "Type": "Pass",
+            "End": true
+          }
+        }
+      },
+      "ResultPath": "$.processingResults",
+      "Next": "WorkflowComplete"
+    },
+    "NoActionNeeded": {
+      "Type": "Pass",
+      "Result": {
+        "message": "No inactive artisans found. All artisans are active."
+      },
+      "End": true
+    },
+    "WorkflowComplete": {
+      "Type": "Succeed"
+    },
+    "LogError": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:putItem",
+      "Parameters": {
+        "TableName": "WorkflowErrors",
+        "Item": {
+          "errorId": {
+            "S.$": "States.UUID()"
+          },
+          "timestamp": {
+            "S.$": "$$.State.EnteredTime"
+          },
+          "error": {
+            "S.$": "$.error.Error"
+          },
+          "cause": {
+            "S.$": "$.error.Cause"
+          }
+        }
+      },
+      "Next": "WorkflowFailed"
+    },
+    "WorkflowFailed": {
+      "Type": "Fail",
+      "Error": "WorkflowExecutionFailed",
+      "Cause": "An error occurred during workflow execution"
+    }
+  }
+}

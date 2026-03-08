@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnose Bulk Orders Issue</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+        }
+        .section {
+            background: #252526;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #007acc;
+        }
+        h2 {
+            color: #4ec9b0;
+            margin-top: 0;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background: #1e3a1e; color: #4ec9b0; }
+        .error { background: #3a1e1e; color: #f48771; }
+        .warning { background: #3a3a1e; color: #dcdcaa; }
+        .info { background: #1e2a3a; color: #9cdcfe; }
+        button {
+            background: #0e639c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-family: inherit;
+        }
+        button:hover { background: #1177bb; }
+        pre {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            border: 1px solid #3e3e42;
+        }
+        .code { color: #ce9178; }
+        .key { color: #9cdcfe; }
+        .value { color: #b5cea8; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Bulk Orders Diagnostic Tool</h1>
+
+    <div class="section">
+        <h2>1. Check LocalStorage</h2>
+        <div id="localStorageCheck"></div>
+        <button onclick="checkLocalStorage()">Check Storage</button>
+        <button onclick="clearAndRelogin()">Clear & Force Re-login</button>
+    </div>
+
+    <div class="section">
+        <h2>2. Test Backend Connection</h2>
+        <div id="backendCheck"></div>
+        <button onclick="testBackend()">Test Backend</button>
+    </div>
+
+    <div class="section">
+        <h2>3. Test Orders API</h2>
+        <div id="ordersCheck"></div>
+        <button onclick="testOrdersAPI()">Test Orders API</button>
+    </div>
+
+    <div class="section">
+        <h2>4. Backend Logs</h2>
+        <div id="backendLogs"></div>
+        <button onclick="checkBackendLogs()">Check Logs</button>
+    </div>
+
+    <script>
+        function checkLocalStorage() {
+            const div = document.getElementById('localStorageCheck');
+            
+            const token = localStorage.getItem('shebalance_token');
+            const userStr = localStorage.getItem('shebalance_user');
+            const user = userStr ? JSON.parse(userStr) : null;
+
+            let html = '';
+
+            if (token) {
+                html += `<div class="status success">✅ Token found: ${token.substring(0, 20)}...</div>`;
+            } else {
+                html += `<div class="status error">❌ No token found in localStorage</div>`;
+            }
+
+            if (user) {
+                html += `<div class="status success">✅ User data found</div>`;
+                html += `<pre>${JSON.stringify(user, null, 2)}</pre>`;
+            } else {
+                html += `<div class="status error">❌ No user data found</div>`;
+            }
+
+            // Check if token is in user object
+            if (user && user.token) {
+                html += `<div class="status warning">⚠️ Token also stored in user object: ${user.token.substring(0, 20)}...</div>`;
+            }
+
+            div.innerHTML = html;
+        }
+
+        async function testBackend() {
+            const div = document.getElementById('backendCheck');
+            div.innerHTML = '<div class="status info">Testing backend connection...</div>';
+
+            try {
+                const response = await fetch('http://localhost:5000/api/health');
+                
+                if (response.ok) {
+                    div.innerHTML = '<div class="status success">✅ Backend is running on port 5000</div>';
+                } else {
+                    div.innerHTML = '<div class="status error">❌ Backend responded with error: ' + response.status + '</div>';
+                }
+            } catch (error) {
+                div.innerHTML = `<div class="status error">❌ Cannot connect to backend: ${error.message}</div>`;
+                div.innerHTML += '<div class="status warning">⚠️ Make sure backend is running: node server.js</div>';
+            }
+        }
+
+        async function testOrdersAPI() {
+            const div = document.getElementById('ordersCheck');
+            div.innerHTML = '<div class="status info">Testing orders API...</div>';
+
+            const token = localStorage.getItem('shebalance_token');
+            
+            if (!token) {
+                div.innerHTML = '<div class="status error">❌ No token found. Please login first.</div>';
+                return;
+            }
+
+            try {
+                console.log('Calling API with token:', token.substring(0, 20) + '...');
+                
+                const response = await fetch('http://localhost:5000/api/orders', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                console.log('Response status:', response.status);
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                if (response.ok) {
+                    const orders = data.orders || [];
+                    const bulkOrders = orders.filter(o => o.orderType === 'bulk');
+                    
+                    div.innerHTML = `
+                        <div class="status success">✅ Orders API working!</div>
+                        <div class="status info">Total orders: ${orders.length}</div>
+                        <div class="status info">Bulk orders: ${bulkOrders.length}</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    div.innerHTML = `
+                        <div class="status error">❌ API Error: ${data.error || 'Unknown error'}</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                div.innerHTML = `
+                    <div class="status error">❌ Request failed: ${error.message}</div>
+                    <pre>${error.stack}</pre>
+                `;
+            }
+        }
+
+        function checkBackendLogs() {
+            const div = document.getElementById('backendLogs');
+            div.innerHTML = `
+                <div class="status info">Check your terminal/console where you ran "node server.js"</div>
+                <div class="status warning">Look for errors like:</div>
+                <pre>
+- "ReferenceError: pool is not defined"
+- "Error loading bulk orders"
+- "Failed to fetch orders"
+- Any DynamoDB errors
+                </pre>
+            `;
+        }
+
+        async function clearAndRelogin() {
+            if (!confirm('This will clear your session and redirect to login. Continue?')) {
+                return;
+            }
+
+            localStorage.removeItem('shebalance_token');
+            localStorage.removeItem('shebalance_user');
+            
+            alert('Storage cleared. Redirecting to login...');
+            window.location.href = 'SHE-BALANCE-main/SHE-Balnce-main/login.html';
+        }
+
+        // Auto-run checks on load
+        window.addEventListener('load', () => {
+            checkLocalStorage();
+            testBackend();
+        });
+    </script>
+</body>
+</html>

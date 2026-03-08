@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress - SheBalance</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span>SheBalance</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="skills.html" class="nav-item">
+                <i class="fas fa-star"></i>
+                <span>My Skills</span>
+            </a>
+            <a href="#opportunities" class="nav-item">
+                <i class="fas fa-briefcase"></i>
+                <span>Opportunities</span>
+            </a>
+            <a href="#food-marketplace" class="nav-item">
+                <i class="fas fa-utensils"></i>
+                <span>Food Marketplace</span>
+            </a>
+            <a href="#community" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Community</span>
+            </a>
+            <a href="progress.html" class="nav-item active">
+                <i class="fas fa-chart-line"></i>
+                <span>Progress</span>
+            </a>
+            <a href="#settings" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Your Progress Journey</h1>
+            </div>
+            <div class="header-right">
+                <button class="voice-btn" onclick="startVoiceCommand()">
+                    <i class="fas fa-microphone"></i>
+                    Voice Command
+                </button>
+                <div class="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="profile">
+                    <div class="profile-pic"></div>
+                    <span id="userNameProfile">Rukaiya Ghadiali</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Progress Content -->
+        <div class="progress-content">
+            <!-- Progress Overview -->
+            <div class="progress-overview">
+                <div class="overview-card">
+                    <div class="overview-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3>+300%</h3>
+                        <p>Income Growth</p>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3>5</h3>
+                        <p>Skills Mastered</p>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3>3.5 hrs</h3>
+                        <p>Daily Time Saved</p>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3>92%</h3>
+                        <p>Goal Achievement</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Progress Chart -->
+            <div class="main-chart-section">
+                <div class="chart-header">
+                    <h2>Growth Journey Over Time</h2>
+                    <div class="chart-controls">
+                        <button class="btn-outline active" onclick="setChartPeriod('6months')">6 Months</button>
+                        <button class="btn-outline" onclick="setChartPeriod('1year')">1 Year</button>
+                        <button class="btn-outline" onclick="setChartPeriod('all')">All Time</button>
+                    </div>
+                </div>
+                <div class="main-chart-container">
+                    <canvas id="mainProgressChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Progress Breakdown -->
+            <div class="progress-breakdown">
+                <div class="breakdown-section">
+                    <h3>📊 Income Breakdown</h3>
+                    <div class="breakdown-chart">
+                        <canvas id="incomeChart"></canvas>
+                    </div>
+                    <div class="breakdown-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Embroidery</span>
+                            <span class="stat-value">₹7,500</span>
+                            <span class="stat-percent">60%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Cooking</span>
+                            <span class="stat-value">₹3,200</span>
+                            <span class="stat-percent">25%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Henna</span>
+                            <span class="stat-value">₹1,800</span>
+                            <span class="stat-percent">15%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="breakdown-section">
+                    <h3>⏰ Time Allocation</h3>
+                    <div class="breakdown-chart">
+                        <canvas id="timeChart"></canvas>
+                    </div>
+                    <div class="breakdown-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Household Work</span>
+                            <span class="stat-value">4.5 hrs</span>
+                            <span class="stat-percent">56%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Career Time</span>
+                            <span class="stat-value">2 hrs</span>
+                            <span class="stat-percent">25%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Self Care</span>
+                            <span class="stat-value">1.5 hrs</span>
+                            <span class="stat-percent">19%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievements Timeline -->
+            <div class="achievements-section">
+                <h3>🏆 Achievement Timeline</h3>
+                <div class="achievements-timeline">
+                    <div class="achievement-item">
+                        <div class="achievement-date">June 2024</div>
+                        <div class="achievement-badge">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="achievement-content">
+                            <h4>Career Catalyst Winner</h4>
+                            <p>Achieved 300% income growth milestone</p>
+                        </div>
+                    </div>
+                    <div class="achievement-item">
+                        <div class="achievement-date">May 2024</div>
+                        <div class="achievement-badge">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="achievement-content">
+                            <h4>5 Skills Mastered</h4>
+                            <p>Completed advanced embroidery certification</p>
+                        </div>
+                    </div>
+                    <div class="achievement-item">
+                        <div class="achievement-date">April 2024</div>
+                        <div class="achievement-badge">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="achievement-content">
+                            <h4>Time Optimization Expert</h4>
+                            <p>Saved 3+ hours daily through smart scheduling</p>
+                        </div>
+                    </div>
+                    <div class="achievement-item">
+                        <div class="achievement-date">March 2024</div>
+                        <div class="achievement-badge">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="achievement-content">
+                            <h4>Community Leader</h4>
+                            <p>Mentored 10+ women in their journey</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Goals Section -->
+            <div class="goals-section">
+                <h3>🎯 Current Goals</h3>
+                <div class="goals-grid">
+                    <div class="goal-card">
+                        <div class="goal-header">
+                            <h4>Monthly Income Target</h4>
+                            <span class="goal-progress">83%</span>
+                        </div>
+                        <div class="goal-bar">
+                            <div class="goal-fill" style="width: 83%"></div>
+                        </div>
+                        <div class="goal-details">
+                            <span>₹12,500 / ₹15,000</span>
+                        </div>
+                    </div>
+                    <div class="goal-card">
+                        <div class="goal-header">
+                            <h4>Skill Certifications</h4>
+                            <span class="goal-progress">60%</span>
+                        </div>
+                        <div class="goal-bar">
+                            <div class="goal-fill" style="width: 60%"></div>
+                        </div>
+                        <div class="goal-details">
+                            <span>3 / 5 Completed</span>
+                        </div>
+                    </div>
+                    <div class="goal-card">
+                        <div class="goal-header">
+                            <h4>Network Connections</h4>
+                            <span class="goal-progress">94%</span>
+                        </div>
+                        <div class="goal-bar">
+                            <div class="goal-fill" style="width: 94%"></div>
+                        </div>
+                        <div class="goal-details">
+                            <span>47 / 50 Connections</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script src="progress.js"></script>
+</body>
+</html>

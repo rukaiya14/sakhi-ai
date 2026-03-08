@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Test - SheBalance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #5D4037;
+        }
+        .language-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 12px 20px;
+            border: 2px solid #8D6E63;
+            background: white;
+            color: #5D4037;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #8D6E63;
+            color: white;
+        }
+        button.active {
+            background: #5D4037;
+            color: white;
+            border-color: #5D4037;
+        }
+        .test-content {
+            margin-top: 30px;
+            padding: 20px;
+            background: #F5F5DC;
+            border-radius: 8px;
+        }
+        .test-item {
+            margin: 15px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+        .label {
+            font-weight: 600;
+            color: #8D6E63;
+            margin-bottom: 5px;
+        }
+        .value {
+            color: #333;
+            font-size: 18px;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .debug {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-card">
+        <h1>🌍 Language System Test</h1>
+        <p>Test the multi-language system. Click a language button to change the language.</p>
+        
+        <div id="status" class="status"></div>
+        
+        <h3>Select Language:</h3>
+        <div class="language-buttons">
+            <button onclick="testLanguage('hi-IN')">🇮🇳 Hindi</button>
+            <button onclick="testLanguage('ta-IN')">🇮🇳 Tamil</button>
+            <button onclick="testLanguage('te-IN')">🇮🇳 Telugu</button>
+            <button onclick="testLanguage('bn-IN')">🇮🇳 Bengali</button>
+            <button onclick="testLanguage('mr-IN')">🇮🇳 Marathi</button>
+            <button onclick="testLanguage('gu-IN')">🇮🇳 Gujarati</button>
+            <button onclick="testLanguage('kn-IN')">🇮🇳 Kannada</button>
+            <button onclick="testLanguage('ml-IN')">🇮🇳 Malayalam</button>
+            <button onclick="testLanguage('pa-IN')">🇮🇳 Punjabi</button>
+            <button onclick="testLanguage('or-IN')">🇮🇳 Odia</button>
+            <button onclick="testLanguage('as-IN')">🇮🇳 Assamese</button>
+            <button onclick="testLanguage('en-IN')">🇬🇧 English</button>
+        </div>
+        
+        <div class="test-content">
+            <h3>Translated Content:</h3>
+            
+            <div class="test-item">
+                <div class="label">Dashboard:</div>
+                <div class="value" data-translate="dashboard">Dashboard</div>
+            </div>
+            
+            <div class="test-item">
+                <div class="label">My Skills:</div>
+                <div class="value" data-translate="mySkills">My Skills</div>
+            </div>
+            
+            <div class="test-item">
+                <div class="label">Active Skills:</div>
+                <div class="value" data-translate="activeSkills">Active Skills</div>
+            </div>
+            
+            <div class="test-item">
+                <div class="label">Opportunities:</div>
+                <div class="value" data-translate="opportunities">Opportunities</div>
+            </div>
+            
+            <div class="test-item">
+                <div class="label">Community:</div>
+                <div class="value" data-translate="community">Community</div>
+            </div>
+            
+            <div class="test-item">
+                <div class="label">Progress:</div>
+                <div class="value" data-translate="progress">Progress</div>
+            </div>
+            
+            <div class="test-item">
+                <div class="label">Greeting:</div>
+                <div class="value" data-translate="greeting">Hello</div>
+            </div>
+        </div>
+        
+        <div class="debug" id="debugLog">
+            <strong>Debug Log:</strong><br>
+        </div>
+    </div>
+    
+    <!-- Load translation system -->
+    <script src="translations.js"></script>
+    <script src="language-init.js"></script>
+    
+    <script>
+        // Capture console logs
+        const debugLog = document.getElementById('debugLog');
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            debugLog.innerHTML += args.join(' ') + '<br>';
+            debugLog.scrollTop = debugLog.scrollHeight;
+        };
+        
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.className = 'status ' + type;
+            status.textContent = message;
+        }
+        
+        function testLanguage(langCode) {
+            console.log('='.repeat(50));
+            console.log('🧪 Testing language:', langCode);
+            
+            try {
+                // Set language
+                localStorage.setItem('shebalance_language', langCode);
+                console.log('✅ Saved to localStorage');
+                
+                // Update active button
+                document.querySelectorAll('.language-buttons button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                event.target.classList.add('active');
+                
+                // Apply translations
+                if (typeof t === 'function') {
+                    document.querySelectorAll('[data-translate]').forEach(element => {
+                        const key = element.getAttribute('data-translate');
+                        const translation = t(key, langCode);
+                        console.log(`Translating "${key}" to "${translation}"`);
+                        element.textContent = translation;
+                    });
+                    
+                    showStatus(`✅ Language changed to ${langCode} successfully!`, 'success');
+                    console.log('✅ Translation complete');
+                } else {
+                    showStatus('❌ Translation function not found!', 'error');
+                    console.error('❌ t() function not available');
+                }
+                
+                // Trigger event
+                document.dispatchEvent(new CustomEvent('languageChanged', { 
+                    detail: { language: langCode } 
+                }));
+                console.log('📢 languageChanged event dispatched');
+                
+            } catch (error) {
+                showStatus('❌ Error: ' + error.message, 'error');
+                console.error('❌ Error:', error);
+            }
+        }
+        
+        // Initialize with current language
+        window.addEventListener('load', () => {
+            const currentLang = localStorage.getItem('shebalance_language') || 'hi-IN';
+            console.log('🚀 Page loaded. Current language:', currentLang);
+            
+            // Highlight active button
+            const buttons = document.querySelectorAll('.language-buttons button');
+            buttons.forEach(btn => {
+                if (btn.textContent.includes(currentLang.split('-')[0].toUpperCase())) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Apply current language
+            if (typeof t === 'function') {
+                testLanguage(currentLang);
+            }
+        });
+    </script>
+</body>
+</html>

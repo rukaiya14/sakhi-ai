@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12 Languages Dashboard Test</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="SHE-BALANCE-main/SHE-Balnce-main/translations.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 15px; padding: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        h1 { color: #5D4037; margin-bottom: 30px; text-align: center; }
+        .language-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 40px; }
+        .lang-btn { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-size: 16px; transition: all 0.3s; }
+        .lang-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); }
+        .lang-btn.active { background: linear-gradient(135deg, #5D4037, #8D6E63); }
+        .dashboard-preview { background: #f9f9f9; padding: 30px; border-radius: 10px; }
+        .section { margin-bottom: 30px; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .section h2 { color: #5D4037; margin-bottom: 15px; font-size: 24px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .stat-card { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; border-radius: 10px; text-align: center; }
+        .stat-number { font-size: 32px; font-weight: bold; display: block; margin-bottom: 5px; }
+        .stat-label { font-size: 14px; opacity: 0.9; }
+        .current-lang { text-align: center; padding: 15px; background: #8D6E63; color: white; border-radius: 10px; margin-bottom: 20px; font-size: 18px; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌍 SheBalance Dashboard - 12 Indian Languages</h1>
+        
+        <div class="current-lang" id="currentLangDisplay">
+            Current Language: <span id="currentLangName">English</span>
+        </div>
+        
+        <div class="language-selector">
+            <button class="lang-btn" onclick="changeLang('hi-IN')">🇮🇳 हिंदी (Hindi)</button>
+            <button class="lang-btn" onclick="changeLang('ta-IN')">🇮🇳 தமிழ் (Tamil)</button>
+            <button class="lang-btn" onclick="changeLang('te-IN')">🇮🇳 తెలుగు (Telugu)</button>
+            <button class="lang-btn" onclick="changeLang('bn-IN')">🇮🇳 বাংলা (Bengali)</button>
+            <button class="lang-btn" onclick="changeLang('mr-IN')">🇮🇳 मराठी (Marathi)</button>
+            <button class="lang-btn" onclick="changeLang('gu-IN')">🇮🇳 ગુજરાતી (Gujarati)</button>
+            <button class="lang-btn" onclick="changeLang('kn-IN')">🇮🇳 ಕನ್ನಡ (Kannada)</button>
+            <button class="lang-btn" onclick="changeLang('ml-IN')">🇮🇳 മലയാളം (Malayalam)</button>
+            <button class="lang-btn" onclick="changeLang('pa-IN')">🇮🇳 ਪੰਜਾਬੀ (Punjabi)</button>
+            <button class="lang-btn" onclick="changeLang('or-IN')">🇮🇳 ଓଡ଼ିଆ (Odia)</button>
+            <button class="lang-btn" onclick="changeLang('as-IN')">🇮🇳 অসমীয়া (Assamese)</button>
+            <button class="lang-btn active" onclick="changeLang('en-IN')">🇬🇧 English</button>
+        </div>
+        
+        <div class="dashboard-preview">
+            <div class="section">
+                <h2><i class="fas fa-home"></i> <span data-translate="dashboard">Dashboard</span></h2>
+                <p><span data-translate="greeting">Hello</span>, <strong>User</strong>!</p>
+            </div>
+            
+            <div class="section">
+                <h2><i class="fas fa-balance-scale"></i> <span data-translate="todaysBalance">Today's Balance</span></h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number">4.5</span>
+                        <span class="stat-label" data-translate="householdWork">Household Work</span>
+                        <div style="margin-top: 5px; font-size: 12px;"><span data-translate="hours">hours</span></div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">2</span>
+                        <span class="stat-label" data-translate="careerTime">Career Time</span>
+                        <div style="margin-top: 5px; font-size: 12px;"><span data-translate="hours">hours</span></div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">1.5</span>
+                        <span class="stat-label" data-translate="selfCare">Self Care</span>
+                        <div style="margin-top: 5px; font-size: 12px;"><span data-translate="hours">hours</span></div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">65%</span>
+                        <span class="stat-label" data-translate="progress">Progress</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2><i class="fas fa-chart-line"></i> <span data-translate="quickStats">Quick Stats</span></h2>
+                <div class="stats-grid">
+                    <div style="padding: 15px; background: #f5f5f5; border-radius: 8px;">
+                        <div style="font-size: 24px; font-weight: bold; color: #5D4037;">₹12,500</div>
+                        <div style="font-size: 14px; color: #666; margin-top: 5px;" data-translate="thisMonthsEarnings">This Month's Earnings</div>
+                    </div>
+                    <div style="padding: 15px; background: #f5f5f5; border-radius: 8px;">
+                        <div style="font-size: 24px; font-weight: bold; color: #5D4037;">8</div>
+                        <div style="font-size: 14px; color: #666; margin-top: 5px;" data-translate="activeProjects">Active Projects</div>
+                    </div>
+                    <div style="padding: 15px; background: #f5f5f5; border-radius: 8px;">
+                        <div style="font-size: 24px; font-weight: bold; color: #5D4037;">4.8</div>
+                        <div style="font-size: 14px; color: #666; margin-top: 5px;" data-translate="averageRating">Average Rating</div>
+                    </div>
+                    <div style="padding: 15px; background: #f5f5f5; border-radius: 8px;">
+                        <div style="font-size: 24px; font-weight: bold; color: #5D4037;">47</div>
+                        <div style="font-size: 14px; color: #666; margin-top: 5px;" data-translate="networkConnections">Network Connections</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2><i class="fas fa-fire"></i> <span data-translate="hotOpportunities">Hot Opportunities</span></h2>
+                <div style="display: grid; gap: 15px; margin-top: 15px;">
+                    <div style="padding: 15px; background: #f9f9f9; border-radius: 8px; border-left: 4px solid #667eea;">
+                        <h3 style="color: #5D4037; margin-bottom: 5px;" data-translate="fashionDesignerAssistant">Fashion Designer Assistant</h3>
+                        <p style="color: #666; font-size: 14px;">₹18,000<span data-translate="perMonth">/month</span> • <span data-translate="remote">Remote</span></p>
+                        <button style="margin-top: 10px; background: #667eea; color: white; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer;" data-translate="apply">Apply</button>
+                    </div>
+                    <div style="padding: 15px; background: #f9f9f9; border-radius: 8px; border-left: 4px solid #764ba2;">
+                        <h3 style="color: #5D4037; margin-bottom: 5px;" data-translate="homeChefForOffice">Home Chef for Office</h3>
+                        <p style="color: #666; font-size: 14px;">₹800<span data-translate="perDay">/day</span> • <span data-translate="nearby">Nearby</span></p>
+                        <button style="margin-top: 10px; background: #764ba2; color: white; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer;" data-translate="apply">Apply</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2><i class="fas fa-utensils"></i> <span data-translate="foodMarketplace">Food Marketplace</span></h2>
+                <div class="stats-grid">
+                    <div style="text-align: center; padding: 15px;">
+                        <div style="font-size: 28px; font-weight: bold; color: #5D4037;">12</div>
+                        <div style="font-size: 14px; color: #666;" data-translate="activeOrders">Active Orders</div>
+                    </div>
+                    <div style="text-align: center; padding: 15px;">
+                        <div style="font-size: 28px; font-weight: bold; color: #5D4037;">₹3,200</div>
+                        <div style="font-size: 14px; color: #666;" data-translate="thisWeek">This Week</div>
+                    </div>
+                    <div style="text-align: center; padding: 15px;">
+                        <div style="font-size: 28px; font-weight: bold; color: #5D4037;">4.9</div>
+                        <div style="font-size: 14px; color: #666;" data-translate="rating">Rating</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2><i class="fas fa-users"></i> <span data-translate="communityUpdates">Community Updates</span></h2>
+                <div style="padding: 15px; background: #f9f9f9; border-radius: 8px; margin-top: 15px;">
+                    <p style="color: #666; font-size: 14px;">
+                        <strong>Sunita Devi</strong> <span data-translate="shared">shared</span> a new embroidery technique
+                    </p>
+                    <span style="font-size: 12px; color: #999;">2 <span data-translate="hoursAgo">hours ago</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const langNames = {
+            'hi-IN': 'हिंदी (Hindi)',
+            'ta-IN': 'தமிழ் (Tamil)',
+            'te-IN': 'తెలుగు (Telugu)',
+            'bn-IN': 'বাংলা (Bengali)',
+            'mr-IN': 'मराठी (Marathi)',
+            'gu-IN': 'ગુજરાતી (Gujarati)',
+            'kn-IN': 'ಕನ್ನಡ (Kannada)',
+            'ml-IN': 'മലയാളം (Malayalam)',
+            'pa-IN': 'ਪੰਜਾਬੀ (Punjabi)',
+            'or-IN': 'ଓଡ଼ିଆ (Odia)',
+            'as-IN': 'অসমীয়া (Assamese)',
+            'en-IN': 'English'
+        };
+        
+        function changeLang(lang) {
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update current language display
+            document.getElementById('currentLangName').textContent = langNames[lang];
+            
+            // Update all translatable elements
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                const translation = t(key, lang);
+                if (translation !== key) {
+                    element.textContent = translation;
+                }
+            });
+            
+            console.log('✅ Language changed to:', lang);
+        }
+        
+        // Initialize with English
+        window.onload = () => {
+            console.log('🌍 12 Languages Dashboard Test Ready!');
+            console.log('Click any language button to see instant translation');
+        };
+    </script>
+</body>
+</html>

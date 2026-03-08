@@ -1,0 +1,17 @@
+{
+  "name": "ai-sakhi-chat-lambda",
+  "version": "1.0.0",
+  "description": "AI Sakhi Chat Lambda with Amazon Bedrock",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["ai", "bedrock", "claude", "chat"],
+  "author": "SHE-BALANCE",
+  "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.450.0",
+    "@aws-sdk/client-dynamodb": "^3.450.0",
+    "@aws-sdk/lib-dynamodb": "^3.450.0"
+  }
+}

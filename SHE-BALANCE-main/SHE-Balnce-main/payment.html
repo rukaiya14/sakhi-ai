@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - SheBalance</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .payment-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .payment-header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .payment-header i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .payment-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .payment-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .payment-body {
+            padding: 30px;
+        }
+
+        .course-info {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .course-info h3 {
+            color: #1f2937;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .course-info .payment-type {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .amount-display {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .amount-display .label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .amount-display .amount {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .payment-methods {
+            margin-bottom: 25px;
+        }
+
+        .payment-methods h4 {
+            color: #1f2937;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .payment-method {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .payment-method:hover {
+            border-color: #6366f1;
+            background: #f9fafb;
+        }
+
+        .payment-method.selected {
+            border-color: #6366f1;
+            background: #f0f9ff;
+        }
+
+        .payment-method-icon {
+            width: 50px;
+            height: 50px;
+            background: #f0f9ff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #6366f1;
+        }
+
+        .payment-method-info {
+            flex: 1;
+        }
+
+        .payment-method-info strong {
+            display: block;
+            color: #1f2937;
+            margin-bottom: 3px;
+        }
+
+        .payment-method-info span {
+            color: #6b7280;
+            font-size: 0.85rem;
+        }
+
+        .payment-method input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #374151;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .card-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-pay:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-pay:active {
+            transform: translateY(0);
+        }
+
+        .security-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .security-note i {
+            color: #10b981;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .amount-display .amount {
+                font-size: 2.5rem;
+            }
+
+            .card-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <div class="payment-header">
+            <i class="fas fa-credit-card"></i>
+            <h1>Secure Payment</h1>
+            <p>Complete your course enrollment</p>
+        </div>
+
+        <div class="payment-body">
+            <div class="course-info">
+                <h3 id="courseName">Advanced Henna Techniques</h3>
+                <p class="payment-type" id="paymentType">Full Payment</p>
+            </div>
+
+            <div class="amount-display">
+                <div class="label">Amount to Pay</div>
+                <div class="amount" id="amount">₹2,499</div>
+            </div>
+
+            <div class="payment-methods">
+                <h4>Select Payment Method</h4>
+                
+                <div class="payment-method selected" onclick="selectPaymentMethod('card')">
+                    <div class="payment-method-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="payment-method-info">
+                        <strong>Credit/Debit Card</strong>
+                        <span>Visa, Mastercard, RuPay</span>
+                    </div>
+                    <input type="radio" name="payment" checked>
+                </div>
+
+                <div class="payment-method" onclick="selectPaymentMethod('upi')">
+                    <div class="payment-method-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="payment-method-info">
+                        <strong>UPI</strong>
+                        <span>Google Pay, PhonePe, Paytm</span>
+                    </div>
+                    <input type="radio" name="payment">
+                </div>
+
+                <div class="payment-method" onclick="selectPaymentMethod('netbanking')">
+                    <div class="payment-method-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="payment-method-info">
+                        <strong>Net Banking</strong>
+                        <span>All major banks supported</span>
+                    </div>
+                    <input type="radio" name="payment">
+                </div>
+
+                <div class="payment-method" onclick="selectPaymentMethod('wallet')">
+                    <div class="payment-method-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="payment-method-info">
+                        <strong>Wallet</strong>
+                        <span>Paytm, PhonePe, Amazon Pay</span>
+                    </div>
+                    <input type="radio" name="payment">
+                </div>
+            </div>
+
+            <div id="cardForm" style="display: block;">
+                <div class="form-group">
+                    <label>Card Number</label>
+                    <input type="text" placeholder="1234 5678 9012 3456" maxlength="19">
+                </div>
+
+                <div class="form-group">
+                    <label>Cardholder Name</label>
+                    <input type="text" placeholder="Name on card">
+                </div>
+
+                <div class="card-row">
+                    <div class="form-group">
+                        <label>Expiry Date</label>
+                        <input type="text" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label>CVV</label>
+                        <input type="text" placeholder="123" maxlength="3">
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-pay" onclick="processPayment()">
+                <i class="fas fa-lock"></i>
+                Pay Now
+            </button>
+
+            <div class="security-note">
+                <i class="fas fa-shield-alt"></i>
+                Your payment is secured with 256-bit SSL encryption
+            </div>
+
+            <div class="back-link">
+                <a href="skills.html"><i class="fas fa-arrow-left"></i> Back to Courses</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get payment details from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseName = urlParams.get('course') || 'Advanced Henna Techniques';
+        const amount = urlParams.get('amount') || '2499';
+        const paymentType = urlParams.get('type') || 'full';
+
+        // Update UI
+        document.getElementById('courseName').textContent = courseName;
+        document.getElementById('amount').textContent = '₹' + amount;
+        document.getElementById('paymentType').textContent = paymentType === 'full' ? 'Full Payment' : 'EMI Payment';
+
+        function selectPaymentMethod(method) {
+            // Remove selected class from all
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            // Add selected class to clicked
+            event.currentTarget.classList.add('selected');
+
+            // Check the radio button
+            event.currentTarget.querySelector('input[type="radio"]').checked = true;
+
+            // Show/hide card form
+            if (method === 'card') {
+                document.getElementById('cardForm').style.display = 'block';
+            } else {
+                document.getElementById('cardForm').style.display = 'none';
+            }
+        }
+
+        function processPayment() {
+            const btn = event.currentTarget;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            btn.disabled = true;
+
+            // Simulate payment processing
+            setTimeout(() => {
+                // Show success message
+                document.querySelector('.payment-body').innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px;">
+                        <div style="font-size: 5rem; color: #10b981; margin-bottom: 20px;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h2 style="color: #1f2937; margin-bottom: 15px;">Payment Successful!</h2>
+                        <p style="color: #6b7280; margin-bottom: 10px;">
+                            You have successfully enrolled in
+                        </p>
+                        <h3 style="color: #6366f1; margin-bottom: 20px;">${courseName}</h3>
+                        <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin-bottom: 25px;">
+                            <p style="margin: 0; color: #065f46;">
+                                <strong>Transaction ID:</strong> TXN${Math.random().toString(36).substr(2, 9).toUpperCase()}
+                            </p>
+                        </div>
+                        <button onclick="window.location.href='skills.html'" 
+                            style="width: 100%; padding: 14px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;">
+                            <i class="fas fa-graduation-cap"></i> Start Learning
+                        </button>
+                    </div>
+                `;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

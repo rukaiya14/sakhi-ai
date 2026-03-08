@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHE-BALANCE Backend API Tester</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .status.online {
+            background: #10b981;
+            color: white;
+        }
+
+        .status.offline {
+            background: #ef4444;
+            color: white;
+        }
+
+        .test-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .test-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .test-section h2::before {
+            content: '🧪';
+            font-size: 24px;
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .test-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s;
+        }
+
+        .test-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .test-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .test-card p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .result.success {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            color: #065f46;
+        }
+
+        .result.error {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .result pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
+        .credentials {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .credentials h3 {
+            color: #92400e;
+            margin-bottom: 15px;
+        }
+
+        .credentials table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .credentials th,
+        .credentials td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #fbbf24;
+        }
+
+        .credentials th {
+            background: #fbbf24;
+            color: #78350f;
+            font-weight: bold;
+        }
+
+        .credentials td {
+            color: #92400e;
+        }
+
+        .token-display {
+            background: #e0e7ff;
+            border: 2px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card h4 {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 SHE-BALANCE Backend API Tester</h1>
+            <p>Test your DynamoDB-powered backend API</p>
+            <div id="serverStatus" class="status offline">Checking...</div>
+        </div>
+
+        <div class="credentials">
+            <h3>📋 Test User Credentials</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Admin</strong></td>
+                        <td>admin@shebalance.com</td>
+                        <td>admin123</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Artisan</strong></td>
+                        <td>priya@example.com</td>
+                        <td>artisan123</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Buyer</strong></td>
+                        <td>rahul@example.com</td>
+                        <td>buyer123</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Authentication Tests -->
+        <div class="test-section">
+            <h2>Authentication Tests</h2>
+            <div class="test-grid">
+                <div class="test-card">
+                    <h3>Login as Artisan</h3>
+                    <p>Test artisan login with priya@example.com</p>
+                    <button onclick="testArtisanLogin()">Test Login</button>
+                    <div id="artisan-login-result"></div>
+                </div>
+
+                <div class="test-card">
+                    <h3>Login as Buyer</h3>
+                    <p>Test buyer login with rahul@example.com</p>
+                    <button onclick="testBuyerLogin()">Test Login</button>
+                    <div id="buyer-login-result"></div>
+                </div>
+
+                <div class="test-card">
+                    <h3>Login as Admin</h3>
+                    <p>Test admin login with admin@shebalance.com</p>
+                    <button onclick="testAdminLogin()">Test Login</button>
+                    <div id="admin-login-result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Tests -->
+        <div class="test-section">
+            <h2>Profile Tests</h2>
+            <div class="test-grid">
+                <div class="test-card">
+                    <h3>Get User Profile</h3>
+                    <p>Fetch authenticated user profile</p>
+                    <button onclick="testGetProfile()">Get Profile</button>
+                    <div id="profile-result"></div>
+                </div>
+
+                <div class="test-card">
+                    <h3>Update Profile</h3>
+                    <p>Update user profile information</p>
+                    <button onclick="testUpdateProfile()">Update Profile</button>
+                    <div id="update-profile-result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Artisan Tests -->
+        <div class="test-section">
+            <h2>Artisan Tests</h2>
+            <div class="test-grid">
+                <div class="test-card">
+                    <h3>Get All Artisans</h3>
+                    <p>Fetch list of verified artisans</p>
+                    <button onclick="testGetArtisans()">Get Artisans</button>
+                    <div id="artisans-result"></div>
+                </div>
+
+                <div class="test-card">
+                    <h3>Get Artisan Details</h3>
+                    <p>Fetch specific artisan profile</p>
+                    <button onclick="testGetArtisanDetails()">Get Details</button>
+                    <div id="artisan-details-result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Tests -->
+        <div class="test-section">
+            <h2>Admin Tests</h2>
+            <div class="test-grid">
+                <div class="test-card">
+                    <h3>Platform Statistics</h3>
+                    <p>Get platform-wide statistics</p>
+                    <button onclick="testGetStatistics()">Get Statistics</button>
+                    <div id="statistics-result"></div>
+                </div>
+
+                <div class="test-card">
+                    <h3>Get All Users</h3>
+                    <p>Fetch all registered users (admin only)</p>
+                    <button onclick="testGetAllUsers()">Get Users</button>
+                    <div id="all-users-result"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000';
+        let currentToken = null;
+        let currentRole = null;
+
+        // Check server status on load
+        window.addEventListener('load', checkServerStatus);
+
+        async function checkServerStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                
+                const statusEl = document.getElementById('serverStatus');
+                if (data.status === 'OK') {
+                    statusEl.textContent = `✅ Server Online (${data.database})`;
+                    statusEl.className = 'status online';
+                } else {
+                    statusEl.textContent = '❌ Server Error';
+                    statusEl.className = 'status offline';
+                }
+            } catch (error) {
+                const statusEl = document.getElementById('serverStatus');
+                statusEl.textContent = '❌ Server Offline';
+                statusEl.className = 'status offline';
+            }
+        }
+
+        function showResult(elementId, success, data) {
+            const element = document.getElementById(elementId);
+            element.className = `result ${success ? 'success' : 'error'}`;
+            element.innerHTML = `
+                <strong>${success ? '✅ Success' : '❌ Error'}</strong>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
+        }
+
+        async function testArtisanLogin() {
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'priya@example.com',
+                        password: 'artisan123'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentToken = data.token;
+                    currentRole = 'artisan';
+                    showResult('artisan-login-result', true, {
+                        message: data.message,
+                        user: data.user,
+                        token: data.token.substring(0, 30) + '...'
+                    });
+                } else {
+                    showResult('artisan-login-result', false, data);
+                }
+            } catch (error) {
+                showResult('artisan-login-result', false, { error: error.message });
+            }
+        }
+
+        async function testBuyerLogin() {
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'rahul@example.com',
+                        password: 'buyer123'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentToken = data.token;
+                    currentRole = 'buyer';
+                    showResult('buyer-login-result', true, {
+                        message: data.message,
+                        user: data.user,
+                        token: data.token.substring(0, 30) + '...'
+                    });
+                } else {
+                    showResult('buyer-login-result', false, data);
+                }
+            } catch (error) {
+                showResult('buyer-login-result', false, { error: error.message });
+            }
+        }
+
+        async function testAdminLogin() {
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'admin@shebalance.com',
+                        password: 'admin123'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentToken = data.token;
+                    currentRole = 'admin';
+                    showResult('admin-login-result', true, {
+                        message: data.message,
+                        user: data.user,
+                        token: data.token.substring(0, 30) + '...'
+                    });
+                } else {
+                    showResult('admin-login-result', false, data);
+                }
+            } catch (error) {
+                showResult('admin-login-result', false, { error: error.message });
+            }
+        }
+
+        async function testGetProfile() {
+            if (!currentToken) {
+                showResult('profile-result', false, { error: 'Please login first' });
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/users/profile`, {
+                    headers: { 'Authorization': `Bearer ${currentToken}` }
+                });
+
+                const data = await response.json();
+                showResult('profile-result', response.ok, data);
+            } catch (error) {
+                showResult('profile-result', false, { error: error.message });
+            }
+        }
+
+        async function testUpdateProfile() {
+            if (!currentToken) {
+                showResult('update-profile-result', false, { error: 'Please login first' });
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/users/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        fullName: 'Updated Name',
+                        phone: '+91-9876543210',
+                        bio: 'Updated bio from API test'
+                    })
+                });
+
+                const data = await response.json();
+                showResult('update-profile-result', response.ok, data);
+            } catch (error) {
+                showResult('update-profile-result', false, { error: error.message });
+            }
+        }
+
+        async function testGetArtisans() {
+            try {
+                const response = await fetch(`${API_BASE}/api/artisans`);
+                const data = await response.json();
+                showResult('artisans-result', response.ok, data);
+            } catch (error) {
+                showResult('artisans-result', false, { error: error.message });
+            }
+        }
+
+        async function testGetArtisanDetails() {
+            try {
+                // First get list of artisans
+                const listResponse = await fetch(`${API_BASE}/api/artisans`);
+                const listData = await listResponse.json();
+                
+                if (listData.artisans && listData.artisans.length > 0) {
+                    const artisanId = listData.artisans[0].artisanId;
+                    
+                    const response = await fetch(`${API_BASE}/api/artisans/${artisanId}`);
+                    const data = await response.json();
+                    showResult('artisan-details-result', response.ok, data);
+                } else {
+                    showResult('artisan-details-result', false, { error: 'No artisans found' });
+                }
+            } catch (error) {
+                showResult('artisan-details-result', false, { error: error.message });
+            }
+        }
+
+        async function testGetStatistics() {
+            if (!currentToken || currentRole !== 'admin') {
+                showResult('statistics-result', false, { error: 'Please login as admin first' });
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/statistics`, {
+                    headers: { 'Authorization': `Bearer ${currentToken}` }
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const statsHtml = `
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <h4>Total Users</h4>
+                                <div class="value">${data.totalUsers}</div>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Active Artisans</h4>
+                                <div class="value">${data.activeArtisans}</div>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Total Orders</h4>
+                                <div class="value">${data.totalOrders}</div>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Total Revenue</h4>
+                                <div class="value">₹${data.totalRevenue}</div>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('statistics-result').innerHTML = statsHtml;
+                } else {
+                    showResult('statistics-result', false, data);
+                }
+            } catch (error) {
+                showResult('statistics-result', false, { error: error.message });
+            }
+        }
+
+        async function testGetAllUsers() {
+            if (!currentToken || currentRole !== 'admin') {
+                showResult('all-users-result', false, { error: 'Please login as admin first' });
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/users`, {
+                    headers: { 'Authorization': `Bearer ${currentToken}` }
+                });
+
+                const data = await response.json();
+                showResult('all-users-result', response.ok, data);
+            } catch (error) {
+                showResult('all-users-result', false, { error: error.message });
+            }
+        }
+    </script>
+</body>
+</html>

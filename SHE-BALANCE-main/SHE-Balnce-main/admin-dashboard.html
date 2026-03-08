@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SheBalance</title>
+    <link rel="stylesheet" href="admin-dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="logo She balance.png" alt="SheBalance Logo" class="logo-image">
+                <span>SheBalance</span>
+            </div>
+            <div class="admin-badge">
+                <i class="fas fa-shield-alt"></i>
+                <span>Admin Panel</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-item active" onclick="showSection('dashboard', event)">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#users" class="nav-item" onclick="showSection('users', event)">
+                <i class="fas fa-users"></i>
+                <span>User Management</span>
+            </a>
+            <a href="#artisans" class="nav-item" onclick="showSection('artisans', event)">
+                <i class="fas fa-user-check"></i>
+                <span>Artisan Verification</span>
+            </a>
+            <a href="#orders" class="nav-item" onclick="showSection('orders', event)">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Order Management</span>
+            </a>
+            <a href="#invisible-labour" class="nav-item" onclick="showSection('invisible-labour', event)">
+                <i class="fas fa-clock"></i>
+                <span>Invisible Labour</span>
+            </a>
+            <a href="#analytics" class="nav-item" onclick="showSection('analytics', event)">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="#reports" class="nav-item" onclick="showSection('reports', event)">
+                <i class="fas fa-file-alt"></i>
+                <span>Reports</span>
+            </a>
+            <a href="#settings" class="nav-item" onclick="showSection('settings', event)">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+            <a href="artisan-marketplace.html" class="nav-item">
+                <i class="fas fa-store"></i>
+                <span>Artisan Marketplace</span>
+            </a>
+            <a href="artisan-marketplace.html#add-product" class="nav-item" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; margin: 10px 15px; border-radius: 10px;">
+                <i class="fas fa-plus-circle"></i>
+                <span>Add Product</span>
+            </a>
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="header-title">
+                <h1>Admin Dashboard</h1>
+                <p>Welcome back! Here's what's happening with your platform today.</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-icon">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">5</span>
+                </button>
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <span class="user-name" id="adminName">Admin</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="section-content active">
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e3f2fd;">
+                        <i class="fas fa-users" style="color: #1976d2;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Total Users</h4>
+                        <p class="stat-number" id="totalUsers">0</p>
+                        <span class="stat-change positive">+12% this month</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #f3e5f5;">
+                        <i class="fas fa-user-check" style="color: #7b1fa2;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Active Artisans</h4>
+                        <p class="stat-number" id="activeArtisans">0</p>
+                        <span class="stat-change positive">+8% this month</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e8f5e9;">
+                        <i class="fas fa-shopping-bag" style="color: #388e3c;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Total Buyers</h4>
+                        <p class="stat-number" id="totalBuyers">0</p>
+                        <span class="stat-change positive">+15% this month</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fff3e0;">
+                        <i class="fas fa-rupee-sign" style="color: #f57c00;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Monthly Revenue</h4>
+                        <p class="stat-number" id="monthlyRevenue">₹0</p>
+                        <span class="stat-change positive">+22% this month</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>User Activity</h3>
+                        <select class="chart-filter">
+                            <option>Last 12 Months</option>
+                            <option>Last 6 Months</option>
+                            <option>Last 3 Months</option>
+                        </select>
+                    </div>
+                    <div style="height: 300px;">
+                        <canvas id="userActivityChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>User Distribution</h3>
+                    </div>
+                    <div style="height: 300px;">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Users Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h3>Recent User Registrations</h3>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search users..." id="userSearch" onkeyup="searchUsers()">
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentUsersTable">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Recent Orders Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h3>Recent Orders</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Artisan</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentOrdersTable">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+
+        <!-- Users Section -->
+        <div id="users" class="section-content">
+            <div class="table-card">
+                <div class="table-header">
+                    <h3>All Users</h3>
+                    <button class="btn-primary" onclick="openAddUserModal()">
+                        <i class="fas fa-plus"></i> Add New User
+                    </button>
+                </div>
+                <div class="search-box" style="margin: 20px;">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search users by name, email, or role..." id="allUsersSearch" onkeyup="searchAllUsers()">
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allUsersTable">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- AI Health Monitoring Section -->
+            <div class="ai-health-monitoring-section">
+                <div class="ai-monitor-header">
+                    <div class="monitor-title">
+                        <i class="fas fa-brain"></i>
+                        <h2>Real-Time AI Health Monitoring</h2>
+                    </div>
+                    <div class="status-badge-admin">
+                        <i class="fas fa-check-circle"></i>
+                        <span>System Active</span>
+                    </div>
+                </div>
+
+                <div class="health-stats-grid">
+                    <div class="stat-card-health green">
+                        <i class="fas fa-heartbeat"></i>
+                        <h3>342</h3>
+                        <p>Healthy Artisans</p>
+                    </div>
+                    <div class="stat-card-health yellow">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>12</h3>
+                        <p>Warning Status</p>
+                    </div>
+                    <div class="stat-card-health red">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h3>5</h3>
+                        <p>Critical Alerts</p>
+                    </div>
+                </div>
+
+                <div class="artisan-monitoring-grid">
+                    <!-- Alert Case 1 -->
+                    <div class="artisan-monitor-card alert">
+                        <div class="artisan-header">
+                            <div class="artisan-avatar" style="background: linear-gradient(135deg, #ef4444, #dc2626);">SD</div>
+                            <div class="artisan-info">
+                                <h3>Sunita Devi</h3>
+                                <p>Embroidery Artist</p>
+                            </div>
+                        </div>
+                        
+                        <div class="health-indicator">
+                            <div class="health-icon alert">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <div class="health-details">
+                                <div class="health-label">Platform Health Status</div>
+                                <div class="health-value alert">CRITICAL - 7 Days Inactive</div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-timeline">
+                            <div class="timeline-label">Last 14 Days Activity</div>
+                            <div class="timeline-bar">
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day partial" title="Partial"></div>
+                                <div class="timeline-day partial" title="Partial"></div>
+                                <div class="timeline-day inactive" title="Inactive"></div>
+                                <div class="timeline-day inactive" title="Inactive"></div>
+                                <div class="timeline-day inactive" title="Inactive"></div>
+                                <div class="timeline-day inactive" title="Inactive"></div>
+                                <div class="timeline-day inactive" title="Inactive"></div>
+                                <div class="timeline-day inactive" title="Inactive"></div>
+                                <div class="timeline-day inactive" title="Inactive"></div>
+                                <div class="timeline-day inactive" title="Inactive - Today"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="ai-trigger-section">
+                            <div class="ai-trigger-header">
+                                <i class="fas fa-robot"></i>
+                                <span>AI Auto-Trigger Activated</span>
+                            </div>
+                            <div class="trigger-message">
+                                AWS Lambda detected sudden activity drop. Emergency payout of ₹5,000 initiated. Community Care workflow triggered via WhatsApp.
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons-health">
+                            <button class="btn-emergency" onclick="triggerPayout('Sunita Devi', 5000)">
+                                <i class="fas fa-money-bill-wave"></i> Disburse Now
+                            </button>
+                            <button class="btn-support-health" onclick="alertCommunity('Sunita Devi')">
+                                <i class="fas fa-users"></i> Alert Community
+                            </button>
+                        </div>
+                        
+                        <div class="insurance-info">
+                            <div class="insurance-row">
+                                <span class="insurance-label">Coverage Amount:</span>
+                                <span class="insurance-value">₹10,000</span>
+                            </div>
+                            <div class="insurance-row">
+                                <span class="insurance-label">Remaining Balance:</span>
+                                <span class="insurance-value">₹5,000</span>
+                            </div>
+                            <div class="insurance-row">
+                                <span class="insurance-label">Last Check-in:</span>
+                                <span class="insurance-value">7 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Warning Case 2 -->
+                    <div class="artisan-monitor-card warning">
+                        <div class="artisan-header">
+                            <div class="artisan-avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">MP</div>
+                            <div class="artisan-info">
+                                <h3>Meera Patel</h3>
+                                <p>Home Chef</p>
+                            </div>
+                        </div>
+                        
+                        <div class="health-indicator">
+                            <div class="health-icon warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="health-details">
+                                <div class="health-label">Platform Health Status</div>
+                                <div class="health-value warning">WARNING - 3 Days Low Activity</div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-timeline">
+                            <div class="timeline-label">Last 14 Days Activity</div>
+                            <div class="timeline-bar">
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day partial" title="Partial"></div>
+                                <div class="timeline-day partial" title="Partial"></div>
+                                <div class="timeline-day partial" title="Partial - Today"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="ai-trigger-section">
+                            <div class="ai-trigger-header">
+                                <i class="fas fa-robot"></i>
+                                <span>AI Monitoring - Early Warning</span>
+                            </div>
+                            <div class="trigger-message">
+                                Pattern change detected. AI-Sakhi community notified for wellness check. Monitoring continues.
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons-health">
+                            <button class="btn-support-health" onclick="checkWellness('Meera Patel')">
+                                <i class="fas fa-phone"></i> Wellness Check
+                            </button>
+                            <button class="btn-support-health" onclick="viewHistory('Meera Patel')">
+                                <i class="fas fa-history"></i> View History
+                            </button>
+                        </div>
+                        
+                        <div class="insurance-info">
+                            <div class="insurance-row">
+                                <span class="insurance-label">Coverage Amount:</span>
+                                <span class="insurance-value">₹10,000</span>
+                            </div>
+                            <div class="insurance-row">
+                                <span class="insurance-label">Remaining Balance:</span>
+                                <span class="insurance-value">₹10,000</span>
+                            </div>
+                            <div class="insurance-row">
+                                <span class="insurance-label">Last Check-in:</span>
+                                <span class="insurance-value">3 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Healthy Case 3 -->
+                    <div class="artisan-monitor-card healthy">
+                        <div class="artisan-header">
+                            <div class="artisan-avatar" style="background: linear-gradient(135deg, #10b981, #059669);">RK</div>
+                            <div class="artisan-info">
+                                <h3>Rekha Kumari</h3>
+                                <p>Tailoring Business</p>
+                            </div>
+                        </div>
+                        
+                        <div class="health-indicator">
+                            <div class="health-icon healthy">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="health-details">
+                                <div class="health-label">Platform Health Status</div>
+                                <div class="health-value healthy">HEALTHY - Active Daily</div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-timeline">
+                            <div class="timeline-label">Last 14 Days Activity</div>
+                            <div class="timeline-bar">
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active"></div>
+                                <div class="timeline-day active" title="Active - Today"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="ai-trigger-section">
+                            <div class="ai-trigger-header">
+                                <i class="fas fa-robot"></i>
+                                <span>AI Monitoring - All Clear</span>
+                            </div>
+                            <div class="trigger-message">
+                                Consistent activity pattern. No intervention needed. Coverage active and ready if needed.
+                            </div>
+                        </div>
+                        
+                        <div class="insurance-info">
+                            <div class="insurance-row">
+                                <span class="insurance-label">Coverage Amount:</span>
+                                <span class="insurance-value">₹10,000</span>
+                            </div>
+                            <div class="insurance-row">
+                                <span class="insurance-label">Remaining Balance:</span>
+                                <span class="insurance-value">₹10,000</span>
+                            </div>
+                            <div class="insurance-row">
+                                <span class="insurance-label">Last Check-in:</span>
+                                <span class="insurance-value">2 hours ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Artisans Section -->
+        <div id="artisans" class="section-content">
+            <div class="verification-stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #FFF3E0;">
+                        <i class="fas fa-clock" style="color: #f57c00;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Pending Verification</h4>
+                        <p class="stat-number" id="pendingVerification">8</p>
+                        <span class="stat-change">Awaiting review</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #E8F5E9;">
+                        <i class="fas fa-check-circle" style="color: #2E7D32;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Verified Artisans</h4>
+                        <p class="stat-number" id="verifiedArtisans">1,248</p>
+                        <span class="stat-change positive">+24 this week</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #FFEBEE;">
+                        <i class="fas fa-times-circle" style="color: #C62828;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Rejected</h4>
+                        <p class="stat-number" id="rejectedArtisans">42</p>
+                        <span class="stat-change">This month</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #E3F2FD;">
+                        <i class="fas fa-user-clock" style="color: #1565C0;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Avg. Review Time</h4>
+                        <p class="stat-number">2.5h</p>
+                        <span class="stat-change">Per application</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-header">
+                    <h3>Artisan Verification Queue</h3>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="filterVerification('all', event)">All</button>
+                        <button class="filter-btn" onclick="filterVerification('pending', event)">Pending</button>
+                        <button class="filter-btn" onclick="filterVerification('verified', event)">Verified</button>
+                        <button class="filter-btn" onclick="filterVerification('rejected', event)">Rejected</button>
+                    </div>
+                </div>
+                <div class="search-box" style="margin: 20px;">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search artisans by name, skill, or location..." id="artisanSearch" onkeyup="searchArtisans()">
+                </div>
+                <table class="data-table artisan-verification-table">
+                    <thead>
+                        <tr>
+                            <th>Artisan</th>
+                            <th>Skill</th>
+                            <th>Location</th>
+                            <th>Experience</th>
+                            <th>Applied Date</th>
+                            <th>Documents</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="artisanVerificationTable">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Artisan Profile Modal -->
+        <div id="artisanProfileModal" class="modal-overlay" onclick="closeArtisanProfile(event)">
+            <div class="artisan-profile-modal" onclick="event.stopPropagation()">
+                <div class="modal-header-profile">
+                    <h2><i class="fas fa-user-circle"></i> Artisan Profile</h2>
+                    <button class="modal-close" onclick="closeArtisanProfile()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body-profile" id="artisanProfileContent">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Document Viewer Modal -->
+        <div id="documentViewerModal" class="modal-overlay" onclick="closeDocumentViewer(event)">
+            <div class="document-viewer-modal" onclick="event.stopPropagation()">
+                <div class="modal-header-profile">
+                    <h2><i class="fas fa-file-alt"></i> Document Viewer</h2>
+                    <button class="modal-close" onclick="closeDocumentViewer()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="document-viewer-body" id="documentViewerContent">
+                    <!-- Populated by JavaScript -->
+                </div>
+                <div class="document-viewer-footer">
+                    <button class="btn-profile-action btn-profile-close" onclick="closeDocumentViewer()">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                    <button class="btn-profile-action btn-view-profile" onclick="downloadDocument()">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Section -->
+        <div id="orders" class="section-content">
+            <div class="order-stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #E3F2FD;">
+                        <i class="fas fa-shopping-cart" style="color: #1565C0;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Total Orders</h4>
+                        <p class="stat-number" id="totalOrders">342</p>
+                        <span class="stat-change positive">+18% this month</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #FFF3E0;">
+                        <i class="fas fa-clock" style="color: #f57c00;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Pending Orders</h4>
+                        <p class="stat-number" id="pendingOrders">28</p>
+                        <span class="stat-change">Awaiting processing</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #E8F5E9;">
+                        <i class="fas fa-check-circle" style="color: #2E7D32;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Completed</h4>
+                        <p class="stat-number" id="completedOrders">289</p>
+                        <span class="stat-change positive">84% completion rate</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #FBE9E7;">
+                        <i class="fas fa-rupee-sign" style="color: #CC5500;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Total Revenue</h4>
+                        <p class="stat-number" id="orderRevenue">₹4.2L</p>
+                        <span class="stat-change positive">This month</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-header">
+                    <h3>Order Management</h3>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="filterOrders('all', event)">All</button>
+                        <button class="filter-btn" onclick="filterOrders('pending', event)">Pending</button>
+                        <button class="filter-btn" onclick="filterOrders('in-progress', event)">In Progress</button>
+                        <button class="filter-btn" onclick="filterOrders('completed', event)">Completed</button>
+                        <button class="filter-btn" onclick="filterOrders('cancelled', event)">Cancelled</button>
+                    </div>
+                </div>
+                <div class="search-box" style="margin: 20px;">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search orders by ID, customer, or artisan..." id="orderSearch" onkeyup="searchOrders()">
+                </div>
+                <table class="data-table order-management-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Artisan</th>
+                            <th>Product/Service</th>
+                            <th>Amount</th>
+                            <th>Order Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderManagementTable">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Order Details Modal -->
+        <div id="orderDetailsModal" class="modal-overlay" onclick="closeOrderDetails(event)">
+            <div class="order-details-modal" onclick="event.stopPropagation()">
+                <div class="modal-header-profile">
+                    <h2><i class="fas fa-shopping-bag"></i> Order Details</h2>
+                    <button class="modal-close" onclick="closeOrderDetails()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body-profile" id="orderDetailsContent">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Invisible Labour Section -->
+        <div id="invisible-labour" class="section-content">
+            <div class="table-card">
+                <div class="table-header">
+                    <h3><i class="fas fa-clock"></i> Invisible Labour Management</h3>
+                    <button class="btn-primary" onclick="exportLabourReport()">
+                        <i class="fas fa-download"></i> Export Report
+                    </button>
+                </div>
+                <div class="labour-stats-grid">
+                    <div class="labour-stat-card">
+                        <div class="stat-icon" style="background: #FBE9E7;">
+                            <i class="fas fa-hourglass-half" style="color: #CC5500;"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Total Labour Hours</h4>
+                            <p class="stat-number">1,248h</p>
+                            <span class="stat-change">This month</span>
+                        </div>
+                    </div>
+                    <div class="labour-stat-card">
+                        <div class="stat-icon" style="background: #EFEBE9;">
+                            <i class="fas fa-home" style="color: #5D4037;"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Household Hours</h4>
+                            <p class="stat-number">856h</p>
+                            <span class="stat-change">Context tracked</span>
+                        </div>
+                    </div>
+                    <div class="labour-stat-card">
+                        <div class="stat-icon" style="background: #E8F5E9;">
+                            <i class="fas fa-hands-helping" style="color: #2E7D32;"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Active Orders</h4>
+                            <p class="stat-number">24</p>
+                            <span class="stat-change">In progress</span>
+                        </div>
+                    </div>
+                    <div class="labour-stat-card">
+                        <div class="stat-icon" style="background: #FFF3E0;">
+                            <i class="fas fa-heart" style="color: #f57c00;"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Avg Time Investment</h4>
+                            <p class="stat-number">52h</p>
+                            <span class="stat-change">Per order</span>
+                        </div>
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Artisan Name</th>
+                            <th>Order ID</th>
+                            <th>Product/Service</th>
+                            <th>Craft Hours</th>
+                            <th>Household Hours</th>
+                            <th>Total Investment</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="labourTable">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div id="analytics" class="section-content">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Revenue Analytics</h3>
+                    <select class="chart-filter">
+                        <option>Last 6 Months</option>
+                        <option>Last 12 Months</option>
+                    </select>
+                </div>
+                <div style="height: 400px;">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Section -->
+        <div id="reports" class="section-content">
+            <div class="reports-header">
+                <h2>Reports & Analytics</h2>
+                <p>Generate comprehensive reports for platform insights and performance tracking</p>
+            </div>
+
+            <div class="reports-grid">
+                <!-- User Reports -->
+                <div class="report-card">
+                    <div class="report-icon" style="background: linear-gradient(135deg, #1565C0, #0D47A1);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="report-content">
+                        <h3>User Activity Report</h3>
+                        <p>Detailed analysis of user registrations, activity patterns, and engagement metrics</p>
+                        <div class="report-meta">
+                            <span><i class="fas fa-calendar"></i> Last generated: 2 days ago</span>
+                            <span><i class="fas fa-file-pdf"></i> PDF Format</span>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="btn-report-generate" onclick="generateReport('user-activity')">
+                            <i class="fas fa-sync"></i> Generate
+                        </button>
+                        <button class="btn-report-download" onclick="downloadReport('user-activity')">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Artisan Reports -->
+                <div class="report-card">
+                    <div class="report-icon" style="background: linear-gradient(135deg, #2E7D32, #1B5E20);">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="report-content">
+                        <h3>Artisan Performance Report</h3>
+                        <p>Track artisan productivity, order completion rates, and customer satisfaction scores</p>
+                        <div class="report-meta">
+                            <span><i class="fas fa-calendar"></i> Last generated: 1 day ago</span>
+                            <span><i class="fas fa-file-excel"></i> Excel Format</span>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="btn-report-generate" onclick="generateReport('artisan-performance')">
+                            <i class="fas fa-sync"></i> Generate
+                        </button>
+                        <button class="btn-report-download" onclick="downloadReport('artisan-performance')">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Revenue Reports -->
+                <div class="report-card">
+                    <div class="report-icon" style="background: linear-gradient(135deg, #f57c00, #E65100);">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <div class="report-content">
+                        <h3>Revenue & Financial Report</h3>
+                        <p>Comprehensive financial overview including revenue, transactions, and payment analytics</p>
+                        <div class="report-meta">
+                            <span><i class="fas fa-calendar"></i> Last generated: Today</span>
+                            <span><i class="fas fa-file-pdf"></i> PDF Format</span>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="btn-report-generate" onclick="generateReport('revenue-financial')">
+                            <i class="fas fa-sync"></i> Generate
+                        </button>
+                        <button class="btn-report-download" onclick="downloadReport('revenue-financial')">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Order Reports -->
+                <div class="report-card">
+                    <div class="report-icon" style="background: linear-gradient(135deg, #7b1fa2, #4A148C);">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="report-content">
+                        <h3>Order Management Report</h3>
+                        <p>Complete order history, status tracking, and fulfillment analytics</p>
+                        <div class="report-meta">
+                            <span><i class="fas fa-calendar"></i> Last generated: 3 days ago</span>
+                            <span><i class="fas fa-file-excel"></i> Excel Format</span>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="btn-report-generate" onclick="generateReport('order-management')">
+                            <i class="fas fa-sync"></i> Generate
+                        </button>
+                        <button class="btn-report-download" onclick="downloadReport('order-management')">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Invisible Labour Reports -->
+                <div class="report-card">
+                    <div class="report-icon" style="background: linear-gradient(135deg, #CC5500, #994400);">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="report-content">
+                        <h3>Invisible Labour Report</h3>
+                        <p>Track and analyze invisible labour hours, household work context, and time investment</p>
+                        <div class="report-meta">
+                            <span><i class="fas fa-calendar"></i> Last generated: 5 days ago</span>
+                            <span><i class="fas fa-file-pdf"></i> PDF Format</span>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="btn-report-generate" onclick="generateReport('invisible-labour')">
+                            <i class="fas fa-sync"></i> Generate
+                        </button>
+                        <button class="btn-report-download" onclick="downloadReport('invisible-labour')">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Custom Report -->
+                <div class="report-card">
+                    <div class="report-icon" style="background: linear-gradient(135deg, #D2B48C, #8B7355);">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <div class="report-content">
+                        <h3>Custom Report Builder</h3>
+                        <p>Create custom reports with specific metrics, date ranges, and data filters</p>
+                        <div class="report-meta">
+                            <span><i class="fas fa-sliders-h"></i> Customizable</span>
+                            <span><i class="fas fa-file-alt"></i> Multiple Formats</span>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="btn-report-generate" onclick="openCustomReportBuilder()">
+                            <i class="fas fa-plus"></i> Create Custom
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="quick-stats-section">
+                <h3><i class="fas fa-chart-line"></i> Quick Statistics</h3>
+                <div class="quick-stats-grid">
+                    <div class="quick-stat-card">
+                        <div class="stat-value">1,248</div>
+                        <div class="stat-label">Total Reports Generated</div>
+                    </div>
+                    <div class="quick-stat-card">
+                        <div class="stat-value">156</div>
+                        <div class="stat-label">This Month</div>
+                    </div>
+                    <div class="quick-stat-card">
+                        <div class="stat-value">42</div>
+                        <div class="stat-label">Scheduled Reports</div>
+                    </div>
+                    <div class="quick-stat-card">
+                        <div class="stat-value">98%</div>
+                        <div class="stat-label">Success Rate</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Reports -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h3>Recent Reports</h3>
+                    <button class="btn-primary" onclick="viewAllReports()">
+                        <i class="fas fa-list"></i> View All
+                    </button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Report Name</th>
+                            <th>Type</th>
+                            <th>Generated By</th>
+                            <th>Date</th>
+                            <th>Size</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentReportsTable">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Custom Report Builder Modal -->
+        <div id="customReportModal" class="modal-overlay" onclick="closeCustomReportBuilder(event)">
+            <div class="artisan-profile-modal" onclick="event.stopPropagation()">
+                <div class="modal-header-profile">
+                    <h2><i class="fas fa-cog"></i> Custom Report Builder</h2>
+                    <button class="modal-close" onclick="closeCustomReportBuilder()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body-profile">
+                    <div class="custom-report-form">
+                        <div class="form-group">
+                            <label>Report Name</label>
+                            <input type="text" id="customReportName" placeholder="Enter report name" class="form-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Report Type</label>
+                            <select id="customReportType" class="form-input">
+                                <option value="">Select report type</option>
+                                <option value="users">User Analytics</option>
+                                <option value="artisans">Artisan Performance</option>
+                                <option value="orders">Order Statistics</option>
+                                <option value="revenue">Revenue Analysis</option>
+                                <option value="labour">Invisible Labour</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input type="date" id="customReportStartDate" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <input type="date" id="customReportEndDate" class="form-input">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Export Format</label>
+                            <select id="customReportFormat" class="form-input">
+                                <option value="pdf">PDF Document</option>
+                                <option value="excel">Excel Spreadsheet</option>
+                                <option value="csv">CSV File</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Include Metrics</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" checked> Summary Statistics
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" checked> Detailed Breakdown
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox"> Charts & Graphs
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox"> Comparative Analysis
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-actions-footer">
+                        <button class="btn-profile-action btn-profile-approve" onclick="generateCustomReport()">
+                            <i class="fas fa-check"></i> Generate Report
+                        </button>
+                        <button class="btn-profile-action btn-profile-close" onclick="closeCustomReportBuilder()">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div id="settings" class="section-content">
+            <div class="settings-container">
+                <div class="settings-header">
+                    <h2>Platform Settings</h2>
+                    <p>Configure and manage platform settings, preferences, and system configurations</p>
+                </div>
+
+                <!-- General Settings -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <i class="fas fa-cog"></i>
+                        <h3>General Settings</h3>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Platform Name</label>
+                                <p>The name displayed across the platform</p>
+                            </div>
+                            <input type="text" class="setting-input" value="SheBalance" id="platformName">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Platform Email</label>
+                                <p>Primary contact email for the platform</p>
+                            </div>
+                            <input type="email" class="setting-input" value="admin@shebalance.com" id="platformEmail">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Support Phone</label>
+                                <p>Customer support contact number</p>
+                            </div>
+                            <input type="tel" class="setting-input" value="+91 1800-123-4567" id="supportPhone">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Platform Status</label>
+                                <p>Enable or disable platform access</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked id="platformStatus">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Settings -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <i class="fas fa-credit-card"></i>
+                        <h3>Payment Settings</h3>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Platform Commission (%)</label>
+                                <p>Percentage commission on each transaction</p>
+                            </div>
+                            <input type="number" class="setting-input" value="10" min="0" max="100" id="commissionRate">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Minimum Order Amount</label>
+                                <p>Minimum order value in rupees</p>
+                            </div>
+                            <input type="number" class="setting-input" value="500" min="0" id="minOrderAmount">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Payment Gateway</label>
+                                <p>Select payment processing gateway</p>
+                            </div>
+                            <select class="setting-input" id="paymentGateway">
+                                <option value="razorpay">Razorpay</option>
+                                <option value="paytm">Paytm</option>
+                                <option value="stripe">Stripe</option>
+                                <option value="phonepe">PhonePe</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Auto Payout to Artisans</label>
+                                <p>Automatically transfer payments after order completion</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked id="autoPayout">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification Settings -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <i class="fas fa-bell"></i>
+                        <h3>Notification Settings</h3>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Email Notifications</label>
+                                <p>Send email notifications for important events</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked id="emailNotifications">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>SMS Notifications</label>
+                                <p>Send SMS alerts for critical updates</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked id="smsNotifications">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>WhatsApp Notifications</label>
+                                <p>Send updates via WhatsApp Business API</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked id="whatsappNotifications">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Push Notifications</label>
+                                <p>Browser push notifications for real-time updates</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="pushNotifications">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Settings -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Security Settings</h3>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Two-Factor Authentication</label>
+                                <p>Require 2FA for admin login</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="twoFactorAuth">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Session Timeout (minutes)</label>
+                                <p>Auto logout after inactivity</p>
+                            </div>
+                            <input type="number" class="setting-input" value="30" min="5" max="120" id="sessionTimeout">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Password Expiry (days)</label>
+                                <p>Force password change after specified days</p>
+                            </div>
+                            <input type="number" class="setting-input" value="90" min="30" max="365" id="passwordExpiry">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Login Attempt Limit</label>
+                                <p>Maximum failed login attempts before lockout</p>
+                            </div>
+                            <input type="number" class="setting-input" value="5" min="3" max="10" id="loginAttemptLimit">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save Settings Button -->
+                <div class="settings-actions">
+                    <button class="btn-save-settings" onclick="saveSettings()">
+                        <i class="fas fa-save"></i> Save All Settings
+                    </button>
+                    <button class="btn-reset-settings" onclick="resetSettings()">
+                        <i class="fas fa-undo"></i> Reset to Default
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Labour Details Modal -->
+    <div id="labourModal" class="modal" style="display: none;">
+        <div class="modal-content labour-modal">
+            <span class="close" onclick="closeLabourModal()">&times;</span>
+            <h2><i class="fas fa-clock"></i> Labour Hours Breakdown</h2>
+            <div id="labourModalContent">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="admin-dashboard.js"></script>
+</body>
+</html>

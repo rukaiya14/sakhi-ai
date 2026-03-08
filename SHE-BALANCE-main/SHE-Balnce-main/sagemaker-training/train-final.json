@@ -1,0 +1,52 @@
+{
+  "TrainingJobName": "shebalance-skillscan-working",
+  "RoleArn": "arn:aws:iam::065538523474:role/SageMakerRole",
+  "AlgorithmSpecification": {
+    "TrainingImage": "763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-training:2.0.0-cpu-py310",
+    "TrainingInputMode": "File"
+  },
+  "InputDataConfig": [
+    {
+      "ChannelName": "train",
+      "DataSource": {
+        "S3DataSource": {
+          "S3DataType": "S3Prefix",
+          "S3Uri": "s3://shebalance-sagemaker-065538523474/skillscan/training/train",
+          "S3DataDistributionType": "FullyReplicated"
+        }
+      },
+      "ContentType": "application/x-image",
+      "CompressionType": "None"
+    },
+    {
+      "ChannelName": "validation",
+      "DataSource": {
+        "S3DataSource": {
+          "S3DataType": "S3Prefix",
+          "S3Uri": "s3://shebalance-sagemaker-065538523474/skillscan/training/val",
+          "S3DataDistributionType": "FullyReplicated"
+        }
+      },
+      "ContentType": "application/x-image",
+      "CompressionType": "None"
+    }
+  ],
+  "OutputDataConfig": {
+    "S3OutputPath": "s3://shebalance-sagemaker-065538523474/skillscan/output"
+  },
+  "ResourceConfig": {
+    "InstanceType": "ml.m5.xlarge",
+    "InstanceCount": 1,
+    "VolumeSizeInGB": 30
+  },
+  "StoppingCondition": {
+    "MaxRuntimeInSeconds": 3600
+  },
+  "HyperParameters": {
+    "epochs": "10",
+    "batch-size": "16",
+    "learning-rate": "0.001",
+    "sagemaker_program": "train.py",
+    "sagemaker_submit_directory": "s3://shebalance-sagemaker-065538523474/code/code.tar.gz"
+  }
+}

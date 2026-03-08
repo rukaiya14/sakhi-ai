@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certifications - SheBalance</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .certifications-page {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .page-header {
+            margin-bottom: 40px;
+        }
+        
+        .page-header h1 {
+            font-size: 32px;
+            color: #333;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .page-header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #D2B48C, #8B7355);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 115, 85, 0.3);
+        }
+        
+        .certifications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+        
+        .cert-card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .cert-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        .cert-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #D2B48C, #8B7355);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: white;
+        }
+        
+        .cert-card h3 {
+            font-size: 20px;
+            color: #333;
+            margin: 0 0 12px 0;
+        }
+        
+        .cert-issuer {
+            color: #8B7355;
+            font-weight: 600;
+            margin: 8px 0;
+        }
+        
+        .cert-date {
+            color: #666;
+            font-size: 14px;
+            margin: 8px 0 20px 0;
+        }
+        
+        .cert-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        
+        .btn-cert {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-view {
+            background: linear-gradient(135deg, #1565C0, #0D47A1);
+            color: white;
+        }
+        
+        .btn-view:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
+        }
+        
+        .btn-download {
+            background: linear-gradient(135deg, #2E7D32, #1B5E20);
+            color: white;
+        }
+        
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+        }
+
+        /* Certificate Viewer Modal */
+        .cert-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .cert-modal.active {
+            display: flex;
+        }
+
+        .cert-modal-content {
+            background: white;
+            border-radius: 15px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .cert-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 30px;
+            border-bottom: 2px solid #F5F5F5;
+        }
+
+        .cert-modal-header h2 {
+            font-size: 24px;
+            color: #5D4037;
+            margin: 0;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 32px;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .cert-modal-body {
+            padding: 40px;
+        }
+
+        .certificate-display {
+            background: linear-gradient(135deg, #FFFEF7 0%, #FFF8E1 50%, #F5E6D3 100%);
+            border: 20px solid;
+            border-image: linear-gradient(135deg, #8B7355, #D2B48C, #8B7355) 1;
+            border-radius: 15px;
+            padding: 60px 50px;
+            text-align: center;
+            position: relative;
+            box-shadow: 
+                inset 0 0 50px rgba(139, 115, 85, 0.1),
+                0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .certificate-display::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            right: 25px;
+            bottom: 25px;
+            border: 3px double #C97D60;
+            border-radius: 8px;
+        }
+
+        .certificate-display::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 1px solid #D2B48C;
+            border-radius: 10px;
+        }
+
+        .cert-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, #FFD700, #FFA500, #FF8C00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 56px;
+            color: white;
+            position: relative;
+            z-index: 1;
+            box-shadow: 
+                0 8px 20px rgba(255, 215, 0, 0.4),
+                inset 0 -3px 10px rgba(0, 0, 0, 0.2);
+            border: 5px solid white;
+        }
+
+        .cert-logo::before {
+            content: '';
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            border: 3px solid #FFD700;
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        .cert-title {
+            font-size: 52px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8B7355, #C97D60);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0 10px;
+            font-family: 'Georgia', serif;
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .cert-subtitle {
+            font-size: 20px;
+            color: #8B7355;
+            margin: 12px 0;
+            position: relative;
+            z-index: 1;
+            font-style: italic;
+            font-family: 'Georgia', serif;
+        }
+
+        .cert-presented-to {
+            font-size: 16px;
+            color: #666;
+            margin: 25px 0 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        .cert-recipient {
+            font-size: 42px;
+            font-weight: 700;
+            color: #5D4037;
+            margin: 20px 0 30px;
+            font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
+            position: relative;
+            z-index: 1;
+            text-decoration: underline;
+            text-decoration-color: #C97D60;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 8px;
+        }
+
+        .cert-description {
+            font-size: 17px;
+            color: #555;
+            line-height: 2;
+            max-width: 650px;
+            margin: 30px auto;
+            position: relative;
+            z-index: 1;
+            font-family: 'Georgia', serif;
+        }
+
+        .cert-description strong {
+            color: #8B7355;
+            font-size: 19px;
+            font-weight: 700;
+        }
+
+        .cert-details {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 45px;
+            padding: 25px 30px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            border: 2px solid #D2B48C;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cert-detail-item {
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .cert-detail-label {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .cert-detail-value {
+            font-size: 16px;
+            color: #5D4037;
+            font-weight: 700;
+        }
+
+        .cert-signatures {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cert-signature {
+            text-align: center;
+        }
+
+        .signature-line {
+            width: 220px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #8B7355, transparent);
+            margin: 0 auto 12px;
+        }
+
+        .signature-name {
+            font-size: 18px;
+            color: #5D4037;
+            font-weight: 700;
+            font-family: 'Brush Script MT', cursive;
+            margin-bottom: 5px;
+        }
+
+        .signature-title {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cert-seal {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: white;
+            font-weight: 700;
+            text-align: center;
+            border: 5px solid white;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            z-index: 2;
+            transform: rotate(-15deg);
+        }
+
+        .cert-seal::before {
+            content: '';
+            position: absolute;
+            width: 110px;
+            height: 110px;
+            border: 2px dashed #FFD700;
+            border-radius: 50%;
+        }
+
+        .cert-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 140px;
+            color: rgba(139, 115, 85, 0.03);
+            font-weight: 700;
+            pointer-events: none;
+            letter-spacing: 10px;
+        }
+
+        .decorative-corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .decorative-corner.top-left {
+            top: 35px;
+            left: 35px;
+            border-top: 4px solid #C97D60;
+            border-left: 4px solid #C97D60;
+        }
+
+        .decorative-corner.top-right {
+            top: 35px;
+            right: 35px;
+            border-top: 4px solid #C97D60;
+            border-right: 4px solid #C97D60;
+        }
+
+        .decorative-corner.bottom-left {
+            bottom: 35px;
+            left: 35px;
+            border-bottom: 4px solid #C97D60;
+            border-left: 4px solid #C97D60;
+        }
+
+        .decorative-corner.bottom-right {
+            bottom: 35px;
+            right: 35px;
+            border-bottom: 4px solid #C97D60;
+            border-right: 4px solid #C97D60;
+        }
+
+        @media (max-width: 768px) {
+            .cert-modal-body {
+                padding: 20px;
+            }
+
+            .certificate-display {
+                padding: 40px 20px;
+            }
+
+            .cert-title {
+                font-size: 28px;
+            }
+
+            .cert-recipient {
+                font-size: 24px;
+            }
+
+            .cert-details {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="certifications-page">
+        <a href="skills.html" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back to Skills
+        </a>
+        
+        <div class="page-header">
+            <h1><i class="fas fa-trophy"></i> Certifications</h1>
+            <p>Your professional certifications and achievements</p>
+        </div>
+        
+        <div class="certifications-grid">
+            <div class="cert-card">
+                <div class="cert-icon">
+                    <i class="fas fa-certificate"></i>
+                </div>
+                <h3>Advanced Embroidery Certificate</h3>
+                <p class="cert-issuer">National Skill Development Corporation</p>
+                <p class="cert-date">Issued: January 2024</p>
+                <div class="cert-actions">
+                    <button class="btn-cert btn-view" onclick="viewCertificate('Advanced Embroidery Certificate', 'National Skill Development Corporation', 'January 2024', 'CERT-2024-001')">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                    <button class="btn-cert btn-download" onclick="downloadCertificate('Advanced Embroidery Certificate')">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                </div>
+            </div>
+            
+            <div class="cert-card">
+                <div class="cert-icon">
+                    <i class="fas fa-certificate"></i>
+                </div>
+                <h3>Professional Henna Artist</h3>
+                <p class="cert-issuer">Indian Beauty & Wellness Association</p>
+                <p class="cert-date">Issued: November 2023</p>
+                <div class="cert-actions">
+                    <button class="btn-cert btn-view" onclick="viewCertificate('Professional Henna Artist', 'Indian Beauty & Wellness Association', 'November 2023', 'CERT-2023-089')">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                    <button class="btn-cert btn-download" onclick="downloadCertificate('Professional Henna Artist')">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                </div>
+            </div>
+            
+            <div class="cert-card">
+                <div class="cert-icon">
+                    <i class="fas fa-certificate"></i>
+                </div>
+                <h3>Tailoring & Fashion Design</h3>
+                <p class="cert-issuer">Fashion Design Council of India</p>
+                <p class="cert-date">Issued: August 2023</p>
+                <div class="cert-actions">
+                    <button class="btn-cert btn-view" onclick="viewCertificate('Tailoring & Fashion Design', 'Fashion Design Council of India', 'August 2023', 'CERT-2023-056')">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                    <button class="btn-cert btn-download" onclick="downloadCertificate('Tailoring & Fashion Design')">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certificate Viewer Modal -->
+        <div id="certModal" class="cert-modal" onclick="closeModal(event)">
+            <div class="cert-modal-content" onclick="event.stopPropagation()">
+                <div class="cert-modal-header">
+                    <h2><i class="fas fa-certificate"></i> Certificate</h2>
+                    <button class="close-modal" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="cert-modal-body">
+                    <div class="certificate-display">
+                        <div class="cert-watermark">SHEBALANCE</div>
+                        <div class="decorative-corner top-left"></div>
+                        <div class="decorative-corner top-right"></div>
+                        <div class="decorative-corner bottom-left"></div>
+                        <div class="decorative-corner bottom-right"></div>
+                        
+                        <div class="cert-logo">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div class="cert-title">CERTIFICATE</div>
+                        <div class="cert-subtitle">of Professional Excellence</div>
+                        <div class="cert-presented-to">This is proudly presented to</div>
+                        <div class="cert-recipient" id="certRecipient">Rukaiya</div>
+                        <div class="cert-description">
+                            for successfully completing the comprehensive professional training program in
+                            <strong id="certCourse">Course Name</strong> and demonstrating
+                            exceptional skills, dedication, and mastery in the craft.
+                        </div>
+                        <div class="cert-details">
+                            <div class="cert-detail-item">
+                                <div class="cert-detail-label">Certificate ID</div>
+                                <div class="cert-detail-value" id="certId">CERT-0000</div>
+                            </div>
+                            <div class="cert-detail-item">
+                                <div class="cert-detail-label">Issue Date</div>
+                                <div class="cert-detail-value" id="certDate">Month Year</div>
+                            </div>
+                            <div class="cert-detail-item">
+                                <div class="cert-detail-label">Valid Until</div>
+                                <div class="cert-detail-value">Lifetime</div>
+                            </div>
+                        </div>
+                        <div class="cert-signatures">
+                            <div class="cert-signature">
+                                <div class="signature-line"></div>
+                                <div class="signature-name">Dr. Priya Sharma</div>
+                                <div class="signature-title">Director</div>
+                            </div>
+                            <div class="cert-signature">
+                                <div class="signature-line"></div>
+                                <div class="signature-name">Authorized Signatory</div>
+                                <div class="signature-title" id="certIssuerTitle">Organization</div>
+                            </div>
+                        </div>
+                        <div class="cert-seal">
+                            <div style="line-height: 1.2;">
+                                VERIFIED<br>
+                                <i class="fas fa-check-circle" style="font-size: 24px; margin-top: 5px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Always use Rukaiya as the name
+        const artisanName = 'Rukaiya';
+
+        // View certificate
+        function viewCertificate(courseName, issuer, issueDate, certId) {
+            document.getElementById('certRecipient').textContent = artisanName;
+            document.getElementById('certCourse').textContent = courseName;
+            document.getElementById('certDate').textContent = issueDate;
+            document.getElementById('certId').textContent = certId;
+            document.getElementById('certIssuerTitle').textContent = issuer;
+            
+            document.getElementById('certModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close modal
+        function closeModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            
+            document.getElementById('certModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Download certificate
+        function downloadCertificate(courseName) {
+            alert(`Downloading Certificate\n\nCourse: ${courseName}\nRecipient: ${artisanName}\n\nIn production, this would generate and download a PDF certificate.`);
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

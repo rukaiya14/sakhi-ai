@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clear Dashboard Cache</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Fix Dashboard Name</h1>
+        
+        <div class="status info" id="status">
+            Click the button below to update the name to "Rukaiya Khan"
+        </div>
+        
+        <button onclick="fixName()">⚡ FIX NAME NOW</button>
+        
+        <div id="countdown" style="font-size: 20px; margin-top: 20px; color: #667eea;"></div>
+    </div>
+    
+    <script>
+        function fixName() {
+            const statusDiv = document.getElementById('status');
+            const countdownDiv = document.getElementById('countdown');
+            
+            try {
+                // Get current user data
+                const userDataStr = localStorage.getItem('shebalance_user');
+                
+                if (!userDataStr) {
+                    statusDiv.className = 'status info';
+                    statusDiv.innerHTML = '⚠️ No user data found. Please login first.<br><br><a href="http://localhost:8080/login.html" style="color: #667eea;">Go to Login</a>';
+                    return;
+                }
+                
+                const userData = JSON.parse(userDataStr);
+                
+                // Update the name
+                userData.name = 'Rukaiya Khan';
+                userData.fullName = 'Rukaiya Khan';
+                
+                // Save back
+                localStorage.setItem('shebalance_user', JSON.stringify(userData));
+                
+                // Success!
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = '✅ NAME UPDATED!<br><br>Old: <s>Rukaiya Ghadiali</s><br>New: <strong>Rukaiya Khan</strong>';
+                
+                // Countdown
+                let seconds = 3;
+                countdownDiv.textContent = `Redirecting to dashboard in ${seconds}...`;
+                
+                const interval = setInterval(() => {
+                    seconds--;
+                    if (seconds > 0) {
+                        countdownDiv.textContent = `Redirecting to dashboard in ${seconds}...`;
+                    } else {
+                        clearInterval(interval);
+                        window.location.href = 'http://localhost:8080/dashboard.html';
+                    }
+                }, 1000);
+                
+            } catch (error) {
+                statusDiv.className = 'status';
+                statusDiv.style.background = '#f8d7da';
+                statusDiv.style.color = '#721c24';
+                statusDiv.innerHTML = '❌ Error: ' + error.message;
+            }
+        }
+        
+        // Auto-check on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const userData = localStorage.getItem('shebalance_user');
+            const statusDiv = document.getElementById('status');
+            
+            if (userData) {
+                const user = JSON.parse(userData);
+                if (user.name === 'Rukaiya Khan' || user.fullName === 'Rukaiya Khan') {
+                    statusDiv.className = 'status success';
+                    statusDiv.innerHTML = '✅ Already showing "Rukaiya Khan"!<br><br><a href="http://localhost:8080/dashboard.html" style="color: #667eea;">Go to Dashboard</a>';
+                } else {
+                    statusDiv.innerHTML = `Current name: <strong>${user.name || user.fullName}</strong><br><br>Click button to change to "Rukaiya Khan"`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

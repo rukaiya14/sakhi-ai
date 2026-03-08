@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Skills - SheBalance</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .skills-page {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .page-header {
+            margin-bottom: 40px;
+        }
+        
+        .page-header h1 {
+            font-size: 32px;
+            color: #333;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .page-header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #D2B48C, #8B7355);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 115, 85, 0.3);
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+        
+        .skill-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .skill-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .skill-header h3 {
+            font-size: 20px;
+            color: #333;
+            margin: 0;
+        }
+        
+        .skill-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .skill-badge.expert {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+        
+        .skill-badge.advanced {
+            background: #E3F2FD;
+            color: #1565C0;
+        }
+        
+        .skill-badge.intermediate {
+            background: #FFF3E0;
+            color: #f57c00;
+        }
+        
+        .skill-progress {
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #F5F5DC;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #D2B48C, #8B7355);
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+        
+        .skill-meta {
+            color: #666;
+            font-size: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        
+        .skill-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="skills-page">
+        <a href="skills.html" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back to Skills
+        </a>
+        
+        <div class="page-header">
+            <h1><i class="fas fa-star"></i> Active Skills</h1>
+            <p>Your current skill portfolio and proficiency levels</p>
+        </div>
+        
+        <div class="skills-grid">
+            <div class="skill-card">
+                <div class="skill-header">
+                    <h3>Embroidery</h3>
+                    <span class="skill-badge expert">Expert</span>
+                </div>
+                <div class="skill-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 95%;"></div>
+                    </div>
+                    <div class="skill-meta">
+                        <span><i class="fas fa-chart-line"></i> 95% Proficiency</span>
+                        <span><i class="fas fa-clock"></i> 45 hours practiced</span>
+                        <span><i class="fas fa-project-diagram"></i> 12 projects completed</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="skill-card">
+                <div class="skill-header">
+                    <h3>Henna Art</h3>
+                    <span class="skill-badge advanced">Advanced</span>
+                </div>
+                <div class="skill-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 88%;"></div>
+                    </div>
+                    <div class="skill-meta">
+                        <span><i class="fas fa-chart-line"></i> 88% Proficiency</span>
+                        <span><i class="fas fa-clock"></i> 32 hours practiced</span>
+                        <span><i class="fas fa-project-diagram"></i> 8 projects completed</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="skill-card">
+                <div class="skill-header">
+                    <h3>Crochet</h3>
+                    <span class="skill-badge intermediate">Intermediate</span>
+                </div>
+                <div class="skill-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%;"></div>
+                    </div>
+                    <div class="skill-meta">
+                        <span><i class="fas fa-chart-line"></i> 75% Proficiency</span>
+                        <span><i class="fas fa-clock"></i> 28 hours practiced</span>
+                        <span><i class="fas fa-project-diagram"></i> 6 projects completed</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="skill-card">
+                <div class="skill-header">
+                    <h3>Tailoring</h3>
+                    <span class="skill-badge advanced">Advanced</span>
+                </div>
+                <div class="skill-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 82%;"></div>
+                    </div>
+                    <div class="skill-meta">
+                        <span><i class="fas fa-chart-line"></i> 82% Proficiency</span>
+                        <span><i class="fas fa-clock"></i> 38 hours practiced</span>
+                        <span><i class="fas fa-project-diagram"></i> 10 projects completed</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="skill-card">
+                <div class="skill-header">
+                    <h3>Home Cooking</h3>
+                    <span class="skill-badge intermediate">Intermediate</span>
+                </div>
+                <div class="skill-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 70%;"></div>
+                    </div>
+                    <div class="skill-meta">
+                        <span><i class="fas fa-chart-line"></i> 70% Proficiency</span>
+                        <span><i class="fas fa-clock"></i> 25 hours practiced</span>
+                        <span><i class="fas fa-utensils"></i> 15 dishes mastered</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

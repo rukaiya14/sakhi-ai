@@ -1,0 +1,16 @@
+{
+  "name": "ai-sakhi-context-lambda",
+  "version": "1.0.0",
+  "description": "AI Sakhi Context Fetcher Lambda",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["ai", "context", "dynamodb"],
+  "author": "SHE-BALANCE",
+  "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.450.0",
+    "@aws-sdk/lib-dynamodb": "^3.450.0"
+  }
+}

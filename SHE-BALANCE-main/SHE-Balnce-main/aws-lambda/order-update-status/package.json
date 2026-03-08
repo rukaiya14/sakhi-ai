@@ -1,0 +1,14 @@
+{
+  "name": "shebalance-order-update-status",
+  "version": "1.0.0",
+  "description": "Update order status Lambda function for SHE-BALANCE platform",
+  "main": "index.js",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.450.0",
+    "@aws-sdk/lib-dynamodb": "^3.450.0",
+    "@aws-sdk/client-sns": "^3.450.0",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "author": "SHE-BALANCE Team",
+  "license": "MIT"
+}

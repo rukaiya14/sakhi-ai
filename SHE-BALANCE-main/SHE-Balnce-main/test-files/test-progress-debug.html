@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Bar Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .balance-item {
+            margin-bottom: 30px;
+        }
+        .balance-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .balance-time-container {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+        .balance-time-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #5D4037;
+            cursor: text;
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            min-width: 40px;
+            text-align: center;
+        }
+        .balance-time-number:hover {
+            background: rgba(141, 110, 99, 0.1);
+            border-color: rgba(141, 110, 99, 0.3);
+        }
+        .balance-time-number:focus {
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(141, 110, 99, 0.3);
+            border-color: #8D6E63;
+        }
+        .balance-time-unit {
+            font-size: 14px;
+            font-weight: 500;
+            color: #999;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+            border-radius: 4px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .console-log {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin-top: 30px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin-bottom: 5px;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Progress Bar Animation Test</h1>
+        
+        <div class="instructions">
+            <h3>📝 Instructions:</h3>
+            <ol>
+                <li>Click on the number below (e.g., "4.5")</li>
+                <li>Type a new number (e.g., "6")</li>
+                <li>Press <strong>Enter</strong></li>
+                <li>Watch the progress bar animate!</li>
+            </ol>
+        </div>
+
+        <div class="balance-item">
+            <div class="balance-label">Household Work</div>
+            <div class="balance-time-container">
+                <span class="balance-time-number" 
+                      id="household-time" 
+                      contenteditable="true"
+                      data-type="household"
+                      onclick="selectText(this)"
+                      onblur="saveInlineEdit(this)"
+                      onkeypress="handleEnterKey(event, this)">4.5</span>
+                <span class="balance-time-unit">hours</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress" id="household-progress" style="width: 56%"></div>
+            </div>
+        </div>
+
+        <div class="balance-item">
+            <div class="balance-label">Career Time</div>
+            <div class="balance-time-container">
+                <span class="balance-time-number" 
+                      id="career-time" 
+                      contenteditable="true"
+                      data-type="career"
+                      onclick="selectText(this)"
+                      onblur="saveInlineEdit(this)"
+                      onkeypress="handleEnterKey(event, this)">2</span>
+                <span class="balance-time-unit">hours</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress" id="career-progress" style="width: 25%"></div>
+            </div>
+        </div>
+
+        <div class="console-log" id="console">
+            <div class="log-entry">🟢 Test page loaded. Ready to test!</div>
+            <div class="log-entry">💡 Click on a number and press Enter to see animation</div>
+        </div>
+    </div>
+
+    <script>
+        // Simple data storage
+        const balanceData = {
+            household: 4.5,
+            career: 2,
+            selfcare: 1.5
+        };
+
+        // Log to custom console
+        function log(message) {
+            const console = document.getElementById('console');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            console.appendChild(entry);
+            console.scrollTop = console.scrollHeight;
+            
+            // Also log to browser console
+            console.log(message);
+        }
+
+        // Select all text when clicking
+        function selectText(element) {
+            log(`📝 Clicked on ${element.getAttribute('data-type')}`);
+            const range = document.createRange();
+            range.selectNodeContents(element);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+
+        // Handle Enter key
+        function handleEnterKey(event, element) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                log(`⌨️ Enter key pressed`);
+                element.blur();
+                return false;
+            }
+        }
+
+        // Save inline edit
+        function saveInlineEdit(element) {
+            const type = element.getAttribute('data-type');
+            const text = element.textContent.trim();
+            
+            log(`🔄 Saving ${type}: ${text}`);
+            
+            // Extract number
+            const numberMatch = text.match(/[\d.]+/);
+            if (!numberMatch) {
+                log(`❌ Invalid input: ${text}`);
+                element.textContent = balanceData[type];
+                return;
+            }
+            
+            let value = parseFloat(numberMatch[0]);
+            
+            // Validate
+            if (value < 0 || value > 24) {
+                log(`❌ Value out of range: ${value}`);
+                element.textContent = balanceData[type];
+                return;
+            }
+            
+            // Round to nearest 0.5
+            value = Math.round(value * 2) / 2;
+            
+            // Update data
+            balanceData[type] = value;
+            element.textContent = `${value}`;
+            
+            log(`✅ Updated ${type} to ${value} hours`);
+            
+            // Get progress bar
+            const progressBar = document.getElementById(`${type}-progress`);
+            
+            if (!progressBar) {
+                log(`❌ Progress bar not found: ${type}-progress`);
+                return;
+            }
+            
+            log(`📊 Found progress bar element`);
+            
+            // Reset animation
+            log(`🔄 Resetting progress bar to 0%`);
+            progressBar.style.transition = 'none';
+            progressBar.style.width = '0%';
+            
+            // Force reflow
+            void progressBar.offsetWidth;
+            log(`⚡ Forced browser reflow`);
+            
+            // Re-enable transition
+            progressBar.style.transition = 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+            log(`🎨 Re-enabled transition`);
+            
+            // Calculate percentage
+            let percentage;
+            if (type === 'household') {
+                percentage = Math.min((value / 8) * 100, 100);
+            } else if (type === 'career') {
+                percentage = Math.min((value / 8) * 100, 100);
+            } else {
+                percentage = Math.min((value / 4) * 100, 100);
+            }
+            
+            log(`📈 Calculated percentage: ${percentage.toFixed(1)}%`);
+            
+            // Animate to new value
+            setTimeout(() => {
+                progressBar.style.width = `${percentage}%`;
+                log(`✨ Progress bar animated to ${percentage.toFixed(1)}%`);
+                log(`🎉 Animation complete!`);
+            }, 10);
+        }
+
+        log(`✅ All functions loaded successfully`);
+    </script>
+</body>
+</html>

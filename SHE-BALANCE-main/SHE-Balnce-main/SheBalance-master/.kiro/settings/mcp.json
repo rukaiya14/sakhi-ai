@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "aws-docs": {
+      "command": "C:\\Users\\Aliasgar Ghadiali\\.local\\bin\\uvx.exe",
+      "args": ["awslabs.aws-documentation-mcp-server@latest"],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR",
+        "PATH": "C:\\Users\\Aliasgar Ghadiali\\.local\\bin;%PATH%"
+      },
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}

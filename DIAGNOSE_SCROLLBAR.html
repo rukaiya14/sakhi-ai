@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrollbar Diagnostic</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .alert {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .alert h2 {
+            color: #d97706;
+            margin-bottom: 10px;
+        }
+
+        .demo-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .sidebar-demo {
+            position: relative;
+            width: 280px;
+            height: 600px;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow-y: scroll; /* ALWAYS SHOW */
+            overflow-x: hidden;
+            border-radius: 12px;
+        }
+
+        /* ALWAYS VISIBLE SCROLLBAR */
+        .sidebar-demo::-webkit-scrollbar {
+            width: 12px;
+            background: #f1f1f1;
+        }
+
+        .sidebar-demo::-webkit-scrollbar-track {
+            background: #e5e7eb;
+            border-radius: 6px;
+            margin: 8px 0;
+            border: 1px solid #d1d5db;
+        }
+
+        .sidebar-demo::-webkit-scrollbar-thumb {
+            background: #6366f1;
+            border-radius: 6px;
+            border: 2px solid #e5e7eb;
+            min-height: 40px;
+        }
+
+        .sidebar-demo::-webkit-scrollbar-thumb:hover {
+            background: #4f46e5;
+        }
+
+        .sidebar-demo::-webkit-scrollbar-thumb:active {
+            background: #4338ca;
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #6B5444;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            color: #6b7280;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: #f9fafb;
+            color: #6366f1;
+            border-left-color: #6366f1;
+        }
+
+        .sidebar-footer {
+            padding: 20px 0;
+            border-top: 1px solid #e5e7eb;
+            flex-shrink: 0;
+        }
+
+        .info-panel {
+            flex: 1;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-panel h2 {
+            color: #6366f1;
+            margin-bottom: 20px;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 4px solid #10b981;
+        }
+
+        .checklist li:before {
+            content: "✅ ";
+            font-weight: bold;
+        }
+
+        .arrow {
+            position: absolute;
+            right: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 48px;
+            color: #ef4444;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: translateY(-50%) scale(1); }
+            50% { opacity: 0.7; transform: translateY(-50%) scale(1.1); }
+        }
+
+        .code-block {
+            background: #1f2937;
+            color: #10b981;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="alert">
+            <h2>🔍 Scrollbar Diagnostic Tool</h2>
+            <p>This page shows you EXACTLY where the scrollbar should appear and how to see it.</p>
+        </div>
+
+        <div class="demo-container">
+            <div style="position: relative;">
+                <div class="sidebar-demo">
+                    <div class="sidebar-header">
+                        <div class="logo">🌸 SheBalance</div>
+                    </div>
+                    <nav class="sidebar-nav">
+                        <a href="#" class="nav-item">📱 Dashboard</a>
+                        <a href="#" class="nav-item">🤖 AI Sakhi Assistant</a>
+                        <a href="#" class="nav-item">⭐ My Skills</a>
+                        <a href="#" class="nav-item">💼 Opportunities</a>
+                        <a href="#" class="nav-item">🍴 Food Marketplace</a>
+                        <a href="#" class="nav-item">🏪 Artisan Marketplace</a>
+                        <a href="#" class="nav-item">➕ Add Product</a>
+                        <a href="#" class="nav-item">👥 Community</a>
+                        <a href="#" class="nav-item">♻️ Resource Circularity</a>
+                        <a href="#" class="nav-item">🕐 Invisible Labor</a>
+                        <a href="#" class="nav-item">🏭 Virtual Factory</a>
+                        <a href="#" class="nav-item">📈 Progress</a>
+                        <a href="#" class="nav-item">⚙️ Settings</a>
+                    </nav>
+                    <div class="sidebar-footer">
+                        <a href="#" class="nav-item">🚪 Logout</a>
+                    </div>
+                </div>
+                <div class="arrow">👉</div>
+            </div>
+
+            <div class="info-panel">
+                <h2>✅ What You Should See</h2>
+                
+                <p style="margin-bottom: 20px;">
+                    Look at the <span class="highlight">RIGHT EDGE</span> of the white sidebar on the left. 
+                    You should see a <span class="highlight">BLUE SCROLLBAR</span> that is <span class="highlight">12px wide</span>.
+                </p>
+
+                <ul class="checklist">
+                    <li>Scrollbar is on the RIGHT side of the sidebar</li>
+                    <li>Scrollbar is BLUE (#6366f1)</li>
+                    <li>Scrollbar is 12px wide (easy to see)</li>
+                    <li>Scrollbar is ALWAYS visible (not just on hover)</li>
+                    <li>You can scroll to see all menu items</li>
+                    <li>Hover makes it darker blue</li>
+                </ul>
+
+                <h2 style="margin-top: 30px;">🎨 CSS Applied</h2>
+                <div class="code-block">
+.sidebar {<br>
+&nbsp;&nbsp;overflow-y: scroll; /* ALWAYS SHOW */<br>
+}<br>
+<br>
+.sidebar::-webkit-scrollbar {<br>
+&nbsp;&nbsp;width: 12px; /* Wide and visible */<br>
+&nbsp;&nbsp;background: #f1f1f1;<br>
+}<br>
+<br>
+.sidebar::-webkit-scrollbar-thumb {<br>
+&nbsp;&nbsp;background: #6366f1; /* BLUE */<br>
+&nbsp;&nbsp;border-radius: 6px;<br>
+}
+                </div>
+
+                <h2 style="margin-top: 30px;">🔧 Still Not Seeing It?</h2>
+                <ol style="padding-left: 20px; line-height: 2;">
+                    <li>Run <code style="background: #f3f4f6; padding: 4px 8px; border-radius: 4px;">FORCE_CLEAR_CACHE_AND_TEST.bat</code></li>
+                    <li>Or press <code style="background: #f3f4f6; padding: 4px 8px; border-radius: 4px;">Ctrl + Shift + Delete</code></li>
+                    <li>Clear "Cached images and files"</li>
+                    <li>Restart browser completely</li>
+                    <li>Open dashboard again</li>
+                </ol>
+
+                <div style="background: #dcfce7; border-left: 4px solid #10b981; padding: 15px; margin-top: 20px; border-radius: 8px;">
+                    <strong style="color: #059669;">✅ If you can see the blue scrollbar on this page:</strong>
+                    <p style="margin: 10px 0 0 0; color: #065f46;">
+                        The CSS is working! You just need to clear your cache on the dashboard page.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Log scrollbar info
+        console.log('Scrollbar diagnostic loaded');
+        console.log('Sidebar height:', document.querySelector('.sidebar-demo').scrollHeight);
+        console.log('Viewport height:', document.querySelector('.sidebar-demo').clientHeight);
+        console.log('Is scrollable:', document.querySelector('.sidebar-demo').scrollHeight > document.querySelector('.sidebar-demo').clientHeight);
+    </script>
+</body>
+</html>

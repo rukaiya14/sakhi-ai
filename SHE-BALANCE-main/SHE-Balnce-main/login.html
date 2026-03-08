@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SheBalance</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8D6E63 0%, #5D4037 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: #F5F5DC;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            max-width: 1000px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .login-left {
+            background: linear-gradient(135deg, #8D6E63 0%, #5D4037 100%);
+            padding: 60px 40px;
+            color: #F5F5DC;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-left h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #F5F5DC;
+        }
+
+        .login-left p {
+            font-size: 18px;
+            opacity: 0.9;
+            line-height: 1.6;
+            color: #F5F5DC;
+        }
+
+        .login-left .features {
+            margin-top: 40px;
+        }
+
+        .login-left .features p {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .login-right {
+            padding: 60px 40px;
+            background: #F5F5DC;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header h2 {
+            color: #5D4037;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #8D6E63;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #5D4037;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #D7CCC8;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #8D6E63;
+        }
+
+        .error-message {
+            background: #FFEBEE;
+            border: 2px solid #EF5350;
+            color: #C62828;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #8D6E63 0%, #5D4037 100%);
+            color: #F5F5DC;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(93, 64, 55, 0.3);
+        }
+
+        .btn-login:disabled {
+            background: #BCAAA4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #8D6E63;
+        }
+
+        .login-footer a {
+            color: #5D4037;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .test-credentials {
+            background: #FFF8DC;
+            border: 2px solid #D4A574;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .test-credentials h4 {
+            color: #5D4037;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .credential-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background: white;
+            border: 2px solid #D7CCC8;
+            border-radius: 8px;
+            color: #5D4037;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .credential-btn:hover {
+            background: #8D6E63;
+            color: #F5F5DC;
+            border-color: #8D6E63;
+            transform: translateX(5px);
+        }
+
+        .credential-btn strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 15px;
+        }
+
+        .credential-btn small {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                grid-template-columns: 1fr;
+            }
+
+            .login-left {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-left">
+            <h1>Welcome Back!</h1>
+            <p>Login to access your SheBalance dashboard and continue empowering women artisans.</p>
+            <div class="features">
+                <p><i class="fas fa-check-circle"></i> Manage your orders</p>
+                <p><i class="fas fa-check-circle"></i> Track your progress</p>
+                <p><i class="fas fa-check-circle"></i> Connect with buyers</p>
+                <p><i class="fas fa-check-circle"></i> Grow your business</p>
+            </div>
+        </div>
+
+        <div class="login-right">
+            <div class="login-header">
+                <h2>Login to SheBalance</h2>
+                <p>Enter your credentials to continue</p>
+            </div>
+
+            <div class="test-credentials">
+                <h4>🧪 Test Credentials - Click to fill:</h4>
+                
+                <button class="credential-btn" onclick="fillCredentials('rukaiya@example.com', 'artisan123')">
+                    <strong><i class="fas fa-user"></i> Artisan - Rukaiya Khan</strong>
+                    <small>rukaiya@example.com / artisan123</small>
+                </button>
+
+                <button class="credential-btn" onclick="fillCredentials('rahul@example.com', 'buyer123')">
+                    <strong><i class="fas fa-shopping-bag"></i> Buyer - Rahul Kumar</strong>
+                    <small>rahul@example.com / buyer123</small>
+                </button>
+
+                <button class="credential-btn" onclick="fillCredentials('corporate@shebalance.com', 'corporate123')">
+                    <strong><i class="fas fa-building"></i> Corporate Buyer</strong>
+                    <small>corporate@shebalance.com / corporate123</small>
+                </button>
+
+                <button class="credential-btn" onclick="fillCredentials('admin@shebalance.com', 'admin123')">
+                    <strong><i class="fas fa-user-shield"></i> Admin</strong>
+                    <small>admin@shebalance.com / admin123</small>
+                </button>
+            </div>
+
+            <div id="errorMessage" class="error-message"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Email Address
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn-login" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <p>Don't have an account? <a href="index.html">Sign Up</a></p>
+                <p style="margin-top: 10px;"><a href="index.html">← Back to Home</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const errorDiv = document.getElementById('errorMessage');
+        const loginBtn = document.getElementById('loginBtn');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        // Function to fill credentials when clicking test buttons
+        function fillCredentials(email, password) {
+            emailInput.value = email;
+            passwordInput.value = password;
+            emailInput.focus();
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            // Hide error
+            errorDiv.style.display = 'none';
+            errorDiv.textContent = '';
+
+            // Show loading
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+
+            try {
+                console.log('Attempting login...');
+                console.log('Email:', email);
+
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+                console.log('Response:', data);
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Login failed');
+                }
+
+                // Success!
+                console.log('✅ Login successful!');
+                console.log('User:', data.user.fullName);
+                console.log('Role:', data.user.role);
+
+                // Save to localStorage
+                localStorage.setItem('shebalance_token', data.token);
+                localStorage.setItem('shebalance_user', JSON.stringify({
+                    email: data.user.email,
+                    name: data.user.fullName,
+                    role: data.user.role,
+                    userId: data.user.userId,
+                    status: data.user.status,
+                    loginTime: new Date().toISOString()
+                }));
+
+                // Show success message
+                alert('Login successful! Welcome back, ' + data.user.fullName + '!');
+
+                // Redirect based on role
+                let redirectUrl = 'dashboard.html';
+                switch(data.user.role) {
+                    case 'admin':
+                        redirectUrl = 'admin-dashboard.html';
+                        break;
+                    case 'buyer':
+                        redirectUrl = 'buyer-dashboard.html';
+                        break;
+                    case 'corporate':
+                        redirectUrl = 'corporate-dashboard.html';
+                        break;
+                    case 'artisan':
+                    default:
+                        redirectUrl = 'dashboard.html';
+                        break;
+                }
+
+                console.log('Redirecting to:', redirectUrl);
+                window.location.href = redirectUrl;
+
+            } catch (error) {
+                console.error('Login error:', error);
+                
+                errorDiv.textContent = error.message || 'Login failed. Please try again.';
+                errorDiv.style.display = 'block';
+
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+            }
+        });
+    </script>
+</body>
+</html>

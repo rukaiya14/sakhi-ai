@@ -1,0 +1,36 @@
+{
+  "version": "50.0.0",
+  "files": {
+    "3366b7f23ca05774511d5d1b258ad82eb04e6f63f5da2e385e4c0f35e4555450": {
+      "displayName": "SkillScanAnalysisFunction/Code",
+      "source": {
+        "path": "asset.3366b7f23ca05774511d5d1b258ad82eb04e6f63f5da2e385e4c0f35e4555450",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "065538523474-us-east-1-5800e029": {
+          "bucketName": "cdk-hnb659fds-assets-065538523474-us-east-1",
+          "objectKey": "3366b7f23ca05774511d5d1b258ad82eb04e6f63f5da2e385e4c0f35e4555450.zip",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::065538523474:role/cdk-hnb659fds-file-publishing-role-065538523474-us-east-1"
+        }
+      }
+    },
+    "2ae39f5a504dc417ed60c79db02f295146a3148d3a773fd9608814d6010055ce": {
+      "displayName": "SkillScanStack Template",
+      "source": {
+        "path": "SkillScanStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "065538523474-us-east-1-b9f18c30": {
+          "bucketName": "cdk-hnb659fds-assets-065538523474-us-east-1",
+          "objectKey": "2ae39f5a504dc417ed60c79db02f295146a3148d3a773fd9608814d6010055ce.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::065538523474:role/cdk-hnb659fds-file-publishing-role-065538523474-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

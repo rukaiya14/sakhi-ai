@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test AI Sakhi Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+        
+        .test-btn {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+        
+        /* AI Sakhi Side Panel */
+        .ai-sakhi-panel {
+            position: fixed;
+            right: -450px;
+            top: 0;
+            width: 450px;
+            height: 100vh;
+            background: white;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+            z-index: 2000;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .ai-sakhi-panel.active {
+            right: 0;
+        }
+
+        .ai-sakhi-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .ai-sakhi-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .ai-sakhi-header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-sakhi-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-sakhi-title h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .close-sakhi-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-sakhi-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .ai-sakhi-content {
+            padding: 20px;
+        }
+
+        .welcome-message {
+            background: #f0f9ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #6366f1;
+        }
+
+        .welcome-message i {
+            font-size: 48px;
+            color: #6366f1;
+            margin-bottom: 10px;
+        }
+
+        .console-log {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <h1>🧪 AI Sakhi Panel Test</h1>
+    
+    <p>Click the button below to test if the AI Sakhi panel opens correctly:</p>
+    
+    <button class="test-btn" onclick="testOpenPanel()">
+        <i class="fas fa-robot"></i> Open AI Sakhi Panel
+    </button>
+    
+    <button class="test-btn" onclick="checkElements()">
+        <i class="fas fa-search"></i> Check Elements
+    </button>
+    
+    <div class="console-log" id="console">
+        <div class="log-entry">🟢 Test page loaded</div>
+    </div>
+
+    <!-- AI Sakhi Side Panel -->
+    <div id="aiSakhiPanel" class="ai-sakhi-panel">
+        <div class="ai-sakhi-header">
+            <div class="ai-sakhi-title">
+                <i class="fas fa-robot"></i>
+                <h2>AI Sakhi Assistant</h2>
+            </div>
+            <button class="close-sakhi-btn" onclick="closeAISakhi()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="ai-sakhi-content">
+            <div class="welcome-message">
+                <div style="text-align: center;">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <p style="text-align: center; margin: 10px 0 0 0;">
+                    <strong>Namaste! I'm your AI Sakhi.</strong><br>
+                    How can I help you today?
+                </p>
+            </div>
+            
+            <p>This is a test of the AI Sakhi side panel. If you can see this, the panel is working correctly!</p>
+            
+            <button class="test-btn" onclick="closeAISakhi()">
+                Close Panel
+            </button>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="aiSakhiOverlay" class="ai-sakhi-overlay" onclick="closeAISakhi()"></div>
+
+    <script>
+        function log(message) {
+            const console = document.getElementById('console');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            console.appendChild(entry);
+            console.scrollTop = console.scrollHeight;
+            window.console.log(message);
+        }
+
+        function testOpenPanel() {
+            log('🔄 Attempting to open AI Sakhi panel...');
+            
+            const panel = document.getElementById('aiSakhiPanel');
+            const overlay = document.getElementById('aiSakhiOverlay');
+            
+            if (!panel) {
+                log('❌ ERROR: aiSakhiPanel element not found!');
+                return;
+            }
+            
+            if (!overlay) {
+                log('❌ ERROR: aiSakhiOverlay element not found!');
+                return;
+            }
+            
+            log('✅ Elements found');
+            log('🎨 Adding active classes...');
+            
+            panel.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            log('✅ Panel should now be visible!');
+            log('📊 Panel classes: ' + panel.className);
+            log('📊 Overlay classes: ' + overlay.className);
+        }
+
+        function closeAISakhi() {
+            log('🔄 Closing AI Sakhi panel...');
+            
+            const panel = document.getElementById('aiSakhiPanel');
+            const overlay = document.getElementById('aiSakhiOverlay');
+            
+            if (panel) {
+                panel.classList.remove('active');
+                log('✅ Removed active class from panel');
+            }
+            
+            if (overlay) {
+                overlay.classList.remove('active');
+                log('✅ Removed active class from overlay');
+            }
+            
+            document.body.style.overflow = 'auto';
+            log('✅ Panel closed');
+        }
+
+        function checkElements() {
+            log('🔍 Checking for required elements...');
+            
+            const panel = document.getElementById('aiSakhiPanel');
+            const overlay = document.getElementById('aiSakhiOverlay');
+            
+            if (panel) {
+                log('✅ aiSakhiPanel exists');
+                log('   - Classes: ' + panel.className);
+                log('   - Position: ' + getComputedStyle(panel).right);
+            } else {
+                log('❌ aiSakhiPanel NOT FOUND');
+            }
+            
+            if (overlay) {
+                log('✅ aiSakhiOverlay exists');
+                log('   - Classes: ' + overlay.className);
+                log('   - Opacity: ' + getComputedStyle(overlay).opacity);
+            } else {
+                log('❌ aiSakhiOverlay NOT FOUND');
+            }
+        }
+
+        // Check on load
+        window.addEventListener('DOMContentLoaded', function() {
+            log('✅ DOM loaded');
+            checkElements();
+        });
+    </script>
+</body>
+</html>

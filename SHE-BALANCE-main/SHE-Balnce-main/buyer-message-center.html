@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Center - SheBalance</title>
+    <link rel="stylesheet" href="buyer-message-center.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span>SheBalance</span>
+                <span class="buyer-badge">Buyer Portal</span>
+            </div>
+            <div class="nav-menu">
+                <a href="buyer-dashboard.html" class="nav-link">Browse Artisans</a>
+                <a href="buyer-orders.html" class="nav-link">My Orders</a>
+                <a href="buyer-favorites.html" class="nav-link">Favorites</a>
+                <a href="index.html" class="nav-link">Home</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" onclick="toggleNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <div class="user-profile" onclick="toggleUserMenu()">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="user-name" id="userName">Loading...</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Menu Dropdown -->
+    <div id="userMenu" class="user-menu">
+        <div class="menu-item" onclick="window.location.href='#profile'">
+            <i class="fas fa-user-circle"></i>
+            <span>My Profile</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='#settings'">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </div>
+        <div class="menu-item" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="message-center-container">
+        <div class="back-button-container">
+            <button class="btn-back" onclick="goBackToDashboard()">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </button>
+        </div>
+
+        <div class="message-center-content">
+            <!-- Artisan Profile Section -->
+            <div class="artisan-profile-card" id="artisanProfile">
+                <div class="profile-header">
+                    <h2>Contact Artisan</h2>
+                </div>
+                <div class="profile-content">
+                    <div class="profile-image-wrapper">
+                        <img id="artisanImage" src="" alt="Artisan" class="profile-image">
+                    </div>
+                    <div class="profile-info">
+                        <h3 id="artisanName">Loading...</h3>
+                        <p class="artisan-skill" id="artisanSkill"></p>
+                        <div class="artisan-rating" id="artisanRating">
+                            <span class="stars"></span>
+                            <span class="rating-text"></span>
+                        </div>
+                        <div class="artisan-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> <span id="artisanLocation"></span></span>
+                            <span><i class="fas fa-shopping-bag"></i> <span id="artisanOrders"></span> orders</span>
+                        </div>
+                        <div class="artisan-address" id="artisanAddress">
+                            <!-- Address will be populated by JavaScript -->
+                        </div>
+                        <div class="artisan-tags" id="artisanTags"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Options Section -->
+            <div class="contact-options">
+                <h3 class="section-title">Choose Your Preferred Contact Method</h3>
+                
+                <div class="contact-cards">
+                    <!-- WhatsApp Card -->
+                    <div class="contact-card whatsapp-card">
+                        <div class="contact-icon">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>WhatsApp</h4>
+                            <p>Send a message instantly</p>
+                            <p class="contact-value" id="whatsappNumber">Loading...</p>
+                        </div>
+                        <button class="btn-contact whatsapp-btn" id="whatsappBtn" onclick="openWhatsApp()">
+                            <i class="fab fa-whatsapp"></i> Open WhatsApp
+                        </button>
+                    </div>
+
+                    <!-- Email Card -->
+                    <div class="contact-card email-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Email</h4>
+                            <p>Send a detailed message</p>
+                            <p class="contact-value" id="emailAddress">Loading...</p>
+                        </div>
+                        <button class="btn-contact email-btn" id="emailBtn" onclick="openEmail()">
+                            <i class="fas fa-envelope"></i> Send Email
+                        </button>
+                    </div>
+
+                    <!-- Phone Card -->
+                    <div class="contact-card phone-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Phone Call</h4>
+                            <p>Talk directly with artisan</p>
+                            <p class="contact-value" id="phoneNumber">Loading...</p>
+                        </div>
+                        <button class="btn-contact phone-btn" id="phoneBtn" onclick="makePhoneCall()">
+                            <i class="fas fa-phone"></i> Call Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Info -->
+            <div class="info-section">
+                <div class="info-card">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <h4>Quick Response</h4>
+                        <p>Most artisans respond within 2-4 hours during business hours</p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <h4>Secure Communication</h4>
+                        <p>All communications are monitored for your safety and security</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="buyer-message-center.js"></script>
+</body>
+</html>

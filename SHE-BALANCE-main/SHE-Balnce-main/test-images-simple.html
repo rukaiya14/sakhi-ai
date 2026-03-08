@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Test - Simple</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .test-section h2 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        .image-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        .image-box {
+            border: 3px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .image-box.loaded {
+            border-color: #4CAF50;
+        }
+        .image-box.error {
+            border-color: #f44336;
+        }
+        .image-box img {
+            max-width: 250px;
+            display: block;
+        }
+        .image-box p {
+            margin: 10px 0 0 0;
+            font-size: 12px;
+            color: #666;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <h1>🖼️ Artisan Marketplace Image Test</h1>
+    <div id="summary" class="status"></div>
+    
+    <div class="test-section">
+        <h2>Embroidery Products (6 images)</h2>
+        <div class="image-container">
+            <div class="image-box" data-category="embroidery">
+                <img src="artisan-images/Embroidery/img 2.png" alt="Embroidery 2">
+                <p>img 2.png</p>
+            </div>
+            <div class="image-box" data-category="embroidery">
+                <img src="artisan-images/Embroidery/img 3.png" alt="Embroidery 3">
+                <p>img 3.png</p>
+            </div>
+            <div class="image-box" data-category="embroidery">
+                <img src="artisan-images/Embroidery/img 4.png" alt="Embroidery 4">
+                <p>img 4.png</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Henna Services (5 images)</h2>
+        <div class="image-container">
+            <div class="image-box" data-category="henna">
+                <img src="artisan-images/Henna/Screenshot 2026-03-04 113717.png" alt="Henna 1">
+                <p>Screenshot 113717.png</p>
+            </div>
+            <div class="image-box" data-category="henna">
+                <img src="artisan-images/Henna/Screenshot 2026-03-04 113756.png" alt="Henna 2">
+                <p>Screenshot 113756.png</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Crochet Products (4 images)</h2>
+        <div class="image-container">
+            <div class="image-box" data-category="crochet">
+                <img src="artisan-images/Crochet/Screenshot 2026-03-04 122630.png" alt="Crochet 1">
+                <p>Screenshot 122630.png</p>
+            </div>
+            <div class="image-box" data-category="crochet">
+                <img src="artisan-images/Crochet/Screenshot 2026-03-04 122703.png" alt="Crochet 2">
+                <p>Screenshot 122703.png</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Weaving Products (4 images)</h2>
+        <div class="image-container">
+            <div class="image-box" data-category="weaving">
+                <img src="artisan-images/Weaving/Screenshot 2026-03-04 122922.png" alt="Weaving 1">
+                <p>Screenshot 122922.png</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Jewelry Products (6 images)</h2>
+        <div class="image-container">
+            <div class="image-box" data-category="jewelry">
+                <img src="artisan-images/Jewelry/Screenshot 2026-03-04 123141.png" alt="Jewelry 1">
+                <p>Screenshot 123141.png</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Pottery Products (4 images)</h2>
+        <div class="image-container">
+            <div class="image-box" data-category="pottery">
+                <img src="artisan-images/Pottery/Screenshot 2026-03-04 123415.png" alt="Pottery 1">
+                <p>Screenshot 123415.png</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 Console Log</h2>
+        <p>Open browser console (F12) to see detailed load status for each image</p>
+        <div id="console-output" style="background: #000; color: #0f0; padding: 15px; border-radius: 5px; font-family: monospace; max-height: 300px; overflow-y: auto;"></div>
+    </div>
+    
+    <script>
+        let loadedCount = 0;
+        let errorCount = 0;
+        const totalImages = document.querySelectorAll('img').length;
+        const consoleOutput = document.getElementById('console-output');
+        
+        function log(message, isError = false) {
+            console.log(message);
+            const line = document.createElement('div');
+            line.textContent = message;
+            line.style.color = isError ? '#f44' : '#0f0';
+            consoleOutput.appendChild(line);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        function updateSummary() {
+            const summary = document.getElementById('summary');
+            if (loadedCount + errorCount === totalImages) {
+                if (errorCount === 0) {
+                    summary.className = 'status success';
+                    summary.textContent = `✅ SUCCESS! All ${loadedCount} images loaded correctly!`;
+                } else {
+                    summary.className = 'status error';
+                    summary.textContent = `⚠️ ${loadedCount} images loaded, ${errorCount} failed to load`;
+                }
+            } else {
+                summary.className = 'status';
+                summary.textContent = `⏳ Loading... ${loadedCount + errorCount}/${totalImages}`;
+            }
+        }
+        
+        // Log image load status
+        document.querySelectorAll('img').forEach((img, index) => {
+            const box = img.closest('.image-box');
+            
+            img.onload = () => {
+                loadedCount++;
+                box.classList.add('loaded');
+                log(`✓ Image ${index + 1} loaded: ${img.src.split('/').pop()}`);
+                updateSummary();
+            };
+            
+            img.onerror = () => {
+                errorCount++;
+                box.classList.add('error');
+                log(`✗ Image ${index + 1} FAILED: ${img.src}`, true);
+                updateSummary();
+            };
+        });
+        
+        log(`Starting image test... Total images: ${totalImages}`);
+        updateSummary();
+    </script>
+</body>
+</html>

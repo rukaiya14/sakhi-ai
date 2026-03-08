@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate Dashboard - SheBalance</title>
+    <link rel="stylesheet" href="corporate-dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span>SheBalance</span>
+            </div>
+            <div class="nav-menu">
+                <a href="corporate-dashboard.html" class="nav-link active">Browse Artisans</a>
+                <a href="corporate-bulk-orders.html" class="nav-link">Bulk Orders</a>
+                <a href="corporate-contracts.html" class="nav-link">Contracts</a>
+                <a href="corporate-invoices.html" class="nav-link">Invoices</a>
+                <a href="artisan-marketplace.html" class="nav-link">Artisan Marketplace</a>
+                <a href="index.html" class="nav-link">Home</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" onclick="toggleNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">5</span>
+                </button>
+                <div class="user-profile" onclick="toggleUserMenu()">
+                    <div class="user-avatar">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <span class="user-name" id="userName">Loading...</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Menu Dropdown -->
+    <div id="userMenu" class="user-menu">
+        <div class="menu-item" onclick="window.location.href='corporate-profile.html'">
+            <i class="fas fa-user-circle"></i>
+            <span>Company Profile</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='#settings'">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </div>
+        <div class="menu-item" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </div>
+    </div>
+
+    <!-- Corporate Partnership Carousel -->
+    <div class="corporate-showcase-hero">
+        <div class="carousel-container">
+            <div class="carousel-track" id="corporateCarouselTrack">
+                <div class="carousel-slide">
+                    <img src="Dashboard/corporate/image 1.png?v=1" alt="Corporate Partnership 1">
+                </div>
+                <div class="carousel-slide">
+                    <img src="Dashboard/corporate/image 2.png?v=1" alt="Corporate Partnership 2">
+                </div>
+                <div class="carousel-slide">
+                    <img src="Dashboard/corporate/image 3.png?v=1" alt="Corporate Partnership 3">
+                </div>
+                <div class="carousel-slide">
+                    <img src="Dashboard/corporate/image 4.png?v=1" alt="Corporate Partnership 4">
+                </div>
+                <div class="carousel-slide">
+                    <img src="Dashboard/corporate/image 5.png?v=1" alt="Corporate Partnership 5">
+                </div>
+                <div class="carousel-slide">
+                    <img src="Dashboard/corporate/image 6.png?v=1" alt="Corporate Partnership 6">
+                </div>
+                <div class="carousel-slide">
+                    <img src="Dashboard/corporate/image 7.png?v=1" alt="Corporate Partnership 7">
+                </div>
+            </div>
+            <button class="carousel-btn prev" onclick="moveCorporateCarousel(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-btn next" onclick="moveCorporateCarousel(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <div class="carousel-indicators" id="corporateIndicators"></div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>Quick Actions</h3>
+                <button class="action-btn" onclick="createBulkOrder()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Create Bulk Order</span>
+                </button>
+                <button class="action-btn" onclick="requestQuote()">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>Request Quote</span>
+                </button>
+                <button class="action-btn" onclick="viewContracts()">
+                    <i class="fas fa-file-contract"></i>
+                    <span>View Contracts</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Categories</h3>
+                <div class="category-list">
+                    <div class="category-item active" onclick="filterByCategory('all')">
+                        <i class="fas fa-th"></i>
+                        <span>All Artisans</span>
+                        <span class="count">156</span>
+                    </div>
+                    <div class="category-item" onclick="filterByCategory('embroidery')">
+                        <i class="fas fa-cut"></i>
+                        <span>Embroidery</span>
+                        <span class="count">42</span>
+                    </div>
+                    <div class="category-item" onclick="filterByCategory('weaving')">
+                        <i class="fas fa-th-large"></i>
+                        <span>Weaving</span>
+                        <span class="count">38</span>
+                    </div>
+                    <div class="category-item" onclick="filterByCategory('pottery')">
+                        <i class="fas fa-wine-bottle"></i>
+                        <span>Pottery</span>
+                        <span class="count">25</span>
+                    </div>
+                    <div class="category-item" onclick="filterByCategory('jewelry')">
+                        <i class="fas fa-gem"></i>
+                        <span>Jewelry</span>
+                        <span class="count">31</span>
+                    </div>
+                    <div class="category-item" onclick="filterByCategory('food')">
+                        <i class="fas fa-utensils"></i>
+                        <span>Food & Catering</span>
+                        <span class="count">20</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Filters</h3>
+                <div class="filter-group">
+                    <label>Minimum Capacity</label>
+                    <select class="filter-select">
+                        <option>Any</option>
+                        <option>50+ units/month</option>
+                        <option>100+ units/month</option>
+                        <option>500+ units/month</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Bulk Discount</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox"> 10% or more</label>
+                        <label><input type="checkbox"> 20% or more</label>
+                        <label><input type="checkbox"> 30% or more</label>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Stats Overview -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e3f2fd;">
+                        <i class="fas fa-shopping-cart" style="color: #1976d2;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Active Orders</h4>
+                        <p class="stat-number">12</p>
+                        <span class="stat-change">3 pending delivery</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #f3e5f5;">
+                        <i class="fas fa-file-contract" style="color: #7b1fa2;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Active Contracts</h4>
+                        <p class="stat-number">5</p>
+                        <span class="stat-change">2 expiring soon</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e8f5e9;">
+                        <i class="fas fa-rupee-sign" style="color: #388e3c;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Total Spent</h4>
+                        <p class="stat-number">₹2,45,000</p>
+                        <span class="stat-change">This quarter</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fff3e0;">
+                        <i class="fas fa-users" style="color: #f57c00;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Partner Artisans</h4>
+                        <p class="stat-number">15</p>
+                        <span class="stat-change">Verified suppliers</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Sort -->
+            <div class="search-bar">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search artisans by name, skill, or location..." id="searchInput">
+                </div>
+                <select class="sort-select">
+                    <option>Sort by: Recommended</option>
+                    <option>Highest Capacity</option>
+                    <option>Best Bulk Discount</option>
+                    <option>Fastest Delivery</option>
+                    <option>Highest Rated</option>
+                </select>
+            </div>
+
+            <!-- Artisan Grid -->
+            <div class="artisan-grid" id="artisanGrid">
+                <!-- Artisan cards will be dynamically loaded -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Portfolio Modal -->
+    <div id="portfolioModal" class="modal" style="display: none;">
+        <div class="modal-content portfolio-modal">
+            <span class="close" onclick="closePortfolioModal()">&times;</span>
+            <h2 id="portfolioTitle">Artisan Portfolio</h2>
+            <div class="portfolio-carousel">
+                <button class="carousel-btn prev" onclick="prevPortfolioItem()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="portfolio-item-container" id="portfolioItemContainer">
+                    <!-- Portfolio items will be loaded here -->
+                </div>
+                <button class="carousel-btn next" onclick="nextPortfolioItem()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="carousel-dots" id="carouselDots">
+                <!-- Dots will be generated here -->
+            </div>
+            <div class="bulk-order-info">
+                <h3><i class="fas fa-industry"></i> Bulk Order Capabilities</h3>
+                <p>This artisan is part of our Virtual Factory network, capable of handling large-scale orders through collaborative production.</p>
+                <div class="sustainability-metrics">
+                    <div class="metric">
+                        <i class="fas fa-leaf"></i>
+                        <span>Sustainable Practices</span>
+                    </div>
+                    <div class="metric">
+                        <i class="fas fa-users"></i>
+                        <span>Community Impact</span>
+                    </div>
+                    <div class="metric">
+                        <i class="fas fa-recycle"></i>
+                        <span>Resource Circularity</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Command Modal -->
+    <div id="voiceModal" class="modal" style="display: none;">
+        <div class="modal-content voice-modal-content">
+            <span class="close" onclick="closeVoiceModal()">&times;</span>
+            
+            <div class="voice-header">
+                <div class="voice-icon-large">
+                    <i class="fas fa-microphone"></i>
+                </div>
+                <h2>Voice Assistant</h2>
+                <p class="voice-subtitle">Speak naturally to navigate and find artisans</p>
+            </div>
+            
+            <div class="voice-body">
+                <div class="voice-animation-container">
+                    <div class="voice-animation" onclick="toggleVoice()" style="cursor: pointer;" title="Click to start listening">
+                        <div class="voice-circle"></div>
+                        <div class="voice-waves">
+                            <div class="wave"></div>
+                            <div class="wave"></div>
+                            <div class="wave"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="voice-status-container">
+                    <p id="voiceStatus" class="voice-status">Ready to listen - Click the microphone above</p>
+                </div>
+                
+                <div class="voice-button-container">
+                    <button id="voiceBtn" class="btn-voice-main" onclick="toggleVoice(); console.log('Button clicked!');">
+                        <i class="fas fa-microphone"></i>
+                        <span>Start Listening</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="voice-examples-section">
+                <h3><i class="fas fa-lightbulb"></i> Try These Commands</h3>
+                <div class="voice-examples-grid">
+                    <div class="voice-example-card">
+                        <i class="fas fa-search"></i>
+                        <span>"Show me embroidery"</span>
+                    </div>
+                    <div class="voice-example-card">
+                        <i class="fas fa-cut"></i>
+                        <span>"Find tailoring"</span>
+                    </div>
+                    <div class="voice-example-card">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>"Show events"</span>
+                    </div>
+                    <div class="voice-example-card">
+                        <i class="fas fa-utensils"></i>
+                        <span>"Browse food services"</span>
+                    </div>
+                    <div class="voice-example-card">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>"Open my orders"</span>
+                    </div>
+                    <div class="voice-example-card">
+                        <i class="fas fa-heart"></i>
+                        <span>"Show favorites"</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="corporate-dashboard.js"></script>
+    <script src="voice-assistant-aws.js"></script>
+</body>
+</html>

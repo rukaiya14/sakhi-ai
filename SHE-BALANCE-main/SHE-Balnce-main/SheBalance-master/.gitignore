@@ -1,0 +1,22 @@
+# Standard gitignore for web projects
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore temporary files
+*~
+*.bak
+*.swp
+*.swo
+*.tmp
+*.temp
+*.log
+
+# Ignore node_modules if you add npm later
+node_modules/
+
+# Ignore IDE files
+.vscode/settings.json
+.idea/
+
+# Keep everything else (all project files will be tracked)

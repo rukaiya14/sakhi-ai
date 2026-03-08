@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test AI Sakhi - Simple</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.info { background: #d1ecf1; color: #0c5460; }
+        button {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #4f46e5;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .response {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        .chat-test {
+            margin-top: 20px;
+        }
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .message.user {
+            background: #e3f2fd;
+            text-align: right;
+        }
+        .message.assistant {
+            background: #f1f8e9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 AI Sakhi Simple Test</h1>
+        <p>This page tests the AI Sakhi backend directly</p>
+
+        <!-- Status -->
+        <div id="status" class="status info">Ready to test...</div>
+
+        <!-- Test 1: Check Backend -->
+        <div class="test-section">
+            <h3>Test 1: Backend Health Check</h3>
+            <button onclick="testBackend()">Check Backend</button>
+            <div id="backendResult" class="response"></div>
+        </div>
+
+        <!-- Test 2: Login -->
+        <div class="test-section">
+            <h3>Test 2: Login</h3>
+            <button onclick="testLogin()">Login as Rukaiya</button>
+            <div id="loginResult" class="response"></div>
+        </div>
+
+        <!-- Test 3: Send Message -->
+        <div class="test-section">
+            <h3>Test 3: Send AI Sakhi Message</h3>
+            <input type="text" id="testMessage" placeholder="Type your message..." value="Hello AI Sakhi!">
+            <button onclick="testAISakhi()">Send Message</button>
+            <div id="aiResult" class="response"></div>
+        </div>
+
+        <!-- Test 4: Chat Interface -->
+        <div class="test-section chat-test">
+            <h3>Test 4: Interactive Chat</h3>
+            <div id="chatMessages"></div>
+            <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendChat()">
+            <button onclick="sendChat()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        let token = null;
+        const API_URL = 'http://localhost:5000';
+
+        function log(elementId, message, isError = false) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.style.color = isError ? '#dc2626' : '#059669';
+        }
+
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+
+        async function testBackend() {
+            try {
+                updateStatus('Testing backend...', 'info');
+                const response = await fetch(`${API_URL}/health`);
+                const data = await response.json();
+                log('backendResult', JSON.stringify(data, null, 2));
+                updateStatus('✅ Backend is running!', 'success');
+            } catch (error) {
+                log('backendResult', `Error: ${error.message}`, true);
+                updateStatus('❌ Backend is NOT running! Start it with: node backend/server.js', 'error');
+            }
+        }
+
+        async function testLogin() {
+            try {
+                updateStatus('Logging in...', 'info');
+                const response = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'rukaiya@example.com',
+                        password: 'artisan123'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.token) {
+                    token = data.token;
+                    localStorage.setItem('shebalance_token', token);
+                    log('loginResult', `✅ Login successful!\n\nToken: ${token.substring(0, 50)}...\n\nUser: ${JSON.stringify(data.user, null, 2)}`);
+                    updateStatus('✅ Logged in successfully!', 'success');
+                } else {
+                    throw new Error(data.error || 'Login failed');
+                }
+            } catch (error) {
+                log('loginResult', `Error: ${error.message}`, true);
+                updateStatus('❌ Login failed!', 'error');
+            }
+        }
+
+        async function testAISakhi() {
+            try {
+                if (!token) {
+                    token = localStorage.getItem('shebalance_token');
+                    if (!token) {
+                        updateStatus('❌ Please login first!', 'error');
+                        return;
+                    }
+                }
+
+                const message = document.getElementById('testMessage').value;
+                updateStatus('Sending message to AI Sakhi...', 'info');
+
+                const response = await fetch(`${API_URL}/api/ai-sakhi/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        conversationHistory: []
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success || data.response) {
+                    log('aiResult', `✅ AI Sakhi Response:\n\n${data.response}\n\nModel: ${data.model}\nFallback: ${data.fallback || false}\nTimestamp: ${data.timestamp}`);
+                    updateStatus('✅ AI Sakhi is working!', 'success');
+                } else {
+                    throw new Error(data.error || 'No response');
+                }
+            } catch (error) {
+                log('aiResult', `Error: ${error.message}`, true);
+                updateStatus('❌ AI Sakhi failed!', 'error');
+            }
+        }
+
+        async function sendChat() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            if (!token) {
+                token = localStorage.getItem('shebalance_token');
+                if (!token) {
+                    alert('Please login first!');
+                    return;
+                }
+            }
+
+            // Add user message
+            addChatMessage('user', message);
+            input.value = '';
+
+            try {
+                const response = await fetch(`${API_URL}/api/ai-sakhi/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        conversationHistory: []
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success || data.response) {
+                    addChatMessage('assistant', data.response);
+                } else {
+                    addChatMessage('assistant', 'Error: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                addChatMessage('assistant', 'Error: ' + error.message);
+            }
+        }
+
+        function addChatMessage(role, content) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            messageDiv.textContent = content;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Auto-test on load
+        window.onload = () => {
+            updateStatus('Page loaded. Click buttons to test.', 'info');
+            
+            // Check if token exists
+            const savedToken = localStorage.getItem('shebalance_token');
+            if (savedToken) {
+                token = savedToken;
+                updateStatus('✅ Found saved token. You can test AI Sakhi directly.', 'success');
+            }
+        };
+    </script>
+</body>
+</html>

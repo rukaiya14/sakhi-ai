@@ -1,0 +1,251 @@
+<!-- 
+    EMERGENCY INLINE VOICE COMMAND FIX
+    
+    If voice command button isn't working, add this script
+    directly to dashboard.html before </body> tag
+-->
+
+<script>
+// Emergency inline voice command implementation
+console.log('🔧 Loading inline voice command fix...');
+
+// Override startVoiceCommand function
+window.startVoiceCommand = function() {
+    console.log('🎤 startVoiceCommand called');
+    
+    // Check browser support
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+        alert('❌ Speech Recognition not supported.\n\nPlease use Google Chrome or Microsoft Edge.');
+        console.error('❌ Speech Recognition not supported');
+        return;
+    }
+    
+    console.log('✅ Speech Recognition supported');
+    
+    try {
+        const recognition = new SpeechRecognition();
+        
+        // Get current language or default to Hindi
+        const currentLang = localStorage.getItem('selectedLanguage') || 'hi';
+        const langMap = {
+            'en': 'en-IN',
+            'hi': 'hi-IN',
+            'bn': 'bn-IN',
+            'mr': 'mr-IN',
+            'ta': 'ta-IN',
+            'te': 'te-IN',
+            'kn': 'kn-IN',
+            'ml': 'ml-IN',
+            'gu': 'gu-IN',
+            'pa': 'pa-IN',
+            'or': 'or-IN',
+            'as': 'as-IN'
+        };
+        
+        recognition.lang = langMap[currentLang] || 'hi-IN';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        
+        console.log('🌐 Listening in:', recognition.lang);
+        
+        // Show listening modal
+        const modal = document.createElement('div');
+        modal.id = 'voiceModal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        `;
+        
+        modal.innerHTML = `
+            <div style="background: white; padding: 40px; border-radius: 20px; text-align: center; max-width: 400px;">
+                <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; animation: pulse 1.5s infinite;">
+                    <i class="fas fa-microphone" style="font-size: 36px; color: white;"></i>
+                </div>
+                <h3 style="margin: 0 0 10px 0; color: #333;">Listening...</h3>
+                <p style="color: #666; margin: 10px 0;">Speak now</p>
+                <p style="color: #999; font-size: 14px; margin-top: 20px;">Try: "Show earnings", "Find jobs"</p>
+                <button onclick="document.getElementById('voiceModal').remove()" style="margin-top: 20px; background: #f44336; color: white; border: none; padding: 10px 30px; border-radius: 25px; cursor: pointer;">
+                    Stop
+                </button>
+            </div>
+            <style>
+                @keyframes pulse {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.1); }
+                }
+            </style>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            const confidence = event.results[0][0].confidence;
+            
+            console.log('📝 Heard:', transcript);
+            console.log('📊 Confidence:', confidence);
+            
+            // Remove listening modal
+            modal.remove();
+            
+            // Detect intent
+            const intent = detectIntent(transcript);
+            console.log('🎯 Intent:', intent);
+            
+            // Show success modal
+            const successModal = document.createElement('div');
+            successModal.style.cssText = modal.style.cssText;
+            successModal.innerHTML = `
+                <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; max-width: 500px;">
+                    <i class="fas fa-check-circle" style="font-size: 48px; color: #4CAF50; margin-bottom: 15px;"></i>
+                    <h3 style="margin: 10px 0; color: #333;">Command Recognized!</h3>
+                    <p style="color: #666; margin: 10px 0;">
+                        <strong>You said:</strong> "${transcript}"<br>
+                        <strong>Going to:</strong> ${intent || 'Unknown'}
+                    </p>
+                    <p style="color: #999; font-size: 14px;">Redirecting...</p>
+                </div>
+            `;
+            document.body.appendChild(successModal);
+            
+            // Navigate
+            if (intent) {
+                setTimeout(() => {
+                    successModal.remove();
+                    navigateToPage(intent);
+                }, 1500);
+            } else {
+                setTimeout(() => {
+                    successModal.remove();
+                }, 3000);
+            }
+        };
+        
+        recognition.onerror = (event) => {
+            console.error('❌ Error:', event.error);
+            modal.remove();
+            
+            let errorMsg = 'An error occurred';
+            if (event.error === 'no-speech') {
+                errorMsg = 'No speech detected. Please try again.';
+            } else if (event.error === 'not-allowed') {
+                errorMsg = 'Microphone access denied.\n\nPlease allow microphone access in browser settings.';
+            }
+            
+            alert('❌ ' + errorMsg);
+        };
+        
+        recognition.onend = () => {
+            console.log('🛑 Recognition ended');
+            const existingModal = document.getElementById('voiceModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+        };
+        
+        recognition.start();
+        console.log('✅ Recognition started');
+        
+    } catch (error) {
+        console.error('❌ Exception:', error);
+        alert('❌ Error: ' + error.message);
+    }
+};
+
+// Detect intent from transcript
+function detectIntent(transcript) {
+    const lower = transcript.toLowerCase();
+    
+    // Dashboard
+    if (lower.includes('dashboard') || lower.includes('home') || lower.includes('डैशबोर्ड')) {
+        return 'dashboard';
+    }
+    
+    // Earnings
+    if (lower.includes('earning') || lower.includes('income') || lower.includes('money') || 
+        lower.includes('कमाई') || lower.includes('पैसा') || lower.includes('வருமானம்') || 
+        lower.includes('ఆదాయం') || lower.includes('ಗಳಿಕೆ')) {
+        return 'earnings';
+    }
+    
+    // Jobs/Opportunities
+    if (lower.includes('job') || lower.includes('work') || lower.includes('opportunit') ||
+        lower.includes('काम') || lower.includes('नौकरी') || lower.includes('வேலை') || 
+        lower.includes('పని') || lower.includes('ಕೆಲಸ')) {
+        return 'opportunities';
+    }
+    
+    // Food
+    if (lower.includes('food') || lower.includes('marketplace') ||
+        lower.includes('खाना') || lower.includes('बाजार') || lower.includes('உணவு') ||
+        lower.includes('ఆహారం') || lower.includes('ಆಹಾರ')) {
+        return 'food';
+    }
+    
+    // Progress
+    if (lower.includes('progress') || lower.includes('growth') ||
+        lower.includes('प्रगति') || lower.includes('विकास') || lower.includes('முன்னேற்றம்') ||
+        lower.includes('పురోగతి') || lower.includes('ಪ್ರಗತಿ')) {
+        return 'progress';
+    }
+    
+    // Skills/Learning
+    if (lower.includes('skill') || lower.includes('learn') || lower.includes('education') ||
+        lower.includes('कौशल') || lower.includes('सीखना') || lower.includes('திறன்') ||
+        lower.includes('నైపుణ్యాలు') || lower.includes('ಕೌಶಲ್ಯ')) {
+        return 'skills';
+    }
+    
+    // Community
+    if (lower.includes('community') || lower.includes('group') ||
+        lower.includes('समुदाय') || lower.includes('சமூகம்') || lower.includes('సమాజం')) {
+        return 'community';
+    }
+    
+    // Artisan
+    if (lower.includes('artisan') || lower.includes('कारीगर') || lower.includes('கைவினைஞர்')) {
+        return 'artisan';
+    }
+    
+    // Settings
+    if (lower.includes('setting') || lower.includes('सेटिंग') || lower.includes('அமைப்பு')) {
+        return 'settings';
+    }
+    
+    return null;
+}
+
+// Navigate to page based on intent
+function navigateToPage(intent) {
+    const pageMap = {
+        'dashboard': 'dashboard.html',
+        'earnings': 'dashboard.html#earnings',
+        'opportunities': 'opportunities.html',
+        'food': 'food-marketplace.html',
+        'progress': 'progress.html',
+        'skills': 'skills.html',
+        'community': 'community.html',
+        'artisan': 'artisan-marketplace.html',
+        'settings': 'settings.html'
+    };
+    
+    const page = pageMap[intent];
+    if (page) {
+        console.log('🔗 Navigating to:', page);
+        window.location.href = page;
+    }
+}
+
+console.log('✅ Inline voice command loaded');
+console.log('✅ startVoiceCommand function ready');
+</script>

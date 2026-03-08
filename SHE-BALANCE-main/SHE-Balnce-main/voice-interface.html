@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Interface - SHE-BALANCE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #F5F5DC 0%, #E8DCC4 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #5D4037;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #8D6E63;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            color: #5D4037;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .language-btn {
+            padding: 10px 20px;
+            border: 2px solid #8D6E63;
+            background: white;
+            color: #5D4037;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .language-btn:hover {
+            background: #F5F5DC;
+        }
+
+        .language-btn.active {
+            background: #8D6E63;
+            color: white;
+        }
+
+        .voice-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .voice-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 32px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .voice-btn.record {
+            background: #f44336;
+            color: white;
+        }
+
+        .voice-btn.record:hover {
+            background: #d32f2f;
+            transform: scale(1.1);
+        }
+
+        .voice-btn.record.recording {
+            animation: pulse 1.5s infinite;
+        }
+
+        .voice-btn.play {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .voice-btn.play:hover {
+            background: #388E3C;
+            transform: scale(1.1);
+        }
+
+        .voice-btn.stop {
+            background: #FF9800;
+            color: white;
+        }
+
+        .voice-btn.stop:hover {
+            background: #F57C00;
+            transform: scale(1.1);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .text-area {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+
+        .text-area:focus {
+            outline: none;
+            border-color: #8D6E63;
+        }
+
+        .action-btn {
+            background: #8D6E63;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .action-btn:hover {
+            background: #5D4037;
+            transform: translateY(-2px);
+        }
+
+        .action-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .output-box {
+            background: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            min-height: 60px;
+        }
+
+        .output-box.success {
+            border-color: #4CAF50;
+            background: #E8F5E9;
+        }
+
+        .output-box.error {
+            border-color: #f44336;
+            background: #FFEBEE;
+        }
+
+        .status {
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .status.recording {
+            background: #FFEBEE;
+            color: #f44336;
+        }
+
+        .status.processing {
+            background: #FFF3E0;
+            color: #FF9800;
+        }
+
+        .status.success {
+            background: #E8F5E9;
+            color: #4CAF50;
+        }
+
+        .audio-player {
+            width: 100%;
+            margin: 15px 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            background: #F5F5DC;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .feature-card i {
+            font-size: 32px;
+            color: #8D6E63;
+            margin-bottom: 10px;
+        }
+
+        .feature-card h3 {
+            color: #5D4037;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #8D6E63;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-microphone"></i> Voice Interface</h1>
+            <p>Speak in your language - We'll understand and respond</p>
+        </div>
+
+        <!-- Language Selection -->
+        <div class="card">
+            <h2><i class="fas fa-language"></i> Select Your Language</h2>
+            <div class="language-selector" id="languageSelector">
+                <!-- Languages will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Voice Recording -->
+        <div class="card">
+            <h2><i class="fas fa-microphone-alt"></i> Voice Recording</h2>
+            <div id="recordingStatus" class="status" style="display: none;"></div>
+            
+            <div class="voice-controls">
+                <button class="voice-btn record" id="recordBtn" title="Start Recording">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button class="voice-btn stop" id="stopBtn" style="display: none;" title="Stop Recording">
+                    <i class="fas fa-stop"></i>
+                </button>
+            </div>
+
+            <div id="audioPlayerContainer" style="display: none;">
+                <audio id="audioPlayer" class="audio-player" controls></audio>
+            </div>
+
+            <div style="text-align: center; margin-top: 15px;">
+                <button class="action-btn" id="transcribeBtn" style="display: none;">
+                    <i class="fas fa-file-alt"></i> Convert to Text
+                </button>
+            </div>
+
+            <div id="transcriptionOutput" class="output-box" style="display: none;"></div>
+        </div>
+
+        <!-- Text to Speech -->
+        <div class="card">
+            <h2><i class="fas fa-volume-up"></i> Text to Speech</h2>
+            <textarea 
+                class="text-area" 
+                id="textInput" 
+                placeholder="Type your message here..."></textarea>
+            
+            <button class="action-btn" id="speakBtn">
+                <i class="fas fa-play"></i> Speak Text
+            </button>
+            <button class="action-btn" id="translateSpeakBtn">
+                <i class="fas fa-language"></i> Translate & Speak
+            </button>
+
+            <div id="ttsOutput" class="output-box" style="display: none;"></div>
+        </div>
+
+        <!-- Translation -->
+        <div class="card">
+            <h2><i class="fas fa-exchange-alt"></i> Text Translation</h2>
+            <textarea 
+                class="text-area" 
+                id="translateInput" 
+                placeholder="Enter text to translate..."></textarea>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="color: #5D4037; font-weight: 600;">Translate to:</label>
+                <select id="targetLanguage" style="padding: 8px; border-radius: 5px; border: 2px solid #e0e0e0; margin-left: 10px;">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+            </div>
+
+            <button class="action-btn" id="translateBtn">
+                <i class="fas fa-language"></i> Translate
+            </button>
+
+            <div id="translationOutput" class="output-box" style="display: none;"></div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+            <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+            <div class="feature-grid">
+                <div class="feature-card" onclick="quickAction('order-update')">
+                    <i class="fas fa-tasks"></i>
+                    <h3>Order Update</h3>
+                    <p>Voice update for orders</p>
+                </div>
+                <div class="feature-card" onclick="quickAction('help-request')">
+                    <i class="fas fa-hands-helping"></i>
+                    <h3>Request Help</h3>
+                    <p>Voice help request</p>
+                </div>
+                <div class="feature-card" onclick="quickAction('payment-request')">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <h3>Payment Request</h3>
+                    <p>Voice payment request</p>
+                </div>
+                <div class="feature-card" onclick="quickAction('health-report')">
+                    <i class="fas fa-heartbeat"></i>
+                    <h3>Health Report</h3>
+                    <p>Voice health update</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="voice-services.js"></script>
+    <script>
+        // Initialize Voice Services
+        const token = localStorage.getItem('shebalance_token');
+        const voiceServices = new VoiceServices('http://localhost:5000/api', token);
+
+        let audioBlob = null;
+        let isRecording = false;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                await voiceServices.initialize();
+                populateLanguages();
+                showStatus('Voice services ready!', 'success');
+            } catch (error) {
+                showStatus('Failed to initialize: ' + error.message, 'error');
+            }
+        });
+
+        // Populate language selector
+        function populateLanguages() {
+            const languages = voiceServices.getSupportedLanguages();
+            const selector = document.getElementById('languageSelector');
+            const targetSelect = document.getElementById('targetLanguage');
+
+            Object.keys(languages).forEach(code => {
+                // Language buttons
+                const btn = document.createElement('button');
+                btn.className = 'language-btn';
+                btn.textContent = languages[code];
+                btn.onclick = () => selectLanguage(code);
+                if (code === 'en') btn.classList.add('active');
+                selector.appendChild(btn);
+
+                // Target language dropdown
+                const option = document.createElement('option');
+                option.value = code;
+                option.textContent = languages[code];
+                targetSelect.appendChild(option);
+            });
+        }
+
+        // Select language
+        function selectLanguage(code) {
+            voiceServices.setLanguage(code);
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            showStatus(`Language changed to ${voiceServices.getSupportedLanguages()[code]}`, 'success');
+        }
+
+        // Start recording
+        document.getElementById('recordBtn').addEventListener('click', async () => {
+            try {
+                await voiceServices.startRecording();
+                isRecording = true;
+                document.getElementById('recordBtn').style.display = 'none';
+                document.getElementById('stopBtn').style.display = 'block';
+                document.getElementById('recordBtn').classList.add('recording');
+                showRecordingStatus('Recording...', 'recording');
+            } catch (error) {
+                showStatus('Failed to start recording: ' + error.message, 'error');
+            }
+        });
+
+        // Stop recording
+        document.getElementById('stopBtn').addEventListener('click', async () => {
+            try {
+                audioBlob = await voiceServices.stopRecording();
+                isRecording = false;
+                document.getElementById('recordBtn').style.display = 'block';
+                document.getElementById('stopBtn').style.display = 'none';
+                document.getElementById('recordBtn').classList.remove('recording');
+                
+                // Show audio player
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audioPlayer = document.getElementById('audioPlayer');
+                audioPlayer.src = audioUrl;
+                document.getElementById('audioPlayerContainer').style.display = 'block';
+                document.getElementById('transcribeBtn').style.display = 'inline-block';
+                
+                showRecordingStatus('Recording saved!', 'success');
+            } catch (error) {
+                showStatus('Failed to stop recording: ' + error.message, 'error');
+            }
+        });
+
+        // Transcribe audio
+        document.getElementById('transcribeBtn').addEventListener('click', async () => {
+            if (!audioBlob) {
+                showStatus('No audio to transcribe', 'error');
+                return;
+            }
+
+            try {
+                showRecordingStatus('Transcribing... This may take a moment', 'processing');
+                document.getElementById('transcribeBtn').disabled = true;
+
+                const result = await voiceServices.speechToText(audioBlob);
+                
+                const output = document.getElementById('transcriptionOutput');
+                output.style.display = 'block';
+                output.className = 'output-box success';
+                output.innerHTML = `
+                    <strong>Transcribed Text:</strong><br>
+                    ${result.text}<br><br>
+                    <small>Confidence: ${(result.confidence * 100).toFixed(1)}%</small>
+                `;
+
+                showRecordingStatus('Transcription complete!', 'success');
+            } catch (error) {
+                showStatus('Transcription failed: ' + error.message, 'error');
+            } finally {
+                document.getElementById('transcribeBtn').disabled = false;
+            }
+        });
+
+        // Text to speech
+        document.getElementById('speakBtn').addEventListener('click', async () => {
+            const text = document.getElementById('textInput').value;
+            if (!text) {
+                showStatus('Please enter some text', 'error');
+                return;
+            }
+
+            try {
+                showTTSStatus('Generating speech...', 'processing');
+                document.getElementById('speakBtn').disabled = true;
+
+                const result = await voiceServices.textToSpeech(text);
+                
+                // Play audio
+                await voiceServices.playAudio(result.audioUrl);
+
+                const output = document.getElementById('ttsOutput');
+                output.style.display = 'block';
+                output.className = 'output-box success';
+                output.innerHTML = `
+                    <strong>Audio generated successfully!</strong><br>
+                    Language: ${voiceServices.getSupportedLanguages()[result.language]}<br>
+                    <audio src="${result.audioUrl}" controls style="width: 100%; margin-top: 10px;"></audio>
+                `;
+
+                showTTSStatus('Speech generated!', 'success');
+            } catch (error) {
+                showStatus('Text-to-speech failed: ' + error.message, 'error');
+            } finally {
+                document.getElementById('speakBtn').disabled = false;
+            }
+        });
+
+        // Translate and speak
+        document.getElementById('translateSpeakBtn').addEventListener('click', async () => {
+            const text = document.getElementById('textInput').value;
+            const targetLang = document.getElementById('targetLanguage').value;
+            
+            if (!text) {
+                showStatus('Please enter some text', 'error');
+                return;
+            }
+
+            try {
+                showTTSStatus('Translating and generating speech...', 'processing');
+                document.getElementById('translateSpeakBtn').disabled = true;
+
+                const result = await voiceServices.createVoiceMessage(text, targetLang);
+                
+                // Play audio
+                await voiceServices.playAudio(result.audioUrl);
+
+                const output = document.getElementById('ttsOutput');
+                output.style.display = 'block';
+                output.className = 'output-box success';
+                output.innerHTML = `
+                    <strong>Translation & Speech Complete!</strong><br>
+                    Original: ${result.originalText}<br>
+                    Translated: ${result.translatedText}<br>
+                    <audio src="${result.audioUrl}" controls style="width: 100%; margin-top: 10px;"></audio>
+                `;
+
+                showTTSStatus('Translation complete!', 'success');
+            } catch (error) {
+                showStatus('Translation failed: ' + error.message, 'error');
+            } finally {
+                document.getElementById('translateSpeakBtn').disabled = false;
+            }
+        });
+
+        // Translate text
+        document.getElementById('translateBtn').addEventListener('click', async () => {
+            const text = document.getElementById('translateInput').value;
+            const targetLang = document.getElementById('targetLanguage').value;
+            
+            if (!text) {
+                showStatus('Please enter text to translate', 'error');
+                return;
+            }
+
+            try {
+                showTranslationStatus('Translating...', 'processing');
+                document.getElementById('translateBtn').disabled = true;
+
+                const result = await voiceServices.translateText(text, targetLang);
+
+                const output = document.getElementById('translationOutput');
+                output.style.display = 'block';
+                output.className = 'output-box success';
+                output.innerHTML = `
+                    <strong>Original (${result.sourceLanguage}):</strong><br>
+                    ${result.originalText}<br><br>
+                    <strong>Translated (${result.targetLanguage}):</strong><br>
+                    ${result.translatedText}
+                `;
+
+                showTranslationStatus('Translation complete!', 'success');
+            } catch (error) {
+                showStatus('Translation failed: ' + error.message, 'error');
+            } finally {
+                document.getElementById('translateBtn').disabled = false;
+            }
+        });
+
+        // Quick actions
+        function quickAction(action) {
+            alert(`Quick action: ${action}\nThis will open a voice-enabled form for ${action.replace('-', ' ')}`);
+        }
+
+        // Status helpers
+        function showRecordingStatus(message, type) {
+            const status = document.getElementById('recordingStatus');
+            status.style.display = 'block';
+            status.className = `status ${type}`;
+            status.textContent = message;
+        }
+
+        function showTTSStatus(message, type) {
+            const output = document.getElementById('ttsOutput');
+            output.style.display = 'block';
+            output.className = `output-box ${type}`;
+            output.textContent = message;
+        }
+
+        function showTranslationStatus(message, type) {
+            const output = document.getElementById('translationOutput');
+            output.style.display = 'block';
+            output.className = `output-box ${type}`;
+            output.textContent = message;
+        }
+
+        function showStatus(message, type) {
+            // You can implement a global status notification here
+            console.log(`[${type}] ${message}`);
+        }
+    </script>
+</body>
+</html>

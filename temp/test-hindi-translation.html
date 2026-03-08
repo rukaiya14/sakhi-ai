@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Hindi Translation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background: #5D4037;
+            color: white;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #8D6E63;
+        }
+        .content {
+            margin-top: 20px;
+        }
+        h2 {
+            color: #5D4037;
+        }
+        .balance-label, .stat-label, .food-label {
+            display: block;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+    </style>
+    <script src="SHE-BALANCE-main/SHE-Balnce-main/translations.js"></script>
+</head>
+<body>
+    <h1>Hindi Translation Test</h1>
+    
+    <div>
+        <button onclick="setLanguage('en-IN')">English</button>
+        <button onclick="setLanguage('hi-IN')">हिंदी (Hindi)</button>
+    </div>
+
+    <div class="test-section">
+        <h2 data-translate="todaysBalance">Today's Balance</h2>
+        <div class="content">
+            <span class="balance-label" data-translate="householdWork">Household Work</span>
+            <span class="balance-label" data-translate="careerTime">Career Time</span>
+            <span class="balance-label" data-translate="selfCare">Self Care</span>
+            <span class="balance-label" data-translate="progress">Progress</span>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Quick Stats</h2>
+        <div class="content">
+            <span class="stat-label" data-translate="thisMonthsEarnings">This Month's Earnings</span>
+            <span class="stat-label" data-translate="activeProjects">Active Projects</span>
+            <span class="stat-label" data-translate="averageRating">Average Rating</span>
+            <span class="stat-label" data-translate="networkConnections">Network Connections</span>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2 data-translate="todaysFocus">Today's Focus</h2>
+        <button data-translate="addNewTask">Add New Task</button>
+    </div>
+
+    <div class="test-section">
+        <h2 data-translate="hotOpportunities">Hot Opportunities</h2>
+        <div class="content">
+            <button data-translate="apply">Apply</button>
+            <button data-translate="viewAllOpportunities">View All Opportunities</button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2 data-translate="foodMarketplace">Food Marketplace</h2>
+        <div class="content">
+            <span class="food-label" data-translate="activeOrders">Active Orders</span>
+            <span class="food-label" data-translate="thisWeek">This Week</span>
+            <span class="food-label" data-translate="rating">Rating</span>
+            <button data-translate="manageOrders">Manage Orders</button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2 data-translate="communityUpdates">Community Updates</h2>
+        <button data-translate="joinCommunity">Join Community</button>
+    </div>
+
+    <div class="test-section">
+        <h2 data-translate="yourGrowthJourney">Your Growth Journey</h2>
+        <div class="content">
+            <span class="stat-label" data-translate="skillsImproved">Skills Improved</span>
+            <span class="stat-label" data-translate="incomeGrowth">Income Growth</span>
+            <span class="stat-label" data-translate="timeOptimized">Time Optimized</span>
+            <button data-translate="viewDetailedProgress">View Detailed Progress</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize with Hindi
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Page loaded, initializing...');
+            updateUILanguage('en-IN');
+        });
+    </script>
+</body>
+</html>

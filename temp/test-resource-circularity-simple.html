@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Resource Circularity AI</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+        }
+        .test-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        .test-section h2 {
+            color: #10b981;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        button {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .result {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #10b981;
+        }
+        .result h3 {
+            color: #10b981;
+            margin-bottom: 15px;
+        }
+        .result pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #10b981;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error {
+            background: #fee;
+            border-left: 4px solid #f44;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .success {
+            background: #efe;
+            border-left: 4px solid #4f4;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Resource Circularity AI Test</h1>
+        <p class="subtitle">Test Amazon Bedrock Llama 3 Integration</p>
+
+        <!-- Test 1: Find Matches -->
+        <div class="test-section">
+            <h2>Test 1: Find AI-Powered Matches</h2>
+            <div class="form-group">
+                <label>Waste Type:</label>
+                <input type="text" id="wasteType" value="Fabric Scraps" placeholder="e.g., Fabric Scraps, Clay Remnants">
+            </div>
+            <div class="form-group">
+                <label>Quantity:</label>
+                <input type="text" id="quantity" value="2.5kg" placeholder="e.g., 2.5kg, 5 units">
+            </div>
+            <div class="form-group">
+                <label>Location:</label>
+                <input type="text" id="location" value="Mumbai" placeholder="e.g., Mumbai, Delhi">
+            </div>
+            <div class="form-group">
+                <label>Your Skill:</label>
+                <select id="skill">
+                    <option value="Tailoring">Tailoring</option>
+                    <option value="Jewelry Making">Jewelry Making</option>
+                    <option value="Pottery">Pottery</option>
+                    <option value="Embroidery">Embroidery</option>
+                    <option value="Weaving">Weaving</option>
+                    <option value="Home Decor">Home Decor</option>
+                </select>
+            </div>
+            <button onclick="testFindMatches()">🔍 Find Matches with AI</button>
+            <div id="matchesResult"></div>
+        </div>
+
+        <!-- Test 2: Get Insights -->
+        <div class="test-section">
+            <h2>Test 2: Get Match Insights</h2>
+            <button onclick="testGetInsights()">💡 Get AI Insights</button>
+            <div id="insightsResult"></div>
+        </div>
+
+        <!-- Test 3: Analyze Compatibility -->
+        <div class="test-section">
+            <h2>Test 3: Analyze Compatibility</h2>
+            <div class="form-group">
+                <label>Waste Material:</label>
+                <input type="text" id="compatWaste" value="Silk Scraps" placeholder="e.g., Silk Scraps">
+            </div>
+            <div class="form-group">
+                <label>Target Skill:</label>
+                <select id="compatSkill">
+                    <option value="Jewelry Making">Jewelry Making</option>
+                    <option value="Home Decor">Home Decor</option>
+                    <option value="Textile Art">Textile Art</option>
+                    <option value="Embroidery">Embroidery</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Quality:</label>
+                <select id="compatQuality">
+                    <option value="Premium">Premium</option>
+                    <option value="Good">Good</option>
+                    <option value="Mixed">Mixed</option>
+                </select>
+            </div>
+            <button onclick="testCompatibility()">🔬 Analyze Compatibility</button>
+            <div id="compatResult"></div>
+        </div>
+
+        <!-- Test 4: Get Recommendations -->
+        <div class="test-section">
+            <h2>Test 4: Get AI Recommendations</h2>
+            <button onclick="testRecommendations()">📊 Get Recommendations</button>
+            <div id="recommendResult"></div>
+        </div>
+
+        <!-- Test 5: Get Insights -->
+        <div class="test-section">
+            <h2>Test 5: Get Waste-to-Wealth Insights</h2>
+            <button onclick="testInsights()">📈 Get Insights</button>
+            <div id="insightsResult2"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+        const TOKEN = 'demo-token'; // Use real token in production
+
+        function showLoading(elementId) {
+            document.getElementById(elementId).innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>AI is analyzing... (Powered by Amazon Bedrock Llama 3)</p>
+                </div>
+            `;
+        }
+
+        function showError(elementId, error) {
+            document.getElementById(elementId).innerHTML = `
+                <div class="error">
+                    <strong>❌ Error:</strong> ${error}
+                </div>
+            `;
+        }
+
+        function showSuccess(elementId, title, data) {
+            document.getElementById(elementId).innerHTML = `
+                <div class="result">
+                    <h3>✅ ${title}</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+        }
+
+        async function testFindMatches() {
+            const resultDiv = 'matchesResult';
+            showLoading(resultDiv);
+
+            try {
+                const response = await fetch(`${API_BASE}/resource-circularity/find-matches`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${TOKEN}`
+                    },
+                    body: JSON.stringify({
+                        wasteType: document.getElementById('wasteType').value,
+                        quantity: document.getElementById('quantity').value,
+                        location: document.getElementById('location').value,
+                        skill: document.getElementById('skill').value
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showSuccess(resultDiv, 'Matches Found', data);
+                } else {
+                    showError(resultDiv, data.error || 'Failed to find matches');
+                }
+            } catch (error) {
+                showError(resultDiv, error.message);
+            }
+        }
+
+        async function testGetInsights() {
+            const resultDiv = 'insightsResult';
+            showLoading(resultDiv);
+
+            try {
+                const response = await fetch(`${API_BASE}/resource-circularity/match-insights`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${TOKEN}`
+                    },
+                    body: JSON.stringify({
+                        artisan1: { name: 'Priya', skill: 'Tailoring' },
+                        artisan2: { name: 'Sunita', skill: 'Jewelry Making' },
+                        material: 'Silk Scraps'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showSuccess(resultDiv, 'Insights Generated', data);
+                } else {
+                    showError(resultDiv, data.error || 'Failed to get insights');
+                }
+            } catch (error) {
+                showError(resultDiv, error.message);
+            }
+        }
+
+        async function testCompatibility() {
+            const resultDiv = 'compatResult';
+            showLoading(resultDiv);
+
+            try {
+                const response = await fetch(`${API_BASE}/resource-circularity/analyze-compatibility`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${TOKEN}`
+                    },
+                    body: JSON.stringify({
+                        wasteType: document.getElementById('compatWaste').value,
+                        targetSkill: document.getElementById('compatSkill').value,
+                        quality: document.getElementById('compatQuality').value
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showSuccess(resultDiv, 'Compatibility Analysis', data);
+                } else {
+                    showError(resultDiv, data.error || 'Failed to analyze');
+                }
+            } catch (error) {
+                showError(resultDiv, error.message);
+            }
+        }
+
+        async function testRecommendations() {
+            const resultDiv = 'recommendResult';
+            showLoading(resultDiv);
+
+            try {
+                const response = await fetch(`${API_BASE}/resource-circularity/recommendations`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${TOKEN}`
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showSuccess(resultDiv, 'AI Recommendations', data);
+                } else {
+                    showError(resultDiv, data.error || 'Failed to get recommendations');
+                }
+            } catch (error) {
+                showError(resultDiv, error.message);
+            }
+        }
+
+        async function testInsights() {
+            const resultDiv = 'insightsResult2';
+            showLoading(resultDiv);
+
+            try {
+                const response = await fetch(`${API_BASE}/resource-circularity/insights`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${TOKEN}`
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showSuccess(resultDiv, 'Waste-to-Wealth Insights', data);
+                } else {
+                    showError(resultDiv, data.error || 'Failed to get insights');
+                }
+            } catch (error) {
+                showError(resultDiv, error.message);
+            }
+        }
+
+        // Show initial message
+        console.log('🚀 Resource Circularity AI Test Page Ready');
+        console.log('📡 API Base:', API_BASE);
+        console.log('🤖 AI Model: Amazon Bedrock Llama 3 70B');
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test AI Sakhi Panel</title>
+</head>
+<body>
+    <h1>Testing AI Sakhi Panel Elements</h1>
+    <button onclick="testElements()">Test Elements</button>
+    <button onclick="openDashboard()">Open Dashboard and Test</button>
+    <div id="results" style="margin-top: 20px; padding: 20px; background: #f0f0f0;"></div>
+    
+    <script>
+        function testElements() {
+            const results = document.getElementById('results');
+            let html = '<h3>Test Results:</h3>';
+            
+            // Open dashboard in new window
+            const dashboardWindow = window.open('http://localhost:8080/dashboard.html', '_blank');
+            
+            setTimeout(() => {
+                try {
+                    const panel = dashboardWindow.document.getElementById('aiSakhiPanel');
+                    const overlay = dashboardWindow.document.getElementById('aiSakhiOverlay');
+                    const button = dashboardWindow.document.getElementById('aiSakhiButton');
+                    
+                    html += `<p>Panel found: ${panel ? '✅ YES' : '❌ NO'}</p>`;
+                    html += `<p>Overlay found: ${overlay ? '✅ YES' : '❌ NO'}</p>`;
+                    html += `<p>Button found: ${button ? '✅ YES' : '❌ NO'}</p>`;
+                    
+                    if (panel && overlay) {
+                        html += '<p style="color: green;"><strong>All elements exist! Trying to open panel...</strong></p>';
+                        panel.classList.add('active');
+                        overlay.classList.add('active');
+                        html += '<p style="color: green;">✅ Panel opened successfully!</p>';
+                    } else {
+                        html += '<p style="color: red;"><strong>Elements missing!</strong></p>';
+                    }
+                    
+                    results.innerHTML = html;
+                } catch (error) {
+                    results.innerHTML = html + `<p style="color: red;">Error: ${error.message}</p>`;
+                }
+            }, 2000);
+        }
+        
+        function openDashboard() {
+            window.open('http://localhost:8080/dashboard.html', '_blank');
+        }
+    </script>
+</body>
+</html>

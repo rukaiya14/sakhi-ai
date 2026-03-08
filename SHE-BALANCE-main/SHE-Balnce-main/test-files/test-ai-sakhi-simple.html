@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test AI Sakhi - Simple</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .test-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .test-section h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status.error {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .log {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            padding: 4px 0;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        
+        .log-time {
+            color: #94a3b8;
+            margin-right: 10px;
+        }
+        
+        .log-success {
+            color: #4ade80;
+        }
+        
+        .log-error {
+            color: #f87171;
+        }
+        
+        .log-info {
+            color: #60a5fa;
+        }
+        
+        .input-group {
+            margin: 15px 0;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        .input-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .response-box {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            min-height: 100px;
+        }
+        
+        .response-box.empty {
+            color: #94a3b8;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 AI Sakhi Test Tool</h1>
+        <p class="subtitle">Test the AI Sakhi chat functionality</p>
+        
+        <!-- Step 1: Check Backend -->
+        <div class="test-section">
+            <h2>
+                Step 1: Backend Server
+                <span class="status pending" id="backendStatus">Checking...</span>
+            </h2>
+            <p>Backend should be running on http://localhost:5000</p>
+            <button class="btn" onclick="checkBackend()">Check Backend</button>
+            <div class="log" id="backendLog"></div>
+        </div>
+        
+        <!-- Step 2: Login -->
+        <div class="test-section">
+            <h2>
+                Step 2: Login
+                <span class="status pending" id="loginStatus">Not Logged In</span>
+            </h2>
+            <div class="input-group">
+                <label>Email:</label>
+                <input type="email" id="loginEmail" value="rukaiya@example.com">
+            </div>
+            <div class="input-group">
+                <label>Password:</label>
+                <input type="password" id="loginPassword" value="artisan123">
+            </div>
+            <button class="btn" onclick="testLogin()">Login</button>
+            <button class="btn" onclick="checkToken()">Check Token</button>
+            <div class="log" id="loginLog"></div>
+        </div>
+        
+        <!-- Step 3: Test AI Sakhi -->
+        <div class="test-section">
+            <h2>
+                Step 3: AI Sakhi Chat
+                <span class="status pending" id="chatStatus">Not Tested</span>
+            </h2>
+            <div class="input-group">
+                <label>Message:</label>
+                <textarea id="chatMessage" placeholder="Type your message here...">Hello AI Sakhi! I need help with my orders.</textarea>
+            </div>
+            <button class="btn" onclick="testChat()" id="sendBtn">Send Message</button>
+            <button class="btn" onclick="testQuickMessages()">Test Quick Messages</button>
+            
+            <div class="response-box empty" id="responseBox">
+                Response will appear here...
+            </div>
+            
+            <div class="log" id="chatLog"></div>
+        </div>
+        
+        <!-- Step 4: Open Dashboard -->
+        <div class="test-section">
+            <h2>Step 4: Open Dashboard</h2>
+            <p>If everything works here, try the actual dashboard</p>
+            <button class="btn" onclick="window.open('dashboard.html', '_blank')">Open Dashboard</button>
+            <button class="btn" onclick="window.open('login.html', '_blank')">Open Login Page</button>
+        </div>
+    </div>
+    
+    <script>
+        const API_URL = 'http://localhost:5000';
+        
+        // Utility functions
+        function log(elementId, message, type = 'info') {
+            const logEl = document.getElementById(elementId);
+            const time = new Date().toLocaleTimeString();
+            const className = `log-${type}`;
+            logEl.innerHTML += `<div class="log-entry"><span class="log-time">[${time}]</span><span class="${className}">${message}</span></div>`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+        
+        function updateStatus(elementId, text, type) {
+            const el = document.getElementById(elementId);
+            el.textContent = text;
+            el.className = `status ${type}`;
+        }
+        
+        // Step 1: Check Backend
+        async function checkBackend() {
+            log('backendLog', 'Checking backend server...', 'info');
+            updateStatus('backendStatus', 'Checking...', 'pending');
+            
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                const data = await response.json();
+                
+                if (data.status === 'OK') {
+                    log('backendLog', '✅ Backend is running!', 'success');
+                    log('backendLog', `Timestamp: ${data.timestamp}`, 'info');
+                    updateStatus('backendStatus', 'Running', 'success');
+                } else {
+                    throw new Error('Unexpected response');
+                }
+            } catch (error) {
+                log('backendLog', `❌ Backend not responding: ${error.message}`, 'error');
+                log('backendLog', 'Make sure to run: node backend/server.js', 'error');
+                updateStatus('backendStatus', 'Not Running', 'error');
+            }
+        }
+        
+        // Step 2: Login
+        async function testLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            log('loginLog', `Attempting login for: ${email}`, 'info');
+            updateStatus('loginStatus', 'Logging in...', 'pending');
+            
+            try {
+                const response = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.token) {
+                    localStorage.setItem('shebalance_token', data.token);
+                    log('loginLog', '✅ Login successful!', 'success');
+                    log('loginLog', `User: ${data.user.fullName} (${data.user.role})`, 'info');
+                    log('loginLog', `Token saved to localStorage`, 'success');
+                    updateStatus('loginStatus', 'Logged In', 'success');
+                } else {
+                    throw new Error(data.error || 'Login failed');
+                }
+            } catch (error) {
+                log('loginLog', `❌ Login failed: ${error.message}`, 'error');
+                updateStatus('loginStatus', 'Failed', 'error');
+            }
+        }
+        
+        function checkToken() {
+            const token = localStorage.getItem('shebalance_token');
+            if (token) {
+                log('loginLog', '✅ Token found in localStorage', 'success');
+                log('loginLog', `Token: ${token.substring(0, 20)}...`, 'info');
+                updateStatus('loginStatus', 'Token Found', 'success');
+            } else {
+                log('loginLog', '❌ No token found. Please login first.', 'error');
+                updateStatus('loginStatus', 'No Token', 'error');
+            }
+        }
+        
+        // Step 3: Test Chat
+        async function testChat() {
+            const message = document.getElementById('chatMessage').value;
+            const token = localStorage.getItem('shebalance_token');
+            
+            if (!token) {
+                log('chatLog', '❌ Please login first!', 'error');
+                updateStatus('chatStatus', 'Not Logged In', 'error');
+                return;
+            }
+            
+            if (!message.trim()) {
+                log('chatLog', '❌ Please enter a message', 'error');
+                return;
+            }
+            
+            log('chatLog', `Sending message: "${message}"`, 'info');
+            updateStatus('chatStatus', 'Sending...', 'pending');
+            
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Sending...';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/ai-sakhi/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        conversationHistory: []
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success || data.response) {
+                    log('chatLog', '✅ Response received!', 'success');
+                    log('chatLog', `Model: ${data.model || 'unknown'}`, 'info');
+                    if (data.fallback) {
+                        log('chatLog', '⚠️  Using fallback mode (Bedrock not available)', 'info');
+                    }
+                    
+                    // Display response
+                    const responseBox = document.getElementById('responseBox');
+                    responseBox.className = 'response-box';
+                    responseBox.innerHTML = `
+                        <strong>AI Sakhi:</strong><br><br>
+                        ${data.response.replace(/\n/g, '<br>')}
+                        <br><br>
+                        <small style="color: #666;">
+                            Model: ${data.model || 'unknown'} | 
+                            Time: ${new Date(data.timestamp).toLocaleTimeString()}
+                        </small>
+                    `;
+                    
+                    updateStatus('chatStatus', 'Working!', 'success');
+                } else {
+                    throw new Error(data.error || 'Unknown error');
+                }
+            } catch (error) {
+                log('chatLog', `❌ Chat failed: ${error.message}`, 'error');
+                updateStatus('chatStatus', 'Failed', 'error');
+                
+                const responseBox = document.getElementById('responseBox');
+                responseBox.className = 'response-box';
+                responseBox.innerHTML = `<span style="color: #dc2626;">Error: ${error.message}</span>`;
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send Message';
+            }
+        }
+        
+        async function testQuickMessages() {
+            const messages = [
+                "Hello AI Sakhi!",
+                "I need help with my bulk order",
+                "I need advance payment",
+                "I'm not feeling well"
+            ];
+            
+            for (const msg of messages) {
+                document.getElementById('chatMessage').value = msg;
+                await testChat();
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+        }
+        
+        // Auto-check on load
+        window.addEventListener('load', () => {
+            checkBackend();
+            checkToken();
+        });
+    </script>
+</body>
+</html>

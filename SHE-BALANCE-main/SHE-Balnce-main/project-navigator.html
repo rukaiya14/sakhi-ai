@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHE-BALANCE Project Navigator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 18px;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            background: #10b981;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            color: white;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card p {
+            opacity: 0.9;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .card .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .card.new {
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+        }
+
+        .credentials {
+            background: #fef3c7;
+            border: 3px solid #f59e0b;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .credentials h3 {
+            color: #92400e;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .credentials table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .credentials th,
+        .credentials td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #fbbf24;
+        }
+
+        .credentials th {
+            background: #fbbf24;
+            color: #78350f;
+            font-weight: bold;
+        }
+
+        .credentials td {
+            color: #92400e;
+            font-family: 'Courier New', monospace;
+        }
+
+        .quick-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .quick-link {
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .quick-link:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 SHE-BALANCE Project Navigator</h1>
+            <p>Your complete guide to testing the application</p>
+            
+            <div class="status-bar">
+                <div class="status-item">
+                    <span>✅</span>
+                    <span>Frontend Running</span>
+                </div>
+                <div class="status-item">
+                    <span>✅</span>
+                    <span>Backend Running</span>
+                </div>
+                <div class="status-item">
+                    <span>✅</span>
+                    <span>Database Connected</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Pages -->
+        <div class="section">
+            <h2>🌐 Main Application Pages</h2>
+            <div class="grid">
+                <a href="index.html" class="card">
+                    <h3>🏠 Landing Page</h3>
+                    <p>Main homepage with features overview, testimonials, and call-to-action</p>
+                    <span class="badge">Public</span>
+                </a>
+
+                <a href="login-redirect.html" class="card">
+                    <h3>🔐 Login Page</h3>
+                    <p>User authentication with role-based redirection</p>
+                    <span class="badge">Public</span>
+                </a>
+
+                <a href="dashboard.html" class="card">
+                    <h3>👩‍🎨 Artisan Dashboard</h3>
+                    <p>Artisan workspace with orders, SkillScan, and earnings</p>
+                    <span class="badge">Artisan Only</span>
+                </a>
+
+                <a href="buyer-dashboard.html" class="card">
+                    <h3>🛍️ Buyer Dashboard</h3>
+                    <p>Browse artisans, place orders, track deliveries</p>
+                    <span class="badge">Buyer Only</span>
+                </a>
+
+                <a href="admin-dashboard.html" class="card">
+                    <h3>⚙️ Admin Dashboard</h3>
+                    <p>Platform management, user verification, analytics</p>
+                    <span class="badge">Admin Only</span>
+                </a>
+
+                <a href="corporate-dashboard.html" class="card">
+                    <h3>🏢 Corporate Dashboard</h3>
+                    <p>Bulk orders, contracts, and corporate features</p>
+                    <span class="badge">Corporate Only</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="section">
+            <h2>✨ Key Features</h2>
+            <div class="grid">
+                <a href="food-marketplace.html" class="card">
+                    <h3>🍽️ Food Marketplace</h3>
+                    <p>Browse and order homemade food, bakery items, and more</p>
+                    <span class="badge">All Users</span>
+                </a>
+
+                <a href="skills.html" class="card">
+                    <h3>📸 SkillScan AI</h3>
+                    <p>AI-powered skill assessment using image analysis</p>
+                    <span class="badge">Artisan Only</span>
+                </a>
+
+                <a href="community.html" class="card">
+                    <h3>👥 Community</h3>
+                    <p>WhatsApp groups, forums, and peer support</p>
+                    <span class="badge">All Users</span>
+                </a>
+
+                <a href="invisible-labor.html" class="card">
+                    <h3>⏰ Invisible Labour Tracking</h3>
+                    <p>Track household work alongside craft work</p>
+                    <span class="badge">Artisan Only</span>
+                </a>
+
+                <a href="learning-hours.html" class="card">
+                    <h3>📚 Learning Hours</h3>
+                    <p>Skill development and training programs</p>
+                    <span class="badge">Artisan Only</span>
+                </a>
+
+                <a href="opportunities.html" class="card">
+                    <h3>💼 Opportunities</h3>
+                    <p>Job listings and income opportunities</p>
+                    <span class="badge">All Users</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Testing Tools -->
+        <div class="section">
+            <h2>🧪 Testing & Development</h2>
+            <div class="grid">
+                <a href="test-backend-api.html" class="card">
+                    <h3>🔌 API Tester</h3>
+                    <p>Visual interface to test all backend API endpoints</p>
+                    <span class="badge">Developer Tool</span>
+                </a>
+
+                <a href="test-connection.html" class="card">
+                    <h3>🔗 Connection Test</h3>
+                    <p>Test database and API connectivity</p>
+                    <span class="badge">Developer Tool</span>
+                </a>
+
+                <a href="test-ai-sakhi.html" class="card">
+                    <h3>🤖 AI Sakhi Test</h3>
+                    <p>Test AI chatbot functionality</p>
+                    <span class="badge">Developer Tool</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- NEW: WhatsApp Reminders -->
+        <div class="section">
+            <h2>📱 NEW: WhatsApp Reminder System</h2>
+            <div class="grid">
+                <div class="card new">
+                    <h3>🔔 Automated Reminders</h3>
+                    <p>Sends WhatsApp messages to artisans who haven't updated bulk order progress for 3+ days</p>
+                    <span class="badge">AWS Lambda + SNS</span>
+                </div>
+
+                <div class="card new">
+                    <h3>📊 Progress Tracking</h3>
+                    <p>New API endpoints to track and update order progress in real-time</p>
+                    <span class="badge">Backend API</span>
+                </div>
+
+                <div class="card new">
+                    <h3>⏰ Daily Monitoring</h3>
+                    <p>EventBridge triggers daily checks at 9 AM UTC</p>
+                    <span class="badge">AWS EventBridge</span>
+                </div>
+            </div>
+
+            <div class="credentials">
+                <h3>📋 Deployment Commands</h3>
+                <div class="quick-links">
+                    <span class="quick-link" style="background: #10b981; cursor: default;">
+                        cd aws-backend
+                    </span>
+                    <span class="quick-link" style="background: #10b981; cursor: default;">
+                        deploy-whatsapp-reminders.bat
+                    </span>
+                </div>
+                <p style="margin-top: 15px; color: #92400e;">
+                    📖 Read complete guide: <strong>WHATSAPP_REMINDERS_GUIDE.md</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- Test Credentials -->
+        <div class="section">
+            <h2>🔑 Test User Credentials</h2>
+            <div class="credentials">
+                <h3>Login Credentials</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Role</th>
+                            <th>Email</th>
+                            <th>Password</th>
+                            <th>Dashboard</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Admin</strong></td>
+                            <td>admin@shebalance.com</td>
+                            <td>admin123</td>
+                            <td>admin-dashboard.html</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Artisan</strong></td>
+                            <td>priya@example.com</td>
+                            <td>artisan123</td>
+                            <td>dashboard.html</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Buyer</strong></td>
+                            <td>rahul@example.com</td>
+                            <td>buyer123</td>
+                            <td>buyer-dashboard.html</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="section">
+            <h2>🔗 Quick Links</h2>
+            <div class="quick-links">
+                <a href="http://localhost:5000/health" class="quick-link" target="_blank">
+                    Backend Health Check
+                </a>
+                <a href="https://console.aws.amazon.com/dynamodb/" class="quick-link" target="_blank">
+                    AWS DynamoDB Console
+                </a>
+                <a href="https://console.aws.amazon.com/lambda/" class="quick-link" target="_blank">
+                    AWS Lambda Console
+                </a>
+                <a href="https://console.aws.amazon.com/cloudwatch/" class="quick-link" target="_blank">
+                    CloudWatch Logs
+                </a>
+            </div>
+        </div>
+
+        <!-- Documentation -->
+        <div class="section">
+            <h2>📚 Documentation</h2>
+            <div class="grid">
+                <div class="card" style="background: #10b981;">
+                    <h3>📄 START_PROJECT_LOCALLY.md</h3>
+                    <p>Complete guide to running and testing your project</p>
+                </div>
+
+                <div class="card" style="background: #10b981;">
+                    <h3>📄 WHATSAPP_REMINDERS_GUIDE.md</h3>
+                    <p>WhatsApp reminder system setup and configuration</p>
+                </div>
+
+                <div class="card" style="background: #10b981;">
+                    <h3>📄 BACKEND_STATUS_REPORT.md</h3>
+                    <p>Backend status, API endpoints, and testing guide</p>
+                </div>
+
+                <div class="card" style="background: #10b981;">
+                    <h3>📄 TEST_YOUR_BACKEND_NOW.md</h3>
+                    <p>Quick testing guide for backend API</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check backend status
+        fetch('http://localhost:5000/health')
+            .then(r => r.json())
+            .then(data => {
+                console.log('✅ Backend Status:', data);
+            })
+            .catch(err => {
+                console.error('❌ Backend Error:', err);
+                alert('Backend server is not running! Please start it with: cd backend && npm start');
+            });
+    </script>
+</body>
+</html>

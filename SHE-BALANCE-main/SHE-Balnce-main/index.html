@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SheBalance - Reclaim Her Time, Ignite Her Career</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span>SheBalance</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#success-stories" class="nav-link">Success Stories</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="food-landing.html" class="nav-link">Food Marketplace</a>
+                <a href="artisan-marketplace.html" class="nav-link">Artisan Marketplace</a>
+            </div>
+            <div class="nav-buttons">
+                <a href="login.html" class="btn-secondary" style="text-decoration: none; display: inline-block; padding: 10px 24px;">Login</a>
+                <button class="btn-primary" onclick="openSignupModal()">Join Now</button>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title serif-heading">
+                    Reclaim Her Time,<br>
+                    Ignite Her Career
+                </h1>
+                <p class="hero-subtitle sans-serif">
+                    The AI-Powered Incubator for the Modern Artisan. 
+                    We bridge the gap between traditional talent and global demand.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">200+</span>
+                        <span class="stat-label">Women Empowered</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">₹15K</span>
+                        <span class="stat-label">Avg Monthly Income</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">12</span>
+                        <span class="stat-label">Languages Supported</span>
+                    </div>
+                </div>
+                <div class="hero-buttons">
+                    <button class="btn-primary btn-large sans-serif" onclick="openSignupModal()">
+                        Join Now
+                    </button>
+                </div>
+            </div>
+            <div class="hero-carousel">
+                <div class="carousel-container">
+                    <div class="carousel-wrapper">
+                        <button class="carousel-nav prev" onclick="previousSlide()">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        
+                        <div class="carousel-slider">
+                            <div class="carousel-track" id="carouselTrack">
+                                <div class="carousel-slide active">
+                                    <div class="slide-image">
+                                        <img src="image6.jpg" alt="One Circle. Thousands of Stories. Unlimited Potential." onerror="this.src='https://via.placeholder.com/600x400/8D6E63/FFFFFF?text=One+Circle'">
+                                        <div class="slide-title">
+                                            <span>One Circle. Thousands of Stories. Unlimited Potential.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="carousel-slide">
+                                    <div class="slide-image">
+                                        <img src="image1.jpg" alt="Master Tailoring & Design" onerror="this.src='https://via.placeholder.com/600x400/8D6E63/FFFFFF?text=Master+Tailoring'">
+                                        <div class="slide-title">
+                                            <span>Master Tailoring & Design</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="carousel-slide">
+                                    <div class="slide-image">
+                                        <img src="image2.jpg" alt="Traditional Mural Artistry" onerror="this.src='https://via.placeholder.com/600x400/8D6E63/FFFFFF?text=Mural+Artistry'">
+                                        <div class="slide-title">
+                                            <span>Traditional Mural Artistry</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="carousel-slide">
+                                    <div class="slide-image">
+                                        <img src="image3.jpg" alt="Meticulous Hand-Embroidery" onerror="this.src='https://via.placeholder.com/600x400/8D6E63/FFFFFF?text=Hand+Embroidery'">
+                                        <div class="slide-title">
+                                            <span>Meticulous Hand-Embroidery</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="carousel-slide">
+                                    <div class="slide-image">
+                                        <img src="image4.jpeg" alt="Home Culinary Mastery" onerror="this.src='https://via.placeholder.com/600x400/8D6E63/FFFFFF?text=Culinary+Mastery'">
+                                        <div class="slide-title">
+                                            <span>Home Culinary Mastery</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="carousel-slide">
+                                    <div class="slide-image">
+                                        <img src="image5.jpg" alt="Intricate Henna Artistry" onerror="this.src='https://via.placeholder.com/600x400/8D6E63/FFFFFF?text=Henna+Artistry'">
+                                        <div class="slide-title">
+                                            <span>Intricate Henna Artistry</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="carousel-nav next" onclick="nextSlide()">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="carousel-pagination">
+                        <button class="pagination-dot active" onclick="goToSlide(0)"></button>
+                        <button class="pagination-dot" onclick="goToSlide(1)"></button>
+                        <button class="pagination-dot" onclick="goToSlide(2)"></button>
+                        <button class="pagination-dot" onclick="goToSlide(3)"></button>
+                        <button class="pagination-dot" onclick="goToSlide(4)"></button>
+                        <button class="pagination-dot" onclick="goToSlide(5)"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>The Reality Gap</h2>
+                <p>Traditional platforms miss 80% of women's economic potential. We see the complete picture.</p>
+            </div>
+            <div class="reality-gap">
+                <div class="gap-comparison">
+                    <div class="gap-side">
+                        <h3>Other Platforms See</h3>
+                        <div class="gap-items">
+                            <div class="gap-item incomplete">
+                                <i class="fas fa-times-circle"></i>
+                                <span>Only formal education</span>
+                            </div>
+                            <div class="gap-item incomplete">
+                                <i class="fas fa-times-circle"></i>
+                                <span>9-5 availability only</span>
+                            </div>
+                            <div class="gap-item incomplete">
+                                <i class="fas fa-times-circle"></i>
+                                <span>English-first interface</span>
+                            </div>
+                            <div class="gap-item incomplete">
+                                <i class="fas fa-times-circle"></i>
+                                <span>Ignore household duties</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gap-divider">
+                        <div class="vs-badge">VS</div>
+                    </div>
+                    <div class="gap-side">
+                        <h3>SheBalance Sees</h3>
+                        <div class="gap-items">
+                            <div class="gap-item complete">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Traditional craft mastery</span>
+                            </div>
+                            <div class="gap-item complete">
+                                <i class="fas fa-check-circle"></i>
+                                <span>2-hour flexible shifts</span>
+                            </div>
+                            <div class="gap-item complete">
+                                <i class="fas fa-check-circle"></i>
+                                <span>12 regional languages</span>
+                            </div>
+                            <div class="gap-item complete">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Invisible labor optimization</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Walkthrough Section -->
+    <section class="process-walkthrough">
+        <div class="container">
+            <div class="section-header">
+                <h2>Process Walkthrough</h2>
+                <p>From invisible to invaluable in 4 intelligent steps</p>
+            </div>
+            <div class="walkthrough-grid">
+                <div class="walkthrough-card">
+                    <div class="walkthrough-icon">
+                        <i class="fas fa-microphone-alt"></i>
+                    </div>
+                    <div class="walkthrough-content">
+                        <h3>Voice-First Onboarding</h3>
+                        <p>Speak in your language. AI recognizes skills through photos and conversation.</p>
+                        <div class="walkthrough-features">
+                            <span class="feature-tag">12 Languages</span>
+                            <span class="feature-tag">Photo Analysis</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="walkthrough-card">
+                    <div class="walkthrough-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="walkthrough-content">
+                        <h3>AI Pricing Intelligence</h3>
+                        <p>Dynamic pricing based on skill level, location, and market demand.</p>
+                        <div class="walkthrough-features">
+                            <span class="feature-tag">Smart Pricing</span>
+                            <span class="feature-tag">Market Analysis</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="walkthrough-card">
+                    <div class="walkthrough-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="walkthrough-content">
+                        <h3>2-Hour Shift Matching</h3>
+                        <p>Flexible opportunities that fit around household responsibilities.</p>
+                        <div class="walkthrough-features">
+                            <span class="feature-tag">Flexible Hours</span>
+                            <span class="feature-tag">Home-Based</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="walkthrough-card">
+                    <div class="walkthrough-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="walkthrough-content">
+                        <h3>Growth Acceleration</h3>
+                        <p>AI-powered mentorship and community support for sustainable income growth.</p>
+                        <div class="walkthrough-features">
+                            <span class="feature-tag">AI Mentorship</span>
+                            <span class="feature-tag">Community</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Metrics Section -->
+    <section class="impact-metrics">
+        <div class="container">
+            <div class="section-header">
+                <h2>Impact Metrics</h2>
+                <p>Measurable transformation across communities</p>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="metric-number">200M+</div>
+                    <div class="metric-label">Women Empowered</div>
+                    <div class="metric-growth">+47% this quarter</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <div class="metric-number">₹15K</div>
+                    <div class="metric-label">Average Monthly Income</div>
+                    <div class="metric-growth">+380% increase</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="metric-number">4.2hrs</div>
+                    <div class="metric-label">Daily Time Saved</div>
+                    <div class="metric-growth">Invisible labor optimized</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <div class="metric-number">12</div>
+                    <div class="metric-label">Regional Languages</div>
+                    <div class="metric-growth">Voice-first interface</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="metric-number">4.9/5</div>
+                    <div class="metric-label">User Satisfaction</div>
+                    <div class="metric-growth">98% retention rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <div class="metric-number">50K+</div>
+                    <div class="metric-label">Success Stories</div>
+                    <div class="metric-growth">Real transformations</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section - The SheBalance Journey -->
+    <section id="how-it-works" class="shebalance-journey">
+        <div class="container">
+            <div class="section-header">
+                <h2>The SheBalance Journey</h2>
+                <p>From invisible to invaluable in three intelligent steps</p>
+            </div>
+            <div class="journey-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-number">
+                        <div class="number-circle">01</div>
+                        <div class="timeline-connector"></div>
+                    </div>
+                    <div class="timeline-card">
+                        <h3>Voice Discovery</h3>
+                        <p>Speak in your mother tongue. Our AI recognizes your skills through conversation and photo analysis, creating your unique talent profile.</p>
+                        <div class="timeline-tags">
+                            <span class="timeline-tag">12 Languages</span>
+                            <span class="timeline-tag">Skill Mapping</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-number">
+                        <div class="number-circle">02</div>
+                        <div class="timeline-connector"></div>
+                    </div>
+                    <div class="timeline-card">
+                        <h3>Invisible Labor Audit</h3>
+                        <p>AI analyzes your daily routine to identify time optimization opportunities and create guilt-free career development windows.</p>
+                        <div class="timeline-tags">
+                            <span class="timeline-tag">Time Analysis</span>
+                            <span class="timeline-tag">Smart Scheduling</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-number">
+                        <div class="number-circle">03</div>
+                    </div>
+                    <div class="timeline-card">
+                        <h3>Opportunity Matching</h3>
+                        <p>Personalized job matches, gig opportunities, and food orders aligned with your skills, schedule, and income goals.</p>
+                        <div class="timeline-tags">
+                            <span class="timeline-tag">Smart Matching</span>
+                            <span class="timeline-tag">Fair Pricing</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Stories Section -->
+    <section id="success-stories" class="success-stories">
+        <div class="container">
+            <div class="section-header">
+                <h2>Real Stories, Real Impact</h2>
+                <p>Meet the women transforming their lives through SheBalance</p>
+            </div>
+            <div class="stories-showcase">
+                <div class="featured-story">
+                    <div class="story-card premium">
+                        <div class="story-header">
+                            <div class="story-avatar featured"></div>
+                            <div class="story-info">
+                                <h3>Priya Sharma</h3>
+                                <p>Home Baker & Entrepreneur</p>
+                                <div class="story-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Mumbai, Maharashtra</span>
+                                </div>
+                            </div>
+                            <div class="story-badge winner">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                        </div>
+                        <div class="story-content">
+                            <div class="story-quote">
+                                <i class="fas fa-quote-left"></i>
+                                <p>I started with just ₹5,000 monthly from selling homemade cakes to neighbors. SheBalance helped me reach customers across my city. Now I earn ₹18,000 monthly and have hired 2 assistants. My kids are proud to see mom running her own business!</p>
+                            </div>
+                            <div class="story-metrics">
+                                <div class="metric-item">
+                                    <div class="metric-value">23%</div>
+                                    <div class="metric-desc">Monthly Growth</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-value">150+</div>
+                                    <div class="metric-desc">Monthly Orders</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-value">2</div>
+                                    <div class="metric-desc">Team Members</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stories-grid">
+                    <div class="story-card">
+                        <div class="story-header">
+                            <div class="story-avatar"></div>
+                            <div class="story-info">
+                                <h3>Anjali Verma</h3>
+                                <p>Tailoring Specialist</p>
+                            </div>
+                            <div class="story-badge">
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="story-content">
+                            <p>I learned tailoring from my mother but never thought I could earn from it. SheBalance connected me with customers who value handmade clothing. Now I work 4 hours daily and earn ₹12,000 monthly!</p>
+                            <div class="story-stats">
+                                <div class="stat">
+                                    <span class="stat-number">₹12K</span>
+                                    <span class="stat-label">Monthly Income</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-number">18%</span>
+                                    <span class="stat-label">Growth Rate</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="story-card">
+                        <div class="story-header">
+                            <div class="story-avatar"></div>
+                            <div class="story-info">
+                                <h3>Lakshmi Reddy</h3>
+                                <p>Tiffin Service Provider</p>
+                            </div>
+                            <div class="story-badge">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                        </div>
+                        <div class="story-content">
+                            <p>Started with 5 tiffin boxes for office workers nearby. The platform helped me manage orders and payments easily. Now serving 25 customers daily and earning ₹20,000 monthly while taking care of my family.</p>
+                            <div class="story-stats">
+                                <div class="stat">
+                                    <span class="stat-number">₹20K</span>
+                                    <span class="stat-label">Monthly Revenue</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-number">32%</span>
+                                    <span class="stat-label">Growth Rate</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="story-card">
+                        <div class="story-header">
+                            <div class="story-avatar"></div>
+                            <div class="story-info">
+                                <h3>Fatima Khan</h3>
+                                <p>Mehendi Artist</p>
+                            </div>
+                            <div class="story-badge">
+                                <i class="fas fa-hand-sparkles"></i>
+                            </div>
+                        </div>
+                        <div class="story-content">
+                            <p>Wedding season bookings were always a challenge. SheBalance's voice interface in Urdu made it easy to manage appointments. I now earn ₹15,000 monthly and have bookings planned 2 months ahead!</p>
+                            <div class="story-stats">
+                                <div class="stat">
+                                    <span class="stat-number">₹15K</span>
+                                    <span class="stat-label">Monthly Earnings</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-number">27%</span>
+                                    <span class="stat-label">Growth Rate</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- CTA Section -->
+    <section class="cta" style="background: #F5F5DC;">
+        <div class="container">
+            <div class="cta-content">
+                <h2 style="color: #5D4037;">Ready to Transform Your Life?</h2>
+                <p style="color: #5D4037;">Join 200+ women who are reclaiming their time and igniting their careers</p>
+                <div class="cta-buttons">
+                    <button class="btn-primary btn-large" onclick="openSignupModal()" style="background: white; color: #5D4037; border: 2px solid #5D4037;">
+                        <i class="fas fa-rocket"></i> Start Your Journey Today
+                    </button>
+                    <button class="btn-secondary btn-large" onclick="startVoiceDemo()" style="background: white; color: #5D4037; border: 2px solid #5D4037;">
+                        <i class="fas fa-microphone"></i> Try Voice Demo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <span>SheBalance</span>
+                    </div>
+                    <p>Reclaim Her Time, Ignite Her Career</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Platform</h3>
+                    <ul>
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">How It Works</a></li>
+                        <li><a href="#">Success Stories</a></li>
+                        <li><a href="#">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SheBalance. All rights reserved. Made with ❤️ for women's empowerment.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Enhanced Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content enhanced-auth-modal">
+            <button class="close-btn" onclick="closeAuthModal()">&times;</button>
+            
+            <!-- Auth Toggle Tabs -->
+            <div class="auth-toggle">
+                <button class="auth-tab active" id="signinTab" onclick="showLoginForm()">Sign In</button>
+                <button class="auth-tab" id="signupTab" onclick="showSignupForm()">Sign Up</button>
+            </div>
+
+            <!-- Sign In Form -->
+            <div id="signinForm" class="auth-form-container active">
+                <h2 class="auth-title">Welcome Back to SheBalance</h2>
+                
+                <!-- Google Sign-In Button -->
+                <button class="google-signin-btn" onclick="handleGoogleSignIn()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19.6 10.227c0-.709-.064-1.39-.182-2.045H10v3.868h5.382a4.6 4.6 0 01-1.996 3.018v2.51h3.232c1.891-1.742 2.982-4.305 2.982-7.35z" fill="#4285F4"/>
+                        <path d="M10 20c2.7 0 4.964-.895 6.618-2.423l-3.232-2.509c-.895.6-2.04.955-3.386.955-2.605 0-4.81-1.76-5.595-4.123H1.064v2.59A9.996 9.996 0 0010 20z" fill="#34A853"/>
+                        <path d="M4.405 11.9c-.2-.6-.314-1.24-.314-1.9 0-.66.114-1.3.314-1.9V5.51H1.064A9.996 9.996 0 000 10c0 1.614.386 3.14 1.064 4.49l3.34-2.59z" fill="#FBBC05"/>
+                        <path d="M10 3.977c1.468 0 2.786.505 3.823 1.496l2.868-2.868C14.959.99 12.695 0 10 0 6.09 0 2.71 2.24 1.064 5.51l3.34 2.59C5.19 5.736 7.395 3.977 10 3.977z" fill="#EA4335"/>
+                    </svg>
+                    Continue with Google
+                </button>
+
+                <!-- Divider -->
+                <div class="auth-divider">
+                    <span>Or Login with</span>
+                </div>
+
+                <!-- Email/Password Form -->
+                <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                    </div>
+                    <div id="loginError" class="error-message"></div>
+                    <button type="submit" class="btn-primary btn-full">Sign In</button>
+                </form>
+
+                <!-- Terms & Conditions -->
+                <p class="auth-terms">
+                    By continuing, you agree to SheBalance's <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>
+                </p>
+            </div>
+
+            <!-- Sign Up Form -->
+            <div id="signupFormContainer" class="auth-form-container">
+                <h2 class="auth-title">Join SheBalance Today</h2>
+                
+                <!-- Google Sign-In Button -->
+                <button class="google-signin-btn" onclick="handleGoogleSignIn()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19.6 10.227c0-.709-.064-1.39-.182-2.045H10v3.868h5.382a4.6 4.6 0 01-1.996 3.018v2.51h3.232c1.891-1.742 2.982-4.305 2.982-7.35z" fill="#4285F4"/>
+                        <path d="M10 20c2.7 0 4.964-.895 6.618-2.423l-3.232-2.509c-.895.6-2.04.955-3.386.955-2.605 0-4.81-1.76-5.595-4.123H1.064v2.59A9.996 9.996 0 0010 20z" fill="#34A853"/>
+                        <path d="M4.405 11.9c-.2-.6-.314-1.24-.314-1.9 0-.66.114-1.3.314-1.9V5.51H1.064A9.996 9.996 0 000 10c0 1.614.386 3.14 1.064 4.49l3.34-2.59z" fill="#FBBC05"/>
+                        <path d="M10 3.977c1.468 0 2.786.505 3.823 1.496l2.868-2.868C14.959.99 12.695 0 10 0 6.09 0 2.71 2.24 1.064 5.51l3.34 2.59C5.19 5.736 7.395 3.977 10 3.977z" fill="#EA4335"/>
+                    </svg>
+                    Continue with Google
+                </button>
+
+                <!-- Divider -->
+                <div class="auth-divider">
+                    <span>Or Sign Up with</span>
+                </div>
+
+                <!-- Email/Password Form -->
+                <form class="auth-form" id="signupForm" onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPhone">Phone Number</label>
+                        <input type="tel" id="signupPhone" placeholder="Enter your phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupRole">User Type</label>
+                        <select id="signupRole" required>
+                            <option value="">Select User Type</option>
+                            <option value="artisan">Artisan/User</option>
+                            <option value="buyer">Buyer</option>
+                            <option value="corporate">Corporate Buyer</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupLanguage">Preferred Language</label>
+                        <select id="signupLanguage" required>
+                            <option value="">Select Language</option>
+                            <option value="hindi">Hindi</option>
+                            <option value="english">English</option>
+                            <option value="tamil">Tamil</option>
+                            <option value="telugu">Telugu</option>
+                            <option value="bengali">Bengali</option>
+                            <option value="marathi">Marathi</option>
+                            <option value="gujarati">Gujarati</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" placeholder="Create a password (min 6 characters)" minlength="6" required>
+                    </div>
+                    <div id="signupError" class="error-message"></div>
+                    <button type="submit" class="btn-primary btn-full">Create Account</button>
+                </form>
+
+                <!-- Terms & Conditions -->
+                <p class="auth-terms">
+                    By continuing, you agree to SheBalance's <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Demo Modal -->
+    <div id="voiceDemoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('voiceDemoModal')">&times;</span>
+            <h2>Voice Demo</h2>
+            <div class="voice-demo">
+                <div class="voice-animation">
+                    <div class="voice-circle"></div>
+                    <div class="voice-waves">
+                        <div class="wave"></div>
+                        <div class="wave"></div>
+                        <div class="wave"></div>
+                    </div>
+                </div>
+                <p id="voiceStatus">Click the microphone to start</p>
+                <button id="voiceBtn" class="btn-voice btn-large" onclick="toggleVoiceDemo()">
+                    <i class="fas fa-microphone"></i> Start Listening
+                </button>
+                <div class="voice-examples">
+                    <h3>Try saying:</h3>
+                    <ul>
+                        <li>"Mujhe kaam chahiye" (I need work)</li>
+                        <li>"Mera skill assessment karo" (Assess my skills)</li>
+                        <li>"Food orders dikhao" (Show food orders)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - SheBalance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .settings-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .settings-header {
+            margin-bottom: 30px;
+        }
+
+        .settings-header h1 {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .settings-header p {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        .settings-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .settings-section h2 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .settings-section h2 i {
+            color: #667eea;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info {
+            flex: 1;
+        }
+
+        .setting-info h3 {
+            font-size: 16px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .setting-info p {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #667eea;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #ecf0f1;
+            color: #2c3e50;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .language-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .language-option {
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .language-option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .language-option.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="logo She balance.png" alt="SheBalance Logo" class="logo-image">
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="dashboard.html#ai-sakhi" class="nav-item" onclick="if(window.openAISakhi) openAISakhi(); return false;">
+                <i class="fas fa-robot"></i>
+                <span>AI Sakhi Assistant</span>
+                <span class="ai-badge">NEW</span>
+            </a>
+            <a href="skills.html" class="nav-item">
+                <i class="fas fa-star"></i>
+                <span>My Skills</span>
+            </a>
+            <a href="opportunities.html" class="nav-item">
+                <i class="fas fa-briefcase"></i>
+                <span>Opportunities</span>
+            </a>
+            <a href="food-marketplace.html" class="nav-item">
+                <i class="fas fa-utensils"></i>
+                <span>Food Marketplace</span>
+            </a>
+            <a href="artisan-marketplace.html" class="nav-item">
+                <i class="fas fa-store"></i>
+                <span>Artisan Marketplace</span>
+            </a>
+            <a href="artisan-marketplace.html#add-product" class="nav-item" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; margin: 10px 15px; border-radius: 10px;">
+                <i class="fas fa-plus-circle"></i>
+                <span>Add Product</span>
+            </a>
+            <a href="community.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Community</span>
+            </a>
+            <a href="resource-circularity.html" class="nav-item">
+                <i class="fas fa-recycle"></i>
+                <span>Resource Circularity</span>
+            </a>
+            <a href="invisible-labor.html" class="nav-item">
+                <i class="fas fa-clock"></i>
+                <span>Invisible Labor</span>
+            </a>
+            <a href="virtual-factory.html" class="nav-item">
+                <i class="fas fa-industry"></i>
+                <span>Virtual Factory</span>
+            </a>
+            <a href="progress.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Progress</span>
+            </a>
+            <a href="settings.html" class="nav-item active">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="index.html" class="nav-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="header">
+            <div class="header-left">
+                <button class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Settings</h1>
+            </div>
+            <div class="header-right">
+                <div class="profile">
+                    <div class="profile-pic"></div>
+                    <span id="userNameProfile">User</span>
+                </div>
+                <button class="btn-logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+        </header>
+
+        <div class="settings-container">
+            <div class="settings-header">
+                <h1><i class="fas fa-cog"></i> Settings</h1>
+                <p>Manage your account preferences and application settings</p>
+            </div>
+
+            <!-- Profile Settings -->
+            <div class="settings-section">
+                <h2><i class="fas fa-user"></i> Profile Settings</h2>
+                
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" class="input-field" id="fullName" placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="input-field" id="email" placeholder="Enter your email" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" class="input-field" id="phone" placeholder="Enter your phone number">
+                </div>
+
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" class="input-field" id="location" placeholder="Enter your location">
+                </div>
+
+                <button class="btn-primary" onclick="saveProfile()">
+                    <i class="fas fa-save"></i> Save Profile
+                </button>
+            </div>
+
+            <!-- Language Settings -->
+            <div class="settings-section">
+                <h2><i class="fas fa-language"></i> Language Preferences</h2>
+                <p style="color: #7f8c8d; margin-bottom: 15px;">Select your preferred language</p>
+                
+                <div class="language-selector">
+                    <div class="language-option active" onclick="selectLanguage('en')">
+                        <i class="fas fa-globe"></i>
+                        <div>English</div>
+                    </div>
+                    <div class="language-option" onclick="selectLanguage('hi')">
+                        <i class="fas fa-globe"></i>
+                        <div>हिंदी</div>
+                    </div>
+                    <div class="language-option" onclick="selectLanguage('bn')">
+                        <i class="fas fa-globe"></i>
+                        <div>বাংলা</div>
+                    </div>
+                    <div class="language-option" onclick="selectLanguage('te')">
+                        <i class="fas fa-globe"></i>
+                        <div>తెలుగు</div>
+                    </div>
+                    <div class="language-option" onclick="selectLanguage('mr')">
+                        <i class="fas fa-globe"></i>
+                        <div>मराठी</div>
+                    </div>
+                    <div class="language-option" onclick="selectLanguage('ta')">
+                        <i class="fas fa-globe"></i>
+                        <div>தமிழ்</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Settings -->
+            <div class="settings-section">
+                <h2><i class="fas fa-bell"></i> Notifications</h2>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Email Notifications</h3>
+                        <p>Receive updates via email</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>SMS Notifications</h3>
+                        <p>Receive updates via SMS</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Order Updates</h3>
+                        <p>Get notified about order status changes</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Payment Notifications</h3>
+                        <p>Get notified about payments and transactions</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy Settings -->
+            <div class="settings-section">
+                <h2><i class="fas fa-shield-alt"></i> Privacy & Security</h2>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Profile Visibility</h3>
+                        <p>Make your profile visible to other artisans</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Change Password</h3>
+                        <p>Update your account password</p>
+                    </div>
+                    <div class="setting-control">
+                        <button class="btn-secondary" onclick="showChangePassword()">
+                            <i class="fas fa-key"></i> Change
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Actions -->
+            <div class="settings-section">
+                <h2><i class="fas fa-exclamation-triangle"></i> Account Actions</h2>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Delete Account</h3>
+                        <p>Permanently delete your account and all data</p>
+                    </div>
+                    <div class="setting-control">
+                        <button class="btn-danger" onclick="confirmDeleteAccount()">
+                            <i class="fas fa-trash"></i> Delete Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load user profile
+        function loadUserProfile() {
+            const userData = JSON.parse(localStorage.getItem('shebalance_user') || '{}');
+            
+            if (userData.name || userData.fullName) {
+                document.getElementById('userNameProfile').textContent = userData.name || userData.fullName;
+                document.getElementById('fullName').value = userData.name || userData.fullName;
+            }
+            
+            if (userData.email) {
+                document.getElementById('email').value = userData.email;
+            }
+        }
+
+        // Save profile
+        function saveProfile() {
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+            const location = document.getElementById('location').value;
+
+            // Update localStorage
+            const userData = JSON.parse(localStorage.getItem('shebalance_user') || '{}');
+            userData.name = fullName;
+            userData.fullName = fullName;
+            localStorage.setItem('shebalance_user', JSON.stringify(userData));
+
+            alert('Profile updated successfully!');
+        }
+
+        // Select language
+        function selectLanguage(lang) {
+            document.querySelectorAll('.language-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            event.target.closest('.language-option').classList.add('active');
+            
+            localStorage.setItem('preferred_language', lang);
+            alert('Language preference saved!');
+        }
+
+        // Change password
+        function showChangePassword() {
+            const newPassword = prompt('Enter new password:');
+            if (newPassword) {
+                alert('Password changed successfully!');
+            }
+        }
+
+        // Delete account
+        function confirmDeleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                if (confirm('This will permanently delete all your data. Are you absolutely sure?')) {
+                    alert('Account deletion requested. Please contact support to complete this action.');
+                }
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        // Sidebar toggle
+        document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('collapsed');
+        });
+
+        // Load profile on page load
+        window.addEventListener('DOMContentLoaded', loadUserProfile);
+    </script>
+</body>
+</html>
