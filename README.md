@@ -1,13 +1,13 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/M-Mahek-03/SheBalance/main/logo%20She%20balance.png" alt="SheBalance Logo" width="250"/>
+<img src="SheBalance Logo.png" alt="SheBalance Logo" width="250"/>
 
 <h1>🌸 SheBalance</h1>
 
 <h3>Enterprise AI-Powered Artisan Empowerment Platform</h3>
 <h4>Leveraging AWS AI to Transform Lives of 10 Million Women Artisans</h4>
 
-<p><em>"A Project for Women, From a Woman, Empowering Women"</em></p>
+<p><em>"A Project Built for Women, From a Woman, Empowering Women"</em></p>
 
 <p>🌱 Sustainable • 🌍 Eco-Conscious • ♻️ Carbon-Neutral • 💚 Women-Led</p>
 
@@ -60,7 +60,7 @@
 
 <h3>🎯 Empowering 10 Million Women Artisans Through AI</h3>
 
-<p><strong>A Project for Women, From a Woman, Empowering Women</strong></p>
+<p><strong>A Project Built for Women, From a Woman, Empowering Women</strong></p>
 
 <table>
 <tr>
@@ -91,35 +91,46 @@
 
 </div>
 
-## 🎥 Platform Demo
+## 🎥 Platform Demonstration
 
 <div align="center">
 
-### 🚀 Watch SheBalance in Action
+### Experience SheBalance Technology
 
 [![Watch Demo](https://img.shields.io/badge/▶️_Watch_Platform_Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com)
 
-<br/>
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  🎬 COMPREHENSIVE PLATFORM WALKTHROUGH                          │
-│                                                                 │
-│  ✨ Complete feature demonstration                             │
-│  🗣️ Multilingual voice interface showcase                      │
-│  🤖 AI Sakhi intelligent assistant in action                   │
-│  📸 SkillScan ML validation demonstration                      │
-│  👁️ Digital Twin invisible labor tracking                      │
-│  🏭 Virtual factory collaboration features                     │
-│  📊 Real-time analytics and insights                           │
-│                                                                 │
-│  ⏱️ Duration: 8 minutes | 🎯 Full platform overview            │
-└─────────────────────────────────────────────────────────────────┘
-```
-
 </div>
 
----
+**Comprehensive 8-minute walkthrough showcasing:**
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+**Core Features**
+- Multilingual AI interface (12 languages)
+- Voice-first navigation and commands
+- AI Sakhi conversational assistant
+- SkillScan ML-powered validation
+- Digital Twin invisible labor tracking
+- Real-time order management
+
+</td>
+<td width="50%" valign="top">
+
+**Technical Capabilities**
+- AWS Bedrock AI integration
+- SageMaker ML model inference
+- Serverless architecture performance
+- Real-time analytics dashboard
+- Virtual factory collaboration
+- End-to-end user workflows
+
+</td>
+</tr>
+</table>
+
+------
 
 ## 📸 Platform Screenshots
 
@@ -130,24 +141,24 @@
 <table>
 <tr>
 <td width="50%">
-<img src="https://via.placeholder.com/600x400/8D6E63/FFFFFF?text=Artisan+Dashboard+%7C+12+Languages" alt="Dashboard"/>
+<img src="Dashboard.jpeg" alt="Dashboard"/>
 <br/>
 <sub><b>Artisan Dashboard</b> - Multilingual interface with voice commands</sub>
 </td>
 <td width="50%">
-<img src="https://via.placeholder.com/600x400/5D4E37/FFFFFF?text=AI+Sakhi+Chatbot+%7C+Claude+3" alt="AI Sakhi"/>
+<img src="AI Sakhi.jpeg" alt="AI Sakhi"/>
 <br/>
 <sub><b>AI Sakhi</b> - Context-aware assistance in native languages</sub>
 </td>
 </tr>
 <tr>
 <td width="50%">
-<img src="https://via.placeholder.com/600x400/8B4513/FFFFFF?text=SkillScan+ML+%7C+92%25+Accuracy" alt="SkillScan"/>
+<img src="SkillScan.jpeg" alt="SkillScan"/>
 <br/>
 <sub><b>SkillScan</b> - AI-powered skill validation using SageMaker</sub>
 </td>
 <td width="50%">
-<img src="https://via.placeholder.com/600x400/A0522D/FFFFFF?text=Digital+Twin+%7C+Invisible+Labor" alt="Digital Twin"/>
+<img src="Digital Twin.jpeg" alt="Digital Twin"/>
 <br/>
 <sub><b>Digital Twin</b> - First-ever invisible labor tracking system</sub>
 </td>
@@ -155,8 +166,6 @@
 </table>
 
 </div>
-
----
 
 ---
 
@@ -450,7 +459,7 @@
 
 <div align="center">
 
-### *"A Project for Women, From a Woman, Empowering Women"*
+### *"A Project Built for Women, From a Woman, Empowering Women"*
 
 Building a sustainable, inclusive digital economy that values both people and planet
 
@@ -1511,16 +1520,16 @@ Create `.env` file in backend directory:
 ```env
 # AWS Configuration
 AWS_REGION=ap-south-1
-AWS_ACCESS_KEY_ID=your_access_key
-AWS_SECRET_ACCESS_KEY=your_secret_key
+AWS_ACCESS_KEY_ID=AKIA****************
+AWS_SECRET_ACCESS_KEY=****************************************
 
 # DynamoDB Tables
 USERS_TABLE=shebalance-users
 ORDERS_TABLE=shebalance-orders
 SKILLS_TABLE=shebalance-skills
 
-# JWT Secret
-JWT_SECRET=your_jwt_secret_key
+# JWT Secret (use strong random string, min 32 characters)
+JWT_SECRET=****************************************
 
 # Server Configuration
 PORT=5001
@@ -1532,6 +1541,8 @@ BEDROCK_MODEL_ID=anthropic.claude-3-sonnet-20240229-v1:0
 # SageMaker
 SAGEMAKER_ENDPOINT=skillscan-endpoint
 ```
+
+**Security Note:** Never commit actual credentials to version control. Use AWS IAM roles in production.
 
 ### Running the Application
 
@@ -1549,19 +1560,13 @@ node frontend-server.js
 
 ### Test Credentials
 
-```
-Admin:
-Email: admin@shebalance.com
-Password: admin123
+**Note:** For demo purposes only. Change all passwords in production.
 
-Artisan:
-Email: priya@example.com
-Password: artisan123
-
-Buyer:
-Email: rahul@example.com
-Password: buyer123
-```
+| Role | Email | Password |
+|:-----|:------|:---------|
+| Admin | admin@shebalance.com | `[Contact team for credentials]` |
+| Artisan | priya@example.com | `[Contact team for credentials]` |
+| Buyer | rahul@example.com | `[Contact team for credentials]` |
 
 ---
 
