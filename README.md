@@ -7,7 +7,7 @@
 <h3>Enterprise AI-Powered Artisan Empowerment Platform</h3>
 <h4>Leveraging AWS AI to Transform Lives of 10 Million Women Artisans</h4>
 
-<p><em>"A Project Built for Women, From a Woman, Empowering Women"</em></p>
+<p><em>"Delivered with Finesse, Empowering Women Every Step of the Way."</em></p>
 
 <p>🌱 Sustainable • 🌍 Eco-Conscious • ♻️ Carbon-Neutral • 💚 Women-Led</p>
 
@@ -60,7 +60,7 @@
 
 <h3>🎯 Empowering 10 Million Women Artisans Through AI</h3>
 
-<p><strong>A Project Built for Women, From a Woman, Empowering Women</strong></p>
+<p><strong>Delivered with Finesse, Empowering Women Every Step of the Way.</strong></p>
 
 <table>
 <tr>
@@ -97,7 +97,7 @@
 
 ### Experience SheBalance Technology
 
-[![Watch Demo](https://img.shields.io/badge/▶️_Watch_Platform_Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com)
+[![Watch Demo](https://img.shields.io/badge/▶️_Watch_Platform_Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/sE1FttlfQZ0?feature=shared)
 
 </div>
 
@@ -1060,6 +1060,8 @@ Resource sharing
 
 ### Technology Stack & Infrastructure
 
+<div align="center">
+  
 **Cloud Infrastructure:** 100% AWS serverless architecture
 
 | Layer | Technology | Purpose |
@@ -1078,6 +1080,7 @@ Resource sharing
 
 **Performance:** <200ms P99 latency | 99.94% uptime | 10K+ RPS capacity
 
+</div>
 ---
 
 ### AWS Well-Architected Framework Compliance
@@ -1580,15 +1583,16 @@ node frontend-server.js
 
 <table>
 <tr>
+
 <td align="center" width="33%">
 
 <a href="https://github.com/MariyamSeemab">
-<img src="https://github.com/MariyamSeemab.png" width="150" height="150" style="border-radius: 50%;" alt="Mariyam Usmani"/>
+<img src="https://github.com/MariyamSeemab.png" width="150" height="150" style="border-radius:50%;" alt="Mariyam Usmani"/>
 </a>
 
 ### **Mariyam Usmani**
 
-<sub>**Full Stack Developer & AI Architect**</sub>
+<sub><b>Full Stack Developer & AI Architect</b></sub>
 
 Lead developer for AWS Bedrock integration, backend architecture, and AI Sakhi chatbot. Specialized in serverless architectures and AI/ML integration.
 
@@ -1600,25 +1604,26 @@ Lead developer for AWS Bedrock integration, backend architecture, and AI Sakhi c
 
 <br/>
 
-**💻 Key Contributions:**
+**💻 Key Contributions**
 ```
-• AWS Bedrock (Claude 3 & Llama 3)
-• Backend API Architecture
-• AI Sakhi Chatbot
-• DynamoDB Schema Design
-• Lambda Functions
+AWS Bedrock (Claude 3 & Llama 3)
+Backend API Architecture
+AI Sakhi Chatbot
+DynamoDB Schema Design
+Lambda Functions
 ```
 
 </td>
+
 <td align="center" width="33%">
 
 <a href="https://github.com/khanzoefisha">
-<img src="https://github.com/khanzoefisha.png" width="150" height="150" style="border-radius: 50%;" alt="Zoefisha Khan"/>
+<img src="https://github.com/khanzoefisha.png" width="150" height="150" style="border-radius:50%;" alt="Zoefisha Khan"/>
 </a>
 
 ### **Zoefisha Khan**
 
-<sub>**ML Engineer & SageMaker Specialist**</sub>
+<sub><b>ML Engineer & SageMaker Specialist</b></sub>
 
 ML engineer responsible for SkillScan model training, voice services integration, and SageMaker deployment. Expert in computer vision and NLP.
 
@@ -1630,25 +1635,26 @@ ML engineer responsible for SkillScan model training, voice services integration
 
 <br/>
 
-**🤖 Key Contributions:**
+**🤖 Key Contributions**
 ```
-• SkillScan ML Model (92%)
-• SageMaker Training
-• Voice Services (Polly/Transcribe)
-• ML Pipeline Optimization
-• Model Deployment
+SkillScan ML Model (92%)
+SageMaker Training
+Voice Services (Polly/Transcribe)
+ML Pipeline Optimization
+Model Deployment
 ```
 
 </td>
-<td align="center" width="34%">
+
+<td align="center" width="33%">
 
 <a href="https://github.com/rukaiya14">
-<img src="https://github.com/rukaiya14.png" width="150" height="150" style="border-radius: 50%;" alt="Rukaiya Ghadiali"/>
+<img src="https://github.com/rukaiya14.png" width="150" height="150" style="border-radius:50%;" alt="Rukaiya Ghadiali"/>
 </a>
 
 ### **Rukaiya Ghadiali**
 
-<sub>**Frontend Developer & UX Designer**</sub>
+<sub><b>Frontend Developer & UX Designer</b></sub>
 
 Frontend lead and UX designer focused on multilingual UI, digital twin feature, and user research. Passionate about accessible design.
 
@@ -1660,16 +1666,17 @@ Frontend lead and UX designer focused on multilingual UI, digital twin feature, 
 
 <br/>
 
-**🎨 Key Contributions:**
+**🎨 Key Contributions**
 ```
-• Multilingual UI/UX (12 langs)
-• Digital Twin Feature
-• User Research (5000+ artisans)
-• Responsive Design
-• Accessibility
+Multilingual UI/UX (12 Languages)
+Digital Twin Feature
+User Research (5000+ artisans)
+Responsive Design
+Accessibility
 ```
 
 </td>
+
 </tr>
 </table>
 
