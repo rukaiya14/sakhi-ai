@@ -2124,7 +2124,7 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 ### Get in Touch
 
-[![GitHub](https://img.shields.io/badge/GitHub-M--Mahek--03/SheBalance-181717?style=for-the-badge&logo=github)](https://github.com/M-Mahek-03/SheBalance)
+[![GitHub](https://img.shields.io/badge/GitHub-rukaiya14/sakhi--ai-181717?style=for-the-badge&logo=github)](https://github.com/rukaiya14/sakhi-ai)
 [![Email](https://img.shields.io/badge/Email-shebalance.team@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:shebalance.team@gmail.com)
 
 ### Star us on GitHub! ⭐
