@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Language Test</title>
+    <style>
+        body { font-family: Arial; padding: 50px; background: #f5f5f5; }
+        .card { background: white; padding: 30px; border-radius: 10px; max-width: 600px; margin: 0 auto; }
+        button { padding: 15px 30px; margin: 10px; font-size: 16px; cursor: pointer; border: 2px solid #333; background: white; border-radius: 5px; }
+        button:hover { background: #333; color: white; }
+        .content { margin-top: 30px; padding: 20px; background: #f0f0f0; border-radius: 5px; }
+        h1 { color: #333; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Simple Language Test</h1>
+        <p>Click a button to change language:</p>
+        
+        <button onclick="changeLang('hi-IN')">Hindi (हिंदी)</button>
+        <button onclick="changeLang('ta-IN')">Tamil (தமிழ்)</button>
+        <button onclick="changeLang('en-IN')">English</button>
+        
+        <div class="content">
+            <h2 id="greeting">Hello</h2>
+            <p id="dashboard">Dashboard</p>
+            <p id="mySkills">My Skills</p>
+            <p id="opportunities">Opportunities</p>
+            <p id="community">Community</p>
+        </div>
+    </div>
+
+    <script>
+        // Inline translations
+        const trans = {
+            'hi-IN': {
+                greeting: 'नमस्ते',
+                dashboard: 'डैशबोर्ड',
+                mySkills: 'मेरे कौशल',
+                opportunities: 'अवसर',
+                community: 'समुदाय'
+            },
+            'ta-IN': {
+                greeting: 'வணக்கம்',
+                dashboard: 'டாஷ்போர்டு',
+                mySkills: 'எனது திறன்கள்',
+                opportunities: 'வாய்ப்புகள்',
+                community: 'சமூகம்'
+            },
+            'en-IN': {
+                greeting: 'Hello',
+                dashboard: 'Dashboard',
+                mySkills: 'My Skills',
+                opportunities: 'Opportunities',
+                community: 'Community'
+            }
+        };
+        
+        function changeLang(lang) {
+            console.log('Changing to:', lang);
+            const t = trans[lang];
+            
+            document.getElementById('greeting').textContent = t.greeting;
+            document.getElementById('dashboard').textContent = t.dashboard;
+            document.getElementById('mySkills').textContent = t.mySkills;
+            document.getElementById('opportunities').textContent = t.opportunities;
+            document.getElementById('community').textContent = t.community;
+            
+            localStorage.setItem('shebalance_language', lang);
+            alert('Language changed to ' + lang);
+        }
+        
+        // Load saved language
+        window.onload = function() {
+            const saved = localStorage.getItem('shebalance_language') || 'hi-IN';
+            changeLang(saved);
+        };
+    </script>
+</body>
+</html>

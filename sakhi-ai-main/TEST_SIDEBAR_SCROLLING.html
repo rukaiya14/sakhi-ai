@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Sidebar Scrolling</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Test Sidebar - Same styles as dashboard.css */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* ✅ Enable vertical scrolling */
+            overflow-x: hidden; /* ✅ Hide horizontal scrollbar */
+        }
+
+        /* Custom scrollbar for sidebar */
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            color: #666;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: #f9fafb;
+            color: #667eea;
+            border-left-color: #667eea;
+        }
+
+        .nav-item.active {
+            background: #f9fafb;
+            color: #667eea;
+            border-left-color: #667eea;
+            font-weight: 600;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 20px 0;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 40px;
+            flex: 1;
+        }
+
+        .test-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .test-card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .test-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .status.success {
+            background: #dcfce7;
+            color: #059669;
+        }
+
+        .status.info {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .checklist {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .checklist li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .checklist li:before {
+            content: "✓ ";
+            color: #059669;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Test Sidebar with Many Items -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    🎯 SheBalance Test
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Sakhi Assistant</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-star"></i>
+                    <span>My Skills</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Opportunities</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-utensils"></i>
+                    <span>Food Marketplace</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-store"></i>
+                    <span>Artisan Marketplace</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Add Product</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Community</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-recycle"></i>
+                    <span>Resource Circularity</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Invisible Labor</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-industry"></i>
+                    <span>Virtual Factory</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Progress</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="test-card">
+                <h2>✅ Sidebar Scrolling Test</h2>
+                <p>This page tests the sidebar scrolling functionality with the exact same CSS as your dashboard.</p>
+                <span class="status success">CSS Applied Successfully</span>
+            </div>
+
+            <div class="test-card">
+                <h2>🔍 What to Check</h2>
+                <ul class="checklist">
+                    <li>Sidebar should have a scrollbar when content exceeds viewport height</li>
+                    <li>Scrollbar should be 8px wide with gray color</li>
+                    <li>All menu items should be accessible by scrolling</li>
+                    <li>You should be able to see "Virtual Factory", "Progress", "Settings", and "Logout"</li>
+                    <li>Scrollbar should appear on hover (in Chrome/Edge)</li>
+                    <li>No horizontal scrollbar should appear</li>
+                </ul>
+            </div>
+
+            <div class="test-card">
+                <h2>📋 Test Instructions</h2>
+                <p><strong>Step 1:</strong> Resize your browser window to make it shorter (drag the bottom edge up)</p>
+                <p><strong>Step 2:</strong> Look at the sidebar - you should see a scrollbar appear</p>
+                <p><strong>Step 3:</strong> Scroll down in the sidebar to see all menu items</p>
+                <p><strong>Step 4:</strong> Verify you can see "Logout" at the bottom</p>
+                <span class="status info">If you can see all items, the fix is working! ✓</span>
+            </div>
+
+            <div class="test-card">
+                <h2>🚨 If Scrollbar Doesn't Appear</h2>
+                <p><strong>1. Hard Refresh:</strong> Press Ctrl + Shift + R (Windows) or Cmd + Shift + R (Mac)</p>
+                <p><strong>2. Clear Cache:</strong> Open DevTools (F12) → Right-click refresh → "Empty Cache and Hard Reload"</p>
+                <p><strong>3. Check Browser:</strong> Make sure you're using a modern browser (Chrome, Firefox, Edge, Safari)</p>
+                <p><strong>4. Resize Window:</strong> Make your browser window shorter to force scrollbar to appear</p>
+            </div>
+
+            <div class="test-card">
+                <h2>✨ Expected Behavior</h2>
+                <p><strong>Desktop:</strong> Scrollbar appears when sidebar content exceeds window height</p>
+                <p><strong>Hover:</strong> Scrollbar becomes more visible when hovering over sidebar</p>
+                <p><strong>Smooth:</strong> Scrolling should be smooth and responsive</p>
+                <p><strong>Custom Style:</strong> Scrollbar should be thin (8px) with rounded corners</p>
+            </div>
+
+            <div class="test-card">
+                <h2>🎯 Next Steps</h2>
+                <p>If this test page works correctly, then the same fix is already applied to your dashboard.html</p>
+                <p><strong>To see it on your actual dashboard:</strong></p>
+                <ol style="margin-left: 20px; margin-top: 10px;">
+                    <li>Open http://localhost:8080/dashboard.html</li>
+                    <li>Do a hard refresh (Ctrl + Shift + R)</li>
+                    <li>Resize window to make it shorter</li>
+                    <li>Scroll in the sidebar</li>
+                </ol>
+                <span class="status success">The CSS is already saved in dashboard.css!</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Log scrollbar status
+        window.addEventListener('load', function() {
+            const sidebar = document.querySelector('.sidebar');
+            const hasScrollbar = sidebar.scrollHeight > sidebar.clientHeight;
+            
+            console.log('=== SIDEBAR SCROLLING TEST ===');
+            console.log('Sidebar Height:', sidebar.clientHeight + 'px');
+            console.log('Sidebar Content Height:', sidebar.scrollHeight + 'px');
+            console.log('Has Scrollbar:', hasScrollbar);
+            console.log('Overflow-Y:', window.getComputedStyle(sidebar).overflowY);
+            console.log('Overflow-X:', window.getComputedStyle(sidebar).overflowX);
+            
+            if (hasScrollbar) {
+                console.log('✅ Scrollbar is active!');
+            } else {
+                console.log('ℹ️ Window is tall enough - resize to see scrollbar');
+            }
+        });
+    </script>
+</body>
+</html>

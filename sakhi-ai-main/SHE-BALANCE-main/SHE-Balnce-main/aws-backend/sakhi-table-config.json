@@ -1,0 +1,41 @@
+{
+  "TableName": "SheBalance-Sakhi-Requests",
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "request_id",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "artisan_id",
+      "AttributeType": "S"
+    }
+  ],
+  "KeySchema": [
+    {
+      "AttributeName": "request_id",
+      "KeyType": "HASH"
+    }
+  ],
+  "GlobalSecondaryIndexes": [
+    {
+      "IndexName": "artisan-index",
+      "KeySchema": [
+        {
+          "AttributeName": "artisan_id",
+          "KeyType": "HASH"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 5,
+        "WriteCapacityUnits": 5
+      }
+    }
+  ],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
+  }
+}

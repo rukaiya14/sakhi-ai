@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Command Diagnostic Test</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        #transcript {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            min-height: 50px;
+            border: 2px dashed #ddd;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-card">
+        <h1><i class="fas fa-microphone"></i> Voice Command Diagnostic Test</h1>
+        <p>This page will help diagnose why voice commands aren't working.</p>
+    </div>
+
+    <div class="test-card">
+        <h2>Step 1: Browser Compatibility Check</h2>
+        <div id="browserCheck"></div>
+    </div>
+
+    <div class="test-card">
+        <h2>Step 2: Test Speech Recognition</h2>
+        <button onclick="testSpeechRecognition()" id="testBtn">
+            <i class="fas fa-microphone"></i> Start Test
+        </button>
+        <button onclick="stopTest()" id="stopBtn" disabled>
+            <i class="fas fa-stop"></i> Stop
+        </button>
+        <div id="testStatus"></div>
+        <div id="transcript"></div>
+    </div>
+
+    <div class="test-card">
+        <h2>Step 3: Test Voice Command Script</h2>
+        <button onclick="testVoiceCommandScript()">
+            <i class="fas fa-code"></i> Test Script Loading
+        </button>
+        <div id="scriptStatus"></div>
+    </div>
+
+    <div class="test-card">
+        <h2>Step 4: Test Full Integration</h2>
+        <button onclick="testFullIntegration()">
+            <i class="fas fa-check-circle"></i> Test Full System
+        </button>
+        <div id="integrationStatus"></div>
+    </div>
+
+    <div class="test-card">
+        <h2>Console Logs</h2>
+        <div id="consoleLogs" style="background: #000; color: #0f0; padding: 15px; border-radius: 5px; font-family: monospace; max-height: 300px; overflow-y: auto;"></div>
+    </div>
+
+    <script>
+        let recognition = null;
+        let consoleLog = [];
+
+        // Override console.log to capture logs
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const logDiv = document.getElementById('consoleLogs');
+            const logEntry = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' ');
+            consoleLog.push(logEntry);
+            logDiv.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${logEntry}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        };
+
+        const originalError = console.error;
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            const logDiv = document.getElementById('consoleLogs');
+            const logEntry = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' ');
+            consoleLog.push('ERROR: ' + logEntry);
+            logDiv.innerHTML += `<div style="color: #f00;">ERROR: ${logEntry}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        };
+
+        // Step 1: Browser Compatibility Check
+        function checkBrowserCompatibility() {
+            const browserCheck = document.getElementById('browserCheck');
+            const results = [];
+
+            // Check Speech Recognition
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (SpeechRecognition) {
+                results.push('<div class="status success">✅ Speech Recognition API: Supported</div>');
+                console.log('✅ Speech Recognition supported');
+            } else {
+                results.push('<div class="status error">❌ Speech Recognition API: NOT Supported<br>Please use Google Chrome or Microsoft Edge</div>');
+                console.error('❌ Speech Recognition not supported');
+            }
+
+            // Check browser
+            const userAgent = navigator.userAgent;
+            let browserName = 'Unknown';
+            if (userAgent.includes('Chrome') && !userAgent.includes('Edg')) {
+                browserName = 'Google Chrome ✅';
+            } else if (userAgent.includes('Edg')) {
+                browserName = 'Microsoft Edge ✅';
+            } else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
+                browserName = 'Safari ⚠️ (Limited support)';
+            } else if (userAgent.includes('Firefox')) {
+                browserName = 'Firefox ❌ (Not supported)';
+            }
+            results.push(`<div class="status info">Browser: ${browserName}</div>`);
+            console.log('Browser:', browserName);
+
+            // Check microphone permission
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(() => {
+                    results.push('<div class="status success">✅ Microphone: Permission granted</div>');
+                    console.log('✅ Microphone permission granted');
+                    browserCheck.innerHTML = results.join('');
+                })
+                .catch((err) => {
+                    results.push(`<div class="status error">❌ Microphone: Permission denied or not available<br>${err.message}</div>`);
+                    console.error('❌ Microphone error:', err);
+                    browserCheck.innerHTML = results.join('');
+                });
+
+            browserCheck.innerHTML = results.join('');
+        }
+
+        // Step 2: Test Speech Recognition
+        function testSpeechRecognition() {
+            const testStatus = document.getElementById('testStatus');
+            const transcriptDiv = document.getElementById('transcript');
+            const testBtn = document.getElementById('testBtn');
+            const stopBtn = document.getElementById('stopBtn');
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            if (!SpeechRecognition) {
+                testStatus.innerHTML = '<div class="status error">❌ Speech Recognition not supported in this browser</div>';
+                return;
+            }
+
+            try {
+                recognition = new SpeechRecognition();
+                recognition.lang = 'hi-IN'; // Hindi
+                recognition.continuous = false;
+                recognition.interimResults = false;
+
+                testStatus.innerHTML = '<div class="status info">🎤 Listening... Speak now in Hindi or English</div>';
+                transcriptDiv.innerHTML = '<em>Waiting for speech...</em>';
+                testBtn.disabled = true;
+                stopBtn.disabled = false;
+
+                console.log('🎤 Starting speech recognition...');
+
+                recognition.onstart = () => {
+                    console.log('✅ Recognition started');
+                    testStatus.innerHTML = '<div class="status success">✅ Recognition started! Speak now...</div>';
+                };
+
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    const confidence = event.results[0][0].confidence;
+                    
+                    console.log('📝 Transcript:', transcript);
+                    console.log('📊 Confidence:', confidence);
+                    
+                    transcriptDiv.innerHTML = `
+                        <strong>You said:</strong> "${transcript}"<br>
+                        <strong>Confidence:</strong> ${(confidence * 100).toFixed(1)}%
+                    `;
+                    testStatus.innerHTML = '<div class="status success">✅ Speech recognized successfully!</div>';
+                };
+
+                recognition.onerror = (event) => {
+                    console.error('❌ Recognition error:', event.error);
+                    testStatus.innerHTML = `<div class="status error">❌ Error: ${event.error}<br>
+                        ${event.error === 'no-speech' ? 'No speech detected. Please try again.' : ''}
+                        ${event.error === 'not-allowed' ? 'Microphone access denied. Please allow microphone access.' : ''}
+                    </div>`;
+                    testBtn.disabled = false;
+                    stopBtn.disabled = true;
+                };
+
+                recognition.onend = () => {
+                    console.log('🛑 Recognition ended');
+                    testBtn.disabled = false;
+                    stopBtn.disabled = true;
+                };
+
+                recognition.start();
+
+            } catch (error) {
+                console.error('❌ Error starting recognition:', error);
+                testStatus.innerHTML = `<div class="status error">❌ Error: ${error.message}</div>`;
+                testBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+        }
+
+        function stopTest() {
+            if (recognition) {
+                recognition.stop();
+                console.log('🛑 Stopping recognition...');
+            }
+        }
+
+        // Step 3: Test Voice Command Script
+        function testVoiceCommandScript() {
+            const scriptStatus = document.getElementById('scriptStatus');
+            const results = [];
+
+            console.log('🔍 Testing voice command script...');
+
+            // Check if script is loaded
+            if (typeof MultilingualVoiceCommand !== 'undefined') {
+                results.push('<div class="status success">✅ MultilingualVoiceCommand class: Found</div>');
+                console.log('✅ MultilingualVoiceCommand class found');
+            } else {
+                results.push('<div class="status error">❌ MultilingualVoiceCommand class: NOT Found</div>');
+                console.error('❌ MultilingualVoiceCommand class not found');
+            }
+
+            // Check if voiceCommand instance exists
+            if (typeof voiceCommand !== 'undefined') {
+                results.push('<div class="status success">✅ voiceCommand instance: Found</div>');
+                console.log('✅ voiceCommand instance found');
+            } else {
+                results.push('<div class="status error">❌ voiceCommand instance: NOT Found</div>');
+                console.error('❌ voiceCommand instance not found');
+            }
+
+            // Check if startVoiceCommand function exists
+            if (typeof startVoiceCommand === 'function') {
+                results.push('<div class="status success">✅ startVoiceCommand function: Found</div>');
+                console.log('✅ startVoiceCommand function found');
+            } else {
+                results.push('<div class="status error">❌ startVoiceCommand function: NOT Found</div>');
+                console.error('❌ startVoiceCommand function not found');
+            }
+
+            scriptStatus.innerHTML = results.join('');
+        }
+
+        // Step 4: Test Full Integration
+        function testFullIntegration() {
+            const integrationStatus = document.getElementById('integrationStatus');
+            
+            console.log('🔍 Testing full integration...');
+            
+            if (typeof startVoiceCommand === 'function') {
+                integrationStatus.innerHTML = '<div class="status info">🎤 Starting voice command... Speak now!</div>';
+                try {
+                    startVoiceCommand();
+                    console.log('✅ startVoiceCommand() called successfully');
+                } catch (error) {
+                    console.error('❌ Error calling startVoiceCommand():', error);
+                    integrationStatus.innerHTML = `<div class="status error">❌ Error: ${error.message}</div>`;
+                }
+            } else {
+                integrationStatus.innerHTML = '<div class="status error">❌ startVoiceCommand function not available. Script may not be loaded.</div>';
+                console.error('❌ startVoiceCommand function not available');
+            }
+        }
+
+        // Run browser check on load
+        window.onload = () => {
+            console.log('🚀 Diagnostic page loaded');
+            checkBrowserCompatibility();
+        };
+    </script>
+
+    <!-- Try to load the voice command script -->
+    <script src="SHE-BALANCE-main/SHE-Balnce-main/voice-command-multilingual.js"></script>
+</body>
+</html>

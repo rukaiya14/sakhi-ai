@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Sakhi Diagnostic</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background: #f5f5f5;
+        }
+        .diagnostic-box {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #6366f1;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .btn {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .btn:hover {
+            background: #4f46e5;
+        }
+        .btn-test {
+            background: #10b981;
+        }
+        .btn-test:hover {
+            background: #059669;
+        }
+        .code-block {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="diagnostic-box">
+        <h1>🔍 AI Sakhi Diagnostic Tool</h1>
+        
+        <div class="test-section">
+            <h3>Step 1: Run Diagnostics</h3>
+            <button class="btn btn-test" onclick="runDiagnostics()">Run Full Diagnostic</button>
+            <button class="btn" onclick="testOpenPanel()">Test Open Panel</button>
+            <button class="btn" onclick="clearCacheInstructions()">Show Cache Clear Instructions</button>
+        </div>
+
+        <div id="results"></div>
+
+        <div class="test-section" id="instructions" style="display: none;">
+            <h3>🧹 Clear Browser Cache</h3>
+            <ol>
+                <li>Press <strong>Ctrl + Shift + Delete</strong> (Windows) or <strong>Cmd + Shift + Delete</strong> (Mac)</li>
+                <li>Select "Cached images and files"</li>
+                <li>Click "Clear data"</li>
+                <li>Close ALL browser tabs</li>
+                <li>Reopen browser and go to dashboard</li>
+            </ol>
+            <p><strong>Or try:</strong></p>
+            <ul>
+                <li>Press <strong>Ctrl + F5</strong> for hard refresh</li>
+                <li>Or <strong>Ctrl + Shift + R</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.textContent = message;
+            results.appendChild(div);
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+
+        function runDiagnostics() {
+            clearResults();
+            log('🔍 Starting AI Sakhi diagnostics...', 'info');
+            
+            // Test 1: Check if we're on the right domain
+            log(`📍 Current URL: ${window.location.href}`, 'info');
+            
+            // Test 2: Try to fetch dashboard.html
+            log('📥 Checking if dashboard.html is accessible...', 'info');
+            fetch('/dashboard.html')
+                .then(response => {
+                    if (response.ok) {
+                        log('✅ dashboard.html is accessible', 'success');
+                        return response.text();
+                    } else {
+                        log(`❌ dashboard.html returned status: ${response.status}`, 'error');
+                        throw new Error('Dashboard not accessible');
+                    }
+                })
+                .then(html => {
+                    // Test 3: Check if AI Sakhi panel exists in HTML
+                    if (html.includes('id="aiSakhiPanel"')) {
+                        log('✅ AI Sakhi panel HTML found in dashboard.html', 'success');
+                    } else {
+                        log('❌ AI Sakhi panel HTML NOT found in dashboard.html', 'error');
+                    }
+                    
+                    if (html.includes('id="aiSakhiOverlay"')) {
+                        log('✅ AI Sakhi overlay HTML found in dashboard.html', 'success');
+                    } else {
+                        log('❌ AI Sakhi overlay HTML NOT found in dashboard.html', 'error');
+                    }
+                    
+                    if (html.includes('function openAISakhi')) {
+                        log('✅ openAISakhi function found in dashboard.html', 'success');
+                    } else {
+                        log('⚠️ openAISakhi function not found in HTML (should be in dashboard.js)', 'warning');
+                    }
+                })
+                .catch(error => {
+                    log(`❌ Error fetching dashboard: ${error.message}`, 'error');
+                });
+            
+            // Test 4: Check if dashboard.js is accessible
+            log('📥 Checking if dashboard.js is accessible...', 'info');
+            fetch('/dashboard.js')
+                .then(response => {
+                    if (response.ok) {
+                        log('✅ dashboard.js is accessible', 'success');
+                        return response.text();
+                    } else {
+                        log(`❌ dashboard.js returned status: ${response.status}`, 'error');
+                        throw new Error('dashboard.js not accessible');
+                    }
+                })
+                .then(js => {
+                    if (js.includes('function openAISakhi')) {
+                        log('✅ openAISakhi function found in dashboard.js', 'success');
+                    } else {
+                        log('❌ openAISakhi function NOT found in dashboard.js', 'error');
+                    }
+                    
+                    if (js.includes('function closeAISakhi')) {
+                        log('✅ closeAISakhi function found in dashboard.js', 'success');
+                    } else {
+                        log('❌ closeAISakhi function NOT found in dashboard.js', 'error');
+                    }
+                })
+                .catch(error => {
+                    log(`❌ Error fetching dashboard.js: ${error.message}`, 'error');
+                });
+            
+            // Test 5: Check if dashboard.css is accessible
+            log('📥 Checking if dashboard.css is accessible...', 'info');
+            fetch('/dashboard.css')
+                .then(response => {
+                    if (response.ok) {
+                        log('✅ dashboard.css is accessible', 'success');
+                        return response.text();
+                    } else {
+                        log(`❌ dashboard.css returned status: ${response.status}`, 'error');
+                        throw new Error('dashboard.css not accessible');
+                    }
+                })
+                .then(css => {
+                    if (css.includes('.ai-sakhi-panel')) {
+                        log('✅ AI Sakhi panel CSS found in dashboard.css', 'success');
+                    } else {
+                        log('❌ AI Sakhi panel CSS NOT found in dashboard.css', 'error');
+                    }
+                    
+                    if (css.includes('.ai-sakhi-overlay')) {
+                        log('✅ AI Sakhi overlay CSS found in dashboard.css', 'success');
+                    } else {
+                        log('❌ AI Sakhi overlay CSS NOT found in dashboard.css', 'error');
+                    }
+                })
+                .catch(error => {
+                    log(`❌ Error fetching dashboard.css: ${error.message}`, 'error');
+                });
+            
+            setTimeout(() => {
+                log('', 'info');
+                log('📊 Diagnostic complete! Check results above.', 'info');
+                log('', 'info');
+                log('💡 Next steps:', 'warning');
+                log('1. If all tests pass, the issue is browser cache', 'warning');
+                log('2. Click "Show Cache Clear Instructions" button', 'warning');
+                log('3. If tests fail, there may be a file issue', 'warning');
+            }, 2000);
+        }
+
+        function testOpenPanel() {
+            clearResults();
+            log('🧪 Testing panel open functionality...', 'info');
+            log('⚠️ This test only works if you\'re on the dashboard page', 'warning');
+            log('', 'info');
+            
+            const code = `
+// Copy and paste this into the dashboard console (F12):
+
+// Test if function exists
+console.log('Function exists:', typeof openAISakhi);
+
+// Test if elements exist
+console.log('Panel exists:', !!document.getElementById('aiSakhiPanel'));
+console.log('Overlay exists:', !!document.getElementById('aiSakhiOverlay'));
+
+// Try to open
+try {
+    openAISakhi();
+    console.log('✅ Panel opened!');
+} catch (error) {
+    console.error('❌ Error:', error);
+}
+            `;
+            
+            const codeBlock = document.createElement('div');
+            codeBlock.className = 'code-block';
+            codeBlock.textContent = code.trim();
+            document.getElementById('results').appendChild(codeBlock);
+            
+            log('📋 Code copied above. Paste it in dashboard console (F12)', 'info');
+        }
+
+        function clearCacheInstructions() {
+            document.getElementById('instructions').style.display = 'block';
+            document.getElementById('instructions').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Auto-run diagnostics on load
+        window.addEventListener('DOMContentLoaded', function() {
+            setTimeout(runDiagnostics, 500);
+        });
+    </script>
+</body>
+</html>

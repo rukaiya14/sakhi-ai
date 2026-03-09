@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Command Test - Standalone</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .status {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 16px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .status.info {
+            background: #e3f2fd;
+            color: #1976d2;
+            border: 2px solid #90caf9;
+        }
+        .status.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #81c784;
+        }
+        .status.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #ef5350;
+        }
+        .status.listening {
+            background: #fff3e0;
+            color: #e65100;
+            border: 2px solid #ffb74d;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            margin: 10px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .commands {
+            text-align: left;
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .commands h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .commands ul {
+            list-style: none;
+        }
+        .commands li {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+        }
+        .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        #transcript {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            min-height: 60px;
+            font-family: monospace;
+            font-size: 14px;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            padding: 5px;
+            margin: 2px 0;
+            border-left: 3px solid #667eea;
+            padding-left: 10px;
+        }
+        .log-error {
+            border-left-color: #f44336;
+            color: #c62828;
+        }
+        .log-success {
+            border-left-color: #4caf50;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🎤</div>
+        <h1>Voice Command Test</h1>
+        <p class="subtitle">Click the button and speak a command</p>
+        
+        <div id="status" class="status info">
+            <strong>Ready to test</strong><br>
+            Click "Start Voice Test" to begin
+        </div>
+        
+        <button onclick="startVoiceTest()" id="startBtn">
+            <i class="fas fa-microphone"></i> Start Voice Test
+        </button>
+        
+        <button onclick="stopVoiceTest()" id="stopBtn" disabled style="background: #f44336;">
+            <i class="fas fa-stop"></i> Stop
+        </button>
+        
+        <div class="commands">
+            <h3>📝 Try These Commands:</h3>
+            <ul>
+                <li>🇬🇧 <strong>English:</strong> "Show earnings" or "Find jobs"</li>
+                <li>🇮🇳 <strong>Hindi:</strong> "कमाई दिखाओ" or "काम चाहिए"</li>
+                <li>🇮🇳 <strong>Tamil:</strong> "வருமானம் காட்டு" or "வேலை வேண்டும்"</li>
+            </ul>
+        </div>
+        
+        <div id="transcript">
+            <div class="log-entry">Console logs will appear here...</div>
+        </div>
+    </div>
+
+    <script>
+        let recognition = null;
+        let isListening = false;
+        
+        function log(message, type = 'info') {
+            const transcript = document.getElementById('transcript');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            if (type === 'error') entry.className += ' log-error';
+            if (type === 'success') entry.className += ' log-success';
+            entry.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+            transcript.appendChild(entry);
+            transcript.scrollTop = transcript.scrollHeight;
+            console.log(message);
+        }
+        
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.className = `status ${type}`;
+            status.innerHTML = message;
+        }
+        
+        function startVoiceTest() {
+            log('🎤 Starting voice test...');
+            
+            const startBtn = document.getElementById('startBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            
+            // Check browser support
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            if (!SpeechRecognition) {
+                log('❌ Speech Recognition NOT supported in this browser', 'error');
+                updateStatus('<strong>❌ Not Supported</strong><br>Please use Google Chrome or Microsoft Edge', 'error');
+                alert('Speech Recognition is not supported in this browser.\n\nPlease use:\n✅ Google Chrome\n✅ Microsoft Edge\n\n❌ Firefox is not supported');
+                return;
+            }
+            
+            log('✅ Speech Recognition is supported', 'success');
+            
+            try {
+                recognition = new SpeechRecognition();
+                recognition.lang = 'hi-IN'; // Hindi
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.maxAlternatives = 3;
+                
+                log('🌐 Language set to: Hindi (hi-IN)');
+                
+                updateStatus('<i class="fas fa-microphone" style="font-size:32px;"></i><br><strong>Listening...</strong><br>Speak now!', 'listening');
+                
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                isListening = true;
+                
+                recognition.onstart = () => {
+                    log('✅ Recognition started successfully', 'success');
+                };
+                
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    const confidence = event.results[0][0].confidence;
+                    
+                    log(`📝 Heard: "${transcript}"`, 'success');
+                    log(`📊 Confidence: ${(confidence * 100).toFixed(1)}%`);
+                    
+                    // Detect intent
+                    const intent = detectIntent(transcript);
+                    log(`🎯 Detected intent: ${intent || 'None'}`);
+                    
+                    updateStatus(
+                        `<i class="fas fa-check-circle" style="font-size:32px;color:#4caf50;"></i><br>` +
+                        `<strong>You said:</strong> "${transcript}"<br>` +
+                        `<strong>Confidence:</strong> ${(confidence * 100).toFixed(1)}%<br>` +
+                        `<strong>Intent:</strong> ${intent || 'Not recognized'}`,
+                        'success'
+                    );
+                    
+                    if (intent) {
+                        log(`✅ Would navigate to: ${intent}`, 'success');
+                        setTimeout(() => {
+                            updateStatus(
+                                `<strong>✅ Success!</strong><br>` +
+                                `In the real dashboard, this would navigate to:<br>` +
+                                `<strong>${intent}</strong>`,
+                                'success'
+                            );
+                        }, 1500);
+                    }
+                    
+                    startBtn.disabled = false;
+                    stopBtn.disabled = true;
+                    isListening = false;
+                };
+                
+                recognition.onerror = (event) => {
+                    log(`❌ Error: ${event.error}`, 'error');
+                    
+                    let errorMsg = 'An error occurred';
+                    let helpText = '';
+                    
+                    if (event.error === 'no-speech') {
+                        errorMsg = 'No speech detected';
+                        helpText = 'Please speak louder and try again';
+                    } else if (event.error === 'not-allowed') {
+                        errorMsg = 'Microphone access denied';
+                        helpText = 'Please allow microphone access:<br>1. Click lock icon in address bar<br>2. Allow Microphone<br>3. Refresh page';
+                    } else if (event.error === 'network') {
+                        errorMsg = 'Network error';
+                        helpText = 'Please check your internet connection';
+                    } else if (event.error === 'aborted') {
+                        errorMsg = 'Recognition aborted';
+                        helpText = 'Please try again';
+                    }
+                    
+                    updateStatus(
+                        `<i class="fas fa-exclamation-circle" style="font-size:32px;"></i><br>` +
+                        `<strong>❌ ${errorMsg}</strong><br>${helpText}`,
+                        'error'
+                    );
+                    
+                    startBtn.disabled = false;
+                    stopBtn.disabled = true;
+                    isListening = false;
+                };
+                
+                recognition.onend = () => {
+                    log('🛑 Recognition ended');
+                    startBtn.disabled = false;
+                    stopBtn.disabled = true;
+                    isListening = false;
+                };
+                
+                recognition.start();
+                log('🚀 Starting recognition...');
+                
+            } catch (error) {
+                log(`❌ Exception: ${error.message}`, 'error');
+                updateStatus(
+                    `<strong>❌ Error</strong><br>${error.message}`,
+                    'error'
+                );
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+        }
+        
+        function stopVoiceTest() {
+            if (recognition && isListening) {
+                recognition.stop();
+                log('🛑 Stopping recognition...');
+            }
+        }
+        
+        function detectIntent(transcript) {
+            const lower = transcript.toLowerCase();
+            
+            if (lower.includes('earning') || lower.includes('income') || lower.includes('कमाई') || lower.includes('வருமானம்')) {
+                return 'Earnings Page';
+            }
+            if (lower.includes('job') || lower.includes('work') || lower.includes('काम') || lower.includes('வேலை')) {
+                return 'Opportunities Page';
+            }
+            if (lower.includes('food') || lower.includes('खाना') || lower.includes('உணவு')) {
+                return 'Food Marketplace';
+            }
+            if (lower.includes('progress') || lower.includes('प्रगति') || lower.includes('முன்னேற்றம்')) {
+                return 'Progress Page';
+            }
+            if (lower.includes('skill') || lower.includes('कौशल') || lower.includes('திறன்')) {
+                return 'Skills Page';
+            }
+            
+            return null;
+        }
+        
+        // Check on page load
+        window.onload = () => {
+            log('🚀 Page loaded');
+            
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (SpeechRecognition) {
+                log('✅ Browser supports Speech Recognition', 'success');
+                updateStatus('<strong>✅ Ready!</strong><br>Your browser supports voice commands', 'success');
+            } else {
+                log('❌ Browser does NOT support Speech Recognition', 'error');
+                updateStatus('<strong>❌ Not Supported</strong><br>Please use Google Chrome or Microsoft Edge', 'error');
+            }
+            
+            // Check microphone permission
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(() => {
+                    log('✅ Microphone permission granted', 'success');
+                })
+                .catch((err) => {
+                    log(`⚠️ Microphone: ${err.message}`, 'error');
+                });
+        };
+    </script>
+</body>
+</html>

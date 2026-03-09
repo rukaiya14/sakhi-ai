@@ -1,0 +1,6 @@
+# SageMaker Training Requirements
+
+tensorflow==2.12.0
+numpy==1.23.5
+Pillow==10.0.0
+boto3==1.28.0

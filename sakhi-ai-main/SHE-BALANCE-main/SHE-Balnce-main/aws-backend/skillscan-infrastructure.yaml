@@ -1,0 +1,317 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'SheBalance SkillScan AI Infrastructure with Claude 3.5 Sonnet'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: production
+    AllowedValues:
+      - development
+      - staging
+      - production
+    Description: Environment name
+
+Resources:
+  # DynamoDB Table for SkillScan Results
+  SkillScanTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub 'SheBalance-SkillScan-${Environment}'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: artisan_id
+          AttributeType: S
+        - AttributeName: analysis_id
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: S
+      KeySchema:
+        - AttributeName: artisan_id
+          KeyType: HASH
+        - AttributeName: analysis_id
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: TimestampIndex
+          KeySchema:
+            - AttributeName: timestamp
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+      Tags:
+        - Key: Application
+          Value: SheBalance
+        - Key: Component
+          Value: SkillScan
+        - Key: Environment
+          Value: !Ref Environment
+
+  # S3 Bucket for SkillScan Images
+  SkillScanImageBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'shebalance-skillscan-images-${Environment}'
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - '*'
+            AllowedMethods:
+              - GET
+              - PUT
+              - POST
+              - DELETE
+            AllowedOrigins:
+              - '*'
+            MaxAge: 3000
+      LifecycleConfiguration:
+        Rules:
+          - Id: DeleteOldImages
+            Status: Enabled
+            ExpirationInDays: 365
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: Application
+          Value: SheBalance
+        - Key: Component
+          Value: SkillScan
+        - Key: Environment
+          Value: !Ref Environment
+
+  # IAM Role for SkillScan Lambda
+  SkillScanLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub 'SheBalance-SkillScan-Lambda-${Environment}'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: SkillScanPermissions
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              # Bedrock permissions for Claude
+              - Effect: Allow
+                Action:
+                  - bedrock:InvokeModel
+                  - bedrock:InvokeModelWithResponseStream
+                Resource:
+                  - !Sub 'arn:aws:bedrock:*::foundation-model/anthropic.claude-3-5-sonnet-*'
+              # DynamoDB permissions
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:GetItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:UpdateItem
+                Resource:
+                  - !GetAtt SkillScanTable.Arn
+                  - !Sub '${SkillScanTable.Arn}/index/*'
+              # S3 permissions
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:DeleteObject
+                Resource:
+                  - !Sub '${SkillScanImageBucket.Arn}/*'
+              # CloudWatch Logs
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: '*'
+
+  # Lambda Function for SkillScan Analysis
+  SkillScanAnalysisFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub 'SheBalance-SkillScan-Analysis-${Environment}'
+      Runtime: python3.11
+      Handler: lambda_skillscan_analysis.lambda_handler
+      Role: !GetAtt SkillScanLambdaRole.Arn
+      Timeout: 300
+      MemorySize: 1024
+      Environment:
+        Variables:
+          SKILLSCAN_TABLE: !Ref SkillScanTable
+          S3_BUCKET: !Ref SkillScanImageBucket
+          ENVIRONMENT: !Ref Environment
+      Code:
+        ZipFile: |
+          # Placeholder - deploy actual code from lambda_skillscan_analysis.py
+          def lambda_handler(event, context):
+              return {'statusCode': 200, 'body': 'Deploy actual code'}
+      Tags:
+        - Key: Application
+          Value: SheBalance
+        - Key: Component
+          Value: SkillScan
+        - Key: Environment
+          Value: !Ref Environment
+
+  # Lambda Function to Get SkillScan History
+  GetSkillScansFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub 'SheBalance-Get-SkillScans-${Environment}'
+      Runtime: python3.11
+      Handler: lambda_get_artisan_skillscans.lambda_handler
+      Role: !GetAtt SkillScanLambdaRole.Arn
+      Timeout: 30
+      MemorySize: 512
+      Environment:
+        Variables:
+          SKILLSCAN_TABLE: !Ref SkillScanTable
+          ENVIRONMENT: !Ref Environment
+      Code:
+        ZipFile: |
+          # Placeholder - deploy actual code from lambda_get_artisan_skillscans.py
+          def lambda_handler(event, context):
+              return {'statusCode': 200, 'body': 'Deploy actual code'}
+      Tags:
+        - Key: Application
+          Value: SheBalance
+        - Key: Component
+          Value: SkillScan
+        - Key: Environment
+          Value: !Ref Environment
+
+  # API Gateway REST API
+  SkillScanAPI:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: !Sub 'SheBalance-SkillScan-API-${Environment}'
+      Description: API for SkillScan AI functionality
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+
+  # API Gateway Resource: /analyze
+  AnalyzeResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref SkillScanAPI
+      ParentId: !GetAtt SkillScanAPI.RootResourceId
+      PathPart: analyze
+
+  # API Gateway Method: POST /analyze
+  AnalyzeMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref SkillScanAPI
+      ResourceId: !Ref AnalyzeResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${SkillScanAnalysisFunction.Arn}/invocations'
+
+  # API Gateway Resource: /skillscans
+  SkillScansResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref SkillScanAPI
+      ParentId: !GetAtt SkillScanAPI.RootResourceId
+      PathPart: skillscans
+
+  # API Gateway Method: GET /skillscans
+  GetSkillScansMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref SkillScanAPI
+      ResourceId: !Ref SkillScansResource
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetSkillScansFunction.Arn}/invocations'
+
+  # API Gateway Deployment
+  SkillScanAPIDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - AnalyzeMethod
+      - GetSkillScansMethod
+    Properties:
+      RestApiId: !Ref SkillScanAPI
+      StageName: !Ref Environment
+
+  # Lambda Permissions for API Gateway
+  AnalyzeLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref SkillScanAnalysisFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${SkillScanAPI}/*/*/*'
+
+  GetSkillScansLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref GetSkillScansFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${SkillScanAPI}/*/*/*'
+
+  # CloudWatch Log Groups
+  AnalysisLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${SkillScanAnalysisFunction}'
+      RetentionInDays: 30
+
+  GetSkillScansLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${GetSkillScansFunction}'
+      RetentionInDays: 30
+
+Outputs:
+  APIEndpoint:
+    Description: API Gateway endpoint URL
+    Value: !Sub 'https://${SkillScanAPI}.execute-api.${AWS::Region}.amazonaws.com/${Environment}'
+    Export:
+      Name: !Sub '${AWS::StackName}-APIEndpoint'
+
+  AnalyzeEndpoint:
+    Description: SkillScan Analysis endpoint
+    Value: !Sub 'https://${SkillScanAPI}.execute-api.${AWS::Region}.amazonaws.com/${Environment}/analyze'
+
+  GetSkillScansEndpoint:
+    Description: Get SkillScans endpoint
+    Value: !Sub 'https://${SkillScanAPI}.execute-api.${AWS::Region}.amazonaws.com/${Environment}/skillscans'
+
+  DynamoDBTableName:
+    Description: DynamoDB table name for SkillScan results
+    Value: !Ref SkillScanTable
+    Export:
+      Name: !Sub '${AWS::StackName}-TableName'
+
+  S3BucketName:
+    Description: S3 bucket name for SkillScan images
+    Value: !Ref SkillScanImageBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-BucketName'
+
+  LambdaRoleArn:
+    Description: IAM Role ARN for Lambda functions
+    Value: !GetAtt SkillScanLambdaRole.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-LambdaRoleArn'

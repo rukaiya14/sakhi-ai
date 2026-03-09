@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyer Dashboard - SheBalance</title>
+    <link rel="stylesheet" href="buyer-dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span>SheBalance</span>
+            </div>
+            <div class="nav-menu">
+                <a href="buyer-dashboard.html" class="nav-link active">Browse Artisans</a>
+                <a href="buyer-orders.html" class="nav-link">My Orders</a>
+                <a href="buyer-favorites.html" class="nav-link">Favorites</a>
+                <a href="artisan-marketplace.html" class="nav-link">Artisan Marketplace</a>
+                <a href="index.html" class="nav-link">Home</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" onclick="toggleNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <div class="user-profile" onclick="toggleUserMenu()">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="user-name" id="userName">Loading...</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Menu Dropdown -->
+    <div id="userMenu" class="user-menu">
+        <div class="menu-item" onclick="window.location.href='#profile'">
+            <i class="fas fa-user-circle"></i>
+            <span>My Profile</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='#settings'">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </div>
+        <div class="menu-item" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>Categories</h3>
+                <div class="category-list">
+                    <div class="category-item active" onclick="filterByCategory('all')">
+                        <i class="fas fa-th"></i>
+                        <span>All Artisans</span>
+                        <span class="count">14</span>
+                    </div>
+                    <div class="category-item" onclick="filterByCategory('embroidery')">
+                        <i class="fas fa-cut"></i>
+                        <span>Embroidery</span>
+                        <span class="count">42</span>
+                    </div>
+                    <div class="category-item" onclick="filterByCategory('weaving')">
+                        <i class="fas fa-th-large"></i>
+                        <span>Weaving</span>
+                        <span class="count">38</span>
+                    </div>
+                    <div class="category-item" onclick="filterByCategory('food')">
+                        <i class="fas fa-utensils"></i>
+                        <span>Food & Culinary</span>
+                        <span class="count">20</span>
+                    </div>
+                    <div class="category-item" onclick="filterByCategory('henna')">
+                        <i class="fas fa-hand-sparkles"></i>
+                        <span>Henna Artists</span>
+                        <span class="count">15</span>
+                    </div>
+                    <div class="category-item" onclick="filterByCategory('tailoring')">
+                        <i class="fas fa-scissors"></i>
+                        <span>Tailoring & Stitching</span>
+                        <span class="count">25</span>
+                    </div>
+                    <div class="category-item" onclick="filterByCategory('crochet')">
+                        <i class="fas fa-yarn"></i>
+                        <span>Crochet & Knitting</span>
+                        <span class="count">18</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Filters</h3>
+                <div class="filter-group">
+                    <label>Skill Level</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" checked> Beginner</label>
+                        <label><input type="checkbox" checked> Intermediate</label>
+                        <label><input type="checkbox" checked> Advanced</label>
+                        <label><input type="checkbox" checked> Expert</label>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label>Price Range</label>
+                    <input type="range" min="0" max="5000" value="2500" class="price-slider">
+                    <div class="price-range">₹0 - ₹5000</div>
+                </div>
+                <div class="filter-group">
+                    <label>Location</label>
+                    <select class="filter-select">
+                        <option>All Locations</option>
+                        <option>Mumbai</option>
+                        <option>Delhi</option>
+                        <option>Bangalore</option>
+                        <option>Kolkata</option>
+                    </select>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Stats Overview -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #EFEBE9;">
+                        <i class="fas fa-shopping-bag" style="color: #5D4037;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Total Orders</h4>
+                        <p class="stat-number">24</p>
+                        <span class="stat-change positive">+12% this month</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #FBE9E7;">
+                        <i class="fas fa-users" style="color: #CC5500;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Active Artisans</h4>
+                        <p class="stat-number">14</p>
+                        <span class="stat-change positive">+3 new</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #E8F5E9;">
+                        <i class="fas fa-rupee-sign" style="color: #2E7D32;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Total Spent</h4>
+                        <p class="stat-number">₹45,600</p>
+                        <span class="stat-change">Last 3 months</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #FFEBEE;">
+                        <i class="fas fa-heart" style="color: #ef4444;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Favorites</h4>
+                        <p class="stat-number">12</p>
+                        <span class="stat-change">Saved artisans</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Sort -->
+            <div class="search-bar">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search artisans by name, skill, or location..." id="searchInput">
+                </div>
+                <select class="sort-select">
+                    <option>Sort by: Recommended</option>
+                    <option>Highest Rated</option>
+                    <option>Most Orders</option>
+                    <option>Newest First</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                </select>
+            </div>
+
+            <!-- Artisan Grid -->
+            <div class="artisan-grid" id="artisanGrid">
+                <!-- Artisan cards will be dynamically loaded -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Portfolio Modal -->
+    <div id="portfolioModal" class="modal" style="display: none;">
+        <div class="modal-content portfolio-modal">
+            <span class="close" onclick="closePortfolioModal()">&times;</span>
+            <h2 id="portfolioTitle">Artisan Portfolio</h2>
+            <div class="portfolio-carousel">
+                <button class="carousel-btn prev" onclick="prevPortfolioItem()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="portfolio-item-container" id="portfolioItemContainer">
+                    <!-- Portfolio items will be loaded here -->
+                </div>
+                <button class="carousel-btn next" onclick="nextPortfolioItem()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="carousel-dots" id="carouselDots">
+                <!-- Dots will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="buyer-dashboard.js"></script>
+</body>
+</html>

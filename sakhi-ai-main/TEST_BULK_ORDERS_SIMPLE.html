@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Bulk Orders - Simple</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .order-card {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #E8F5E9; color: #2E7D32; }
+        .error { background: #FFEBEE; color: #C62828; }
+        .info { background: #E3F2FD; color: #1565C0; }
+        button {
+            background: #8D6E63;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #6D4C41; }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Bulk Orders Test - Simple Version</h1>
+    
+    <div id="status" class="status info">
+        Click "Load Orders" to test
+    </div>
+
+    <button onclick="loadOrders()">Load Orders</button>
+    <button onclick="clearCache()">Clear Cache & Reload</button>
+
+    <div id="orders"></div>
+
+    <script>
+        async function loadOrders() {
+            const statusDiv = document.getElementById('status');
+            const ordersDiv = document.getElementById('orders');
+            
+            statusDiv.className = 'status info';
+            statusDiv.textContent = 'Loading orders...';
+            ordersDiv.innerHTML = '';
+
+            try {
+                // Get token
+                const token = localStorage.getItem('shebalance_token');
+                console.log('Token:', token ? token.substring(0, 20) + '...' : 'NO TOKEN');
+
+                if (!token) {
+                    statusDiv.className = 'status error';
+                    statusDiv.textContent = '❌ No token found. Logging in...';
+                    
+                    // Auto-login
+                    const loginResponse = await fetch('http://localhost:5000/api/auth/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            email: 'rukaiya@example.com',
+                            password: 'password123'
+                        })
+                    });
+
+                    const loginData = await loginResponse.json();
+                    if (!loginResponse.ok) {
+                        throw new Error('Login failed: ' + loginData.error);
+                    }
+
+                    localStorage.setItem('shebalance_token', loginData.token);
+                    localStorage.setItem('shebalance_user', JSON.stringify(loginData.user));
+                    
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = '✅ Logged in! Now loading orders...';
+                    
+                    // Retry with new token
+                    setTimeout(loadOrders, 1000);
+                    return;
+                }
+
+                // Fetch orders
+                console.log('Fetching orders from http://localhost:5000/api/orders');
+                const response = await fetch('http://localhost:5000/api/orders', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to fetch orders');
+                }
+
+                const data = await response.json();
+                console.log('Orders data:', data);
+
+                const orders = data.orders || [];
+                const bulkOrders = orders.filter(o => o.orderType === 'bulk');
+
+                statusDiv.className = 'status success';
+                statusDiv.textContent = `✅ Loaded ${orders.length} total orders, ${bulkOrders.length} bulk orders`;
+
+                if (bulkOrders.length === 0) {
+                    ordersDiv.innerHTML = '<div class="order-card"><p>No bulk orders found</p></div>';
+                    return;
+                }
+
+                // Display orders
+                ordersDiv.innerHTML = bulkOrders.map(order => `
+                    <div class="order-card">
+                        <h3>${order.title || 'Untitled Order'}</h3>
+                        <p><strong>Description:</strong> ${order.description || 'N/A'}</p>
+                        <p><strong>Status:</strong> ${order.status || 'N/A'}</p>
+                        <p><strong>Quantity:</strong> ${order.completedQuantity || 0}/${order.quantity || 0}</p>
+                        <p><strong>Amount:</strong> ₹${(order.totalAmount || 0).toLocaleString()}</p>
+                        <p><strong>Progress:</strong> ${order.progressPercentage || 0}%</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${order.progressPercentage || 0}%"></div>
+                        </div>
+                        <p><strong>Last Update:</strong> ${order.lastProgressUpdate ? new Date(order.lastProgressUpdate).toLocaleDateString() : 'N/A'}</p>
+                        <p><strong>Note:</strong> ${order.progressNote || 'No notes'}</p>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error:', error);
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Error: ${error.message}`;
+            }
+        }
+
+        function clearCache() {
+            localStorage.clear();
+            location.reload();
+        }
+
+        // Auto-load on page load
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('shebalance_token');
+            if (token) {
+                loadOrders();
+            }
+        });
+    </script>
+</body>
+</html>

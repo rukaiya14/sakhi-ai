@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Reminder System - SHE-BALANCE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #F5F5DC 0%, #E8DCC4 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #5D4037;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #8D6E63;
+        }
+
+        .test-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .test-section h2 {
+            color: #5D4037;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-number {
+            background: #8D6E63;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: #8D6E63;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background: #5D4037;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .output {
+            background: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .output.success {
+            border-color: #4CAF50;
+            background: #E8F5E9;
+        }
+
+        .output.error {
+            border-color: #f44336;
+            background: #FFEBEE;
+        }
+
+        .output.info {
+            border-color: #2196F3;
+            background: #E3F2FD;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .status.pending {
+            background: #FFF3E0;
+            color: #F57C00;
+        }
+
+        .status.success {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .status.error {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+        .message-preview {
+            background: white;
+            border: 2px solid #8D6E63;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .message-preview h3 {
+            color: #5D4037;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .message-content {
+            background: #F5F5DC;
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        .icon {
+            font-size: 20px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #8D6E63;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .info-box {
+            background: #E3F2FD;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .info-box h4 {
+            color: #1976D2;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            color: #424242;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔔 Enhanced Reminder System - Local Testing</h1>
+            <p>Test the automated WhatsApp and voice call reminder workflow</p>
+        </div>
+
+        <div class="info-box">
+            <h4>ℹ️ How It Works</h4>
+            <p>
+                This system automatically monitors bulk orders and sends reminders when artisans 
+                haven't updated progress for 3+ days. If no response within 24 hours, a voice call is initiated.
+            </p>
+        </div>
+
+        <!-- Step 1: Create Test Order -->
+        <div class="test-section">
+            <h2>
+                <span class="step-number">1</span>
+                Create Test Order
+            </h2>
+            <p style="margin-bottom: 15px; color: #666;">
+                Create a test bulk order with a 4-day-old progress update to trigger the reminder system.
+            </p>
+            <div class="button-group">
+                <button onclick="createTestOrder()">
+                    <span class="icon">📦</span>
+                    Create Test Order
+                </button>
+            </div>
+            <div id="order-output" class="output" style="display: none;"></div>
+        </div>
+
+        <!-- Step 2: Check Orders -->
+        <div class="test-section">
+            <h2>
+                <span class="step-number">2</span>
+                Scan Orders Needing Reminders
+            </h2>
+            <p style="margin-bottom: 15px; color: #666;">
+                Scan all active bulk orders and identify which ones need reminders (3+ days without update).
+            </p>
+            <div class="button-group">
+                <button onclick="scanOrders()">
+                    <span class="icon">🔍</span>
+                    Scan Orders
+                </button>
+            </div>
+            <div id="scan-output" class="output" style="display: none;"></div>
+        </div>
+
+        <!-- Step 3: Send WhatsApp Reminder -->
+        <div class="test-section">
+            <h2>
+                <span class="step-number">3</span>
+                Send WhatsApp Reminder
+            </h2>
+            <p style="margin-bottom: 15px; color: #666;">
+                Generate and preview the WhatsApp reminder message that would be sent to the artisan.
+            </p>
+            <div class="button-group">
+                <button onclick="sendWhatsAppReminder()">
+                    <span class="icon">📱</span>
+                    Send WhatsApp (Simulated)
+                </button>
+            </div>
+            <div id="whatsapp-output" class="output" style="display: none;"></div>
+            <div id="whatsapp-preview" class="message-preview" style="display: none;">
+                <h3>📱 WhatsApp Message Preview</h3>
+                <div class="message-content" id="whatsapp-message"></div>
+            </div>
+        </div>
+
+        <!-- Step 4: Voice Call Follow-up -->
+        <div class="test-section">
+            <h2>
+                <span class="step-number">4</span>
+                Voice Call Follow-up
+            </h2>
+            <p style="margin-bottom: 15px; color: #666;">
+                Simulate the voice call that would be made if no response is received within 24 hours.
+            </p>
+            <div class="button-group">
+                <button onclick="simulateVoiceCall()">
+                    <span class="icon">📞</span>
+                    Simulate Voice Call
+                </button>
+            </div>
+            <div id="voice-output" class="output" style="display: none;"></div>
+            <div id="voice-preview" class="message-preview" style="display: none;">
+                <h3>📞 Voice Call Script (Hindi)</h3>
+                <div class="message-content" id="voice-script"></div>
+            </div>
+        </div>
+
+        <!-- Step 5: Check Status -->
+        <div class="test-section">
+            <h2>
+                <span class="step-number">5</span>
+                Check Reminder Status
+            </h2>
+            <p style="margin-bottom: 15px; color: #666;">
+                View all reminder records and their current status in the database.
+            </p>
+            <div class="button-group">
+                <button onclick="checkStatus()">
+                    <span class="icon">📊</span>
+                    Check Status
+                </button>
+                <button onclick="clearAll()" style="background: #f44336;">
+                    <span class="icon">🗑️</span>
+                    Clear Test Data
+                </button>
+            </div>
+            <div id="status-output" class="output" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+        let currentTestOrder = null;
+
+        function showOutput(elementId, message, type = 'info') {
+            const output = document.getElementById(elementId);
+            output.style.display = 'block';
+            output.className = `output ${type}`;
+            output.textContent = message;
+        }
+
+        function showLoading(elementId) {
+            const output = document.getElementById(elementId);
+            output.style.display = 'block';
+            output.className = 'output info';
+            output.innerHTML = '<div class="loading"></div> Processing...';
+        }
+
+        async function createTestOrder() {
+            showLoading('order-output');
+            
+            try {
+                const fourDaysAgo = new Date();
+                fourDaysAgo.setDate(fourDaysAgo.getDate() - 4);
+                
+                const testOrder = {
+                    orderId: `test-order-${Date.now()}`,
+                    artisanId: 'artisan-rukaiya',
+                    buyerId: 'buyer-rahul',
+                    title: 'Test Embroidered Sarees (50 pieces)',
+                    description: 'Traditional embroidered sarees for wedding season',
+                    orderType: 'bulk',
+                    status: 'in_progress',
+                    quantity: 50,
+                    price: 25000,
+                    currency: 'INR',
+                    createdAt: fourDaysAgo.toISOString(),
+                    lastProgressUpdate: fourDaysAgo.toISOString()
+                };
+                
+                const response = await fetch(`${API_BASE}/test/create-order`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testOrder)
+                });
+                
+                const data = await response.json();
+                currentTestOrder = testOrder;
+                
+                showOutput('order-output', 
+                    `✅ Test order created successfully!\n\n` +
+                    `Order ID: ${testOrder.orderId}\n` +
+                    `Title: ${testOrder.title}\n` +
+                    `Last Update: ${fourDaysAgo.toLocaleDateString()} (4 days ago)\n` +
+                    `Status: ${testOrder.status}\n` +
+                    `Quantity: ${testOrder.quantity} pieces`,
+                    'success'
+                );
+            } catch (error) {
+                showOutput('order-output', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function scanOrders() {
+            showLoading('scan-output');
+            
+            try {
+                const response = await fetch(`${API_BASE}/test/scan-orders`);
+                const data = await response.json();
+                
+                let output = `Found ${data.totalOrders} active bulk orders\n\n`;
+                output += `Orders needing reminders: ${data.ordersNeedingReminders}\n\n`;
+                
+                if (data.orders && data.orders.length > 0) {
+                    output += 'Details:\n';
+                    output += '─'.repeat(60) + '\n';
+                    data.orders.forEach((order, index) => {
+                        output += `\n${index + 1}. ${order.title}\n`;
+                        output += `   Order ID: ${order.orderId}\n`;
+                        output += `   Days since update: ${order.daysSinceUpdate}\n`;
+                        output += `   Status: ${order.needsReminder ? '⚠️ Needs reminder' : '✓ Up to date'}\n`;
+                    });
+                }
+                
+                showOutput('scan-output', output, 'success');
+            } catch (error) {
+                showOutput('scan-output', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function sendWhatsAppReminder() {
+            showLoading('whatsapp-output');
+            
+            try {
+                const response = await fetch(`${API_BASE}/test/send-whatsapp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId: currentTestOrder?.orderId })
+                });
+                
+                const data = await response.json();
+                
+                showOutput('whatsapp-output',
+                    `✅ WhatsApp reminder sent successfully!\n\n` +
+                    `To: ${data.phoneNumber}\n` +
+                    `Message ID: ${data.messageId}\n` +
+                    `Sent at: ${new Date(data.sentAt).toLocaleString()}\n` +
+                    `Reminder ID: ${data.reminderId}`,
+                    'success'
+                );
+                
+                // Show message preview
+                document.getElementById('whatsapp-preview').style.display = 'block';
+                document.getElementById('whatsapp-message').textContent = data.message;
+                
+            } catch (error) {
+                showOutput('whatsapp-output', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function simulateVoiceCall() {
+            showLoading('voice-output');
+            
+            try {
+                const response = await fetch(`${API_BASE}/test/voice-call`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId: currentTestOrder?.orderId })
+                });
+                
+                const data = await response.json();
+                
+                showOutput('voice-output',
+                    `✅ Voice call initiated successfully!\n\n` +
+                    `To: ${data.phoneNumber}\n` +
+                    `Call ID: ${data.callId}\n` +
+                    `Language: ${data.language}\n` +
+                    `Voice: Amazon Polly (Aditi - Hindi)\n` +
+                    `Initiated at: ${new Date(data.initiatedAt).toLocaleString()}`,
+                    'success'
+                );
+                
+                // Show voice script preview
+                document.getElementById('voice-preview').style.display = 'block';
+                document.getElementById('voice-script').textContent = data.script;
+                
+            } catch (error) {
+                showOutput('voice-output', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function checkStatus() {
+            showLoading('status-output');
+            
+            try {
+                const response = await fetch(`${API_BASE}/test/reminder-status`);
+                const data = await response.json();
+                
+                let output = `Total reminders: ${data.totalReminders}\n\n`;
+                
+                if (data.reminders && data.reminders.length > 0) {
+                    output += 'Recent Reminders:\n';
+                    output += '─'.repeat(60) + '\n';
+                    data.reminders.forEach((reminder, index) => {
+                        output += `\n${index + 1}. Order: ${reminder.orderId}\n`;
+                        output += `   Type: ${reminder.reminderType}\n`;
+                        output += `   Status: ${reminder.status}\n`;
+                        output += `   Sent: ${new Date(reminder.sentAt).toLocaleString()}\n`;
+                        if (reminder.callInitiatedAt) {
+                            output += `   Call: ${new Date(reminder.callInitiatedAt).toLocaleString()}\n`;
+                        }
+                    });
+                } else {
+                    output += 'No reminders found.';
+                }
+                
+                showOutput('status-output', output, 'success');
+            } catch (error) {
+                showOutput('status-output', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function clearAll() {
+            if (!confirm('Are you sure you want to clear all test data?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/test/clear-data`, {
+                    method: 'DELETE'
+                });
+                
+                const data = await response.json();
+                alert('✅ Test data cleared successfully!');
+                location.reload();
+            } catch (error) {
+                alert(`❌ Error: ${error.message}`);
+            }
+        }
+
+        // Check if backend is running
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                if (!response.ok) throw new Error('Backend not responding');
+            } catch (error) {
+                alert('⚠️ Backend server is not running!\n\nPlease start the server first:\ncd backend\nnode server-dynamodb.js');
+            }
+        });
+    </script>
+</body>
+</html>

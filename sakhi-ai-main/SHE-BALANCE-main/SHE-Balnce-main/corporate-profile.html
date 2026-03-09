@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Profile - SheBalance</title>
+    <link rel="stylesheet" href="corporate-dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .profile-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #D2B48C, #8B7355);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 115, 85, 0.3);
+        }
+
+        .profile-header {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .company-logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #D2B48C, #8B7355);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .company-info h1 {
+            font-size: 32px;
+            color: #5D4037;
+            margin: 0 0 10px 0;
+        }
+
+        .company-info p {
+            color: #666;
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .profile-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-card h2 {
+            font-size: 24px;
+            color: #5D4037;
+            margin: 0 0 25px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #5D4037;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #C97D60;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #C97D60, #8B7355);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(201, 125, 96, 0.3);
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #5D4037;
+            font-weight: 600;
+        }
+
+        @media (max-width: 968px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <button class="back-btn" onclick="window.location.href='corporate-dashboard.html'">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </button>
+
+        <div class="profile-header">
+            <div class="company-logo">
+                <i class="fas fa-building"></i>
+            </div>
+            <div class="company-info">
+                <h1 id="companyName">Loading...</h1>
+                <p><i class="fas fa-envelope"></i> <span id="companyEmail">Loading...</span></p>
+                <p><i class="fas fa-phone"></i> <span id="companyPhone">Loading...</span></p>
+                <p><i class="fas fa-map-marker-alt"></i> <span id="companyLocation">Loading...</span></p>
+            </div>
+        </div>
+
+        <div class="profile-grid">
+            <div class="profile-card">
+                <h2><i class="fas fa-building"></i> Company Information</h2>
+                <form id="companyForm">
+                    <div class="form-group">
+                        <label for="name">Company Name *</label>
+                        <input type="text" id="name" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="industry">Industry *</label>
+                        <select id="industry" class="form-select" required>
+                            <option value="">Select Industry</option>
+                            <option value="retail">Retail</option>
+                            <option value="hospitality">Hospitality</option>
+                            <option value="manufacturing">Manufacturing</option>
+                            <option value="technology">Technology</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="education">Education</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="size">Company Size *</label>
+                        <select id="size" class="form-select" required>
+                            <option value="">Select Size</option>
+                            <option value="1-10">1-10 employees</option>
+                            <option value="11-50">11-50 employees</option>
+                            <option value="51-200">51-200 employees</option>
+                            <option value="201-500">201-500 employees</option>
+                            <option value="500+">500+ employees</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="website">Website</label>
+                        <input type="url" id="website" class="form-input" placeholder="https://example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Company Description</label>
+                        <textarea id="description" class="form-textarea" placeholder="Tell us about your company..."></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <div class="profile-card">
+                <h2><i class="fas fa-map-marker-alt"></i> Contact Information</h2>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone *</label>
+                        <input type="tel" id="phone" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address *</label>
+                        <input type="text" id="address" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City *</label>
+                        <input type="text" id="city" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State *</label>
+                        <input type="text" id="state" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pincode">Pincode *</label>
+                        <input type="text" id="pincode" class="form-input" required>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="profile-card">
+            <h2><i class="fas fa-chart-line"></i> Partnership Statistics</h2>
+            <div class="info-item">
+                <span class="info-label">Member Since</span>
+                <span class="info-value" id="memberSince">January 2024</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Total Orders</span>
+                <span class="info-value" id="totalOrders">12</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Active Contracts</span>
+                <span class="info-value" id="activeContracts">5</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Partner Artisans</span>
+                <span class="info-value" id="partnerArtisans">15</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Total Spent</span>
+                <span class="info-value" id="totalSpent">₹2,45,000</span>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn-save" onclick="saveProfile()">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Load company profile data
+        function loadProfile() {
+            const userData = JSON.parse(localStorage.getItem('shebalance_user') || '{}');
+            const companyData = JSON.parse(localStorage.getItem('shebalance_company_profile') || '{}');
+
+            // Set default values if no data exists
+            const profile = {
+                name: companyData.name || userData.name || 'Tech Solutions Pvt Ltd',
+                email: companyData.email || userData.email || 'contact@techsolutions.com',
+                phone: companyData.phone || '+91 98765 43210',
+                address: companyData.address || '123 Business Park',
+                city: companyData.city || 'Mumbai',
+                state: companyData.state || 'Maharashtra',
+                pincode: companyData.pincode || '400001',
+                industry: companyData.industry || 'technology',
+                size: companyData.size || '51-200',
+                website: companyData.website || 'https://techsolutions.com',
+                description: companyData.description || 'Leading technology solutions provider'
+            };
+
+            // Update header
+            document.getElementById('companyName').textContent = profile.name;
+            document.getElementById('companyEmail').textContent = profile.email;
+            document.getElementById('companyPhone').textContent = profile.phone;
+            document.getElementById('companyLocation').textContent = `${profile.city}, ${profile.state}`;
+
+            // Update form fields
+            document.getElementById('name').value = profile.name;
+            document.getElementById('email').value = profile.email;
+            document.getElementById('phone').value = profile.phone;
+            document.getElementById('address').value = profile.address;
+            document.getElementById('city').value = profile.city;
+            document.getElementById('state').value = profile.state;
+            document.getElementById('pincode').value = profile.pincode;
+            document.getElementById('industry').value = profile.industry;
+            document.getElementById('size').value = profile.size;
+            document.getElementById('website').value = profile.website;
+            document.getElementById('description').value = profile.description;
+        }
+
+        // Save profile
+        function saveProfile() {
+            const profile = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                pincode: document.getElementById('pincode').value,
+                industry: document.getElementById('industry').value,
+                size: document.getElementById('size').value,
+                website: document.getElementById('website').value,
+                description: document.getElementById('description').value
+            };
+
+            // Validate required fields
+            if (!profile.name || !profile.email || !profile.phone || !profile.address || 
+                !profile.city || !profile.state || !profile.pincode || !profile.industry || !profile.size) {
+                alert('Please fill in all required fields marked with *');
+                return;
+            }
+
+            // Save to localStorage
+            localStorage.setItem('shebalance_company_profile', JSON.stringify(profile));
+
+            // Show success message
+            alert('✓ Profile saved successfully!');
+
+            // Reload profile data
+            loadProfile();
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadProfile);
+    </script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reminder System Test - Simple</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #5D4037;
+            text-align: center;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-left: 4px solid #8D6E63;
+        }
+        button {
+            background: #8D6E63;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #5D4037;
+        }
+        .output {
+            background: #f5f5f5;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success { color: #2E7D32; }
+        .error { color: #C62828; }
+        .info { color: #1976D2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔔 Reminder System Test</h1>
+        
+        <div class="test-section">
+            <h3>Step 1: Create Test Order</h3>
+            <button onclick="createOrder()">Create Test Order</button>
+            <div id="order-result" class="output" style="display:none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Step 2: Scan Orders</h3>
+            <button onclick="scanOrders()">Scan Orders</button>
+            <div id="scan-result" class="output" style="display:none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Step 3: Send WhatsApp</h3>
+            <button onclick="sendWhatsApp()">Send WhatsApp</button>
+            <div id="whatsapp-result" class="output" style="display:none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Step 4: Voice Call</h3>
+            <button onclick="voiceCall()">Simulate Voice Call</button>
+            <div id="voice-result" class="output" style="display:none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Step 5: Check Status</h3>
+            <button onclick="checkStatus()">Check Status</button>
+            <div id="status-result" class="output" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const API = 'http://localhost:5000/api';
+        let testOrderId = null;
+
+        function show(id, text, type = 'info') {
+            const el = document.getElementById(id);
+            el.style.display = 'block';
+            el.className = `output ${type}`;
+            el.textContent = text;
+        }
+
+        async function createOrder() {
+            try {
+                const fourDaysAgo = new Date();
+                fourDaysAgo.setDate(fourDaysAgo.getDate() - 4);
+                
+                testOrderId = `test-order-${Date.now()}`;
+                
+                const order = {
+                    orderId: testOrderId,
+                    artisanId: 'artisan-rukaiya',
+                    buyerId: 'buyer-rahul',
+                    title: 'Test Embroidered Sarees (50 pieces)',
+                    orderType: 'bulk',
+                    status: 'in_progress',
+                    quantity: 50,
+                    price: 25000,
+                    createdAt: fourDaysAgo.toISOString(),
+                    lastProgressUpdate: fourDaysAgo.toISOString()
+                };
+
+                const res = await fetch(`${API}/test/create-order`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(order)
+                });
+
+                const data = await res.json();
+                show('order-result', 
+                    `✅ Success!\n\nOrder ID: ${testOrderId}\nTitle: ${order.title}\nLast Update: 4 days ago`,
+                    'success'
+                );
+            } catch (error) {
+                show('order-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function scanOrders() {
+            try {
+                const res = await fetch(`${API}/test/scan-orders`);
+                const data = await res.json();
+                
+                let text = `Found ${data.totalOrders} orders\n`;
+                text += `Need reminders: ${data.ordersNeedingReminders}\n\n`;
+                
+                if (data.orders) {
+                    data.orders.forEach((o, i) => {
+                        text += `${i+1}. ${o.title}\n`;
+                        text += `   Days: ${o.daysSinceUpdate}\n`;
+                        text += `   ${o.needsReminder ? '⚠️ Needs reminder' : '✓ OK'}\n\n`;
+                    });
+                }
+                
+                show('scan-result', text, 'success');
+            } catch (error) {
+                show('scan-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function sendWhatsApp() {
+            if (!testOrderId) {
+                show('whatsapp-result', '⚠️ Create a test order first!', 'error');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API}/test/send-whatsapp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId: testOrderId })
+                });
+
+                const data = await res.json();
+                show('whatsapp-result',
+                    `✅ WhatsApp sent!\n\nTo: ${data.phoneNumber}\n\nMessage:\n${data.message}`,
+                    'success'
+                );
+            } catch (error) {
+                show('whatsapp-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function voiceCall() {
+            if (!testOrderId) {
+                show('voice-result', '⚠️ Create a test order first!', 'error');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API}/test/voice-call`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId: testOrderId })
+                });
+
+                const data = await res.json();
+                show('voice-result',
+                    `✅ Voice call initiated!\n\nTo: ${data.phoneNumber}\nLanguage: ${data.language}\n\nScript:\n${data.script}`,
+                    'success'
+                );
+            } catch (error) {
+                show('voice-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function checkStatus() {
+            try {
+                const res = await fetch(`${API}/test/reminder-status`);
+                const data = await res.json();
+                
+                let text = `Total reminders: ${data.totalReminders}\n\n`;
+                
+                if (data.reminders) {
+                    data.reminders.forEach((r, i) => {
+                        text += `${i+1}. Order: ${r.orderId}\n`;
+                        text += `   Type: ${r.reminderType}\n`;
+                        text += `   Status: ${r.status}\n`;
+                        text += `   Sent: ${new Date(r.sentAt).toLocaleString()}\n\n`;
+                    });
+                }
+                
+                show('status-result', text, 'success');
+            } catch (error) {
+                show('status-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Check backend on load
+        window.addEventListener('load', async () => {
+            try {
+                await fetch(`${API}/health`);
+                console.log('✅ Backend connected');
+            } catch (error) {
+                alert('⚠️ Backend server not running!\n\nPlease start it first:\ncd backend\nnode server-dynamodb.js');
+            }
+        });
+    </script>
+</body>
+</html>

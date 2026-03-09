@@ -1,0 +1,8 @@
+{
+  "companyName": "M. H. Saboo Siddik College of Engineering",
+  "companyWebsite": "https://mhssce.ac.in",
+  "intendedUsers": "2",
+  "industryOption": "Education",
+  "otherIndustryOption": "",
+  "useCases": "Academic project for a college course. Using Claude via Bedrock to explore natural language understanding and generate educational content. Output will not be publicly shared or commercialized. Users: 2 students."
+}

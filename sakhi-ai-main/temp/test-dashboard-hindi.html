@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dashboard Hindi Translation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        .test-section h2 {
+            color: #5D4037;
+            margin-top: 0;
+        }
+        .translation-test {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .key {
+            font-weight: bold;
+            color: #666;
+        }
+        .value {
+            color: #333;
+        }
+        .missing {
+            color: red;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+        }
+        button {
+            background: #5D4037;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #8D6E63;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dashboard Hindi Translation Test</h1>
+    
+    <div class="test-section">
+        <h2>Language Selector</h2>
+        <button onclick="testLanguage('hi-IN')">Test Hindi</button>
+        <button onclick="testLanguage('en-IN')">Test English</button>
+        <button onclick="testLanguage('ta-IN')">Test Tamil</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Translation Coverage</h2>
+        <div id="translationResults"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Sample Translations</h2>
+        <div id="sampleTranslations"></div>
+    </div>
+
+    <script src="SHE-BALANCE-main/SHE-Balnce-main/translations-working.js"></script>
+    <script>
+        // Required translation keys from dashboard.html
+        const requiredKeys = [
+            'sheBalance', 'dashboard', 'aiSakhi', 'mySkills', 'opportunities',
+            'foodMarketplace', 'artisanMarketplace', 'addProduct', 'community',
+            'resourceCircularity', 'invisibleLabor', 'virtualFactory', 'progress',
+            'settings', 'logout', 'greeting', 'voiceCommand', 'todaysBalance',
+            'householdWork', 'careerTime', 'selfCare', 'hours', 'thisMonthsEarnings',
+            'activeProjects', 'averageRating', 'networkConnections', 'fromLastMonth',
+            'newThisWeek', 'thisMonth', 'thisWeek', 'aiLearningMentor',
+            'aiLearningMentorDesc', 'personalizedPaths', 'trackProgress',
+            'careerGrowth', 'startLearning', 'free', 'personalized', 'aiPowered',
+            'todaysFocus', 'task1', 'task2', 'task3', 'task4', 'addNewTask',
+            'hotOpportunities', 'fashionDesignerAssistant', 'homeChefForOffice',
+            'embroideryTrainer', 'perMonth', 'perDay', 'perClass', 'remote',
+            'nearby', 'online', 'match', 'apply', 'viewAllOpportunities',
+            'activeOrders', 'rating', 'recentOrders', 'rajmaChawal',
+            'homemadeCookies', 'preparing', 'delivered', 'manageOrders',
+            'communityUpdates', 'shared', 'won', 'started', 'hoursAgo',
+            'daysAgo', 'joinCommunity', 'labourTracking', 'labourTrackingDesc',
+            'bulkOrdersManagement', 'needHelpMessage', 'actionRequired',
+            'ordersNeedUpdate', 'loadingOrders', 'needHelp', 'yourGrowthJourney',
+            'skillsImproved', 'incomeGrowth', 'timeOptimized', 'hrsPerDay',
+            'viewDetailedProgress', 'welcomeToSheBalance', 'letsSetupYourJourney',
+            'tellUsAboutYourself', 'fullName', 'enterYourFullName', 'location',
+            'cityState', 'ageGroup', 'selectAgeGroup', 'yourDailyRoutine',
+            'householdWorkHoursPerDay', 'selfCareHoursPerDay',
+            'mainHouseholdResponsibilities', 'cooking', 'cleaning', 'childcare',
+            'eldercare', 'shopping', 'laundry', 'yourSkillsAndHobbies',
+            'currentSkills', 'embroidery', 'henna', 'crochet', 'stitching',
+            'crossStitch', 'yourHobbiesAndInterests', 'reading', 'gardening',
+            'music', 'dancing', 'painting', 'yoga', 'yourAvailableTime',
+            'freeTimeForCareerPerDay', 'preferredWorkingHours', 'morning',
+            'afternoon', 'evening', 'flexible', 'monthlyIncomeGoal', 'selectGoal',
+            'trySayingInAnyLanguage', 'supportedLanguages', 'aiSakhiAssistant',
+            'quickActions', 'sakhiWelcome', 'updateBulkOrderProgress',
+            'reportWorkCompletion', 'reportHealthIssue', 'letUsKnowUnwell',
+            'requestAdvancePayment', 'needFundsForMaterials'
+        ];
+
+        function testLanguage(lang) {
+            console.log('Testing language:', lang);
+            
+            if (!window.translations || !window.translations[lang]) {
+                alert('Translations not loaded!');
+                return;
+            }
+            
+            const trans = window.translations[lang];
+            const results = document.getElementById('translationResults');
+            const samples = document.getElementById('sampleTranslations');
+            
+            let missing = [];
+            let present = [];
+            
+            requiredKeys.forEach(key => {
+                if (trans[key]) {
+                    present.push(key);
+                } else {
+                    missing.push(key);
+                }
+            });
+            
+            results.innerHTML = `
+                <div class="success">
+                    <strong>✓ Found: ${present.length} translations</strong>
+                </div>
+                ${missing.length > 0 ? `
+                    <div class="missing">
+                        <strong>✗ Missing: ${missing.length} translations</strong>
+                        <ul>
+                            ${missing.map(k => `<li>${k}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : '<div class="success"><strong>✓ All translations present!</strong></div>'}
+            `;
+            
+            // Show sample translations
+            const sampleKeys = [
+                'sheBalance', 'dashboard', 'greeting', 'todaysBalance',
+                'householdWork', 'careerTime', 'selfCare', 'aiLearningMentor',
+                'todaysFocus', 'hotOpportunities', 'yourGrowthJourney'
+            ];
+            
+            samples.innerHTML = sampleKeys.map(key => `
+                <div class="translation-test">
+                    <div class="key">${key}:</div>
+                    <div class="value">${trans[key] || '<span class="missing">MISSING</span>'}</div>
+                </div>
+            `).join('');
+        }
+        
+        // Auto-test Hindi on load
+        window.addEventListener('load', () => {
+            setTimeout(() => testLanguage('hi-IN'), 500);
+        });
+    </script>
+</body>
+</html>

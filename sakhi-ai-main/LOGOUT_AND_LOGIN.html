@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout and Redirect</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 2px solid #bee5eb;
+        }
+        .countdown {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        .info-box {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🔄</div>
+        <h1>Clearing Session...</h1>
+        
+        <div class="status" id="status">
+            Logging you out and clearing cache...
+        </div>
+        
+        <div class="info-box">
+            <strong>After redirect:</strong><br>
+            Login with:<br>
+            <strong>Email:</strong> rukaiya@example.com<br>
+            <strong>Password:</strong> password123
+        </div>
+        
+        <div class="countdown" id="countdown"></div>
+    </div>
+    
+    <script>
+        // Auto-execute on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const statusDiv = document.getElementById('status');
+            const countdownDiv = document.getElementById('countdown');
+            
+            setTimeout(() => {
+                // Clear all localStorage
+                localStorage.clear();
+                
+                statusDiv.innerHTML = '✅ Session cleared!<br>Redirecting to login...';
+                
+                // Countdown and redirect
+                let seconds = 2;
+                countdownDiv.textContent = `Redirecting in ${seconds}...`;
+                
+                const interval = setInterval(() => {
+                    seconds--;
+                    if (seconds > 0) {
+                        countdownDiv.textContent = `Redirecting in ${seconds}...`;
+                    } else {
+                        clearInterval(interval);
+                        countdownDiv.textContent = 'Redirecting now...';
+                        // Redirect to login
+                        window.location.href = 'http://localhost:8080/login.html';
+                    }
+                }, 1000);
+                
+            }, 500);
+        });
+    </script>
+</body>
+</html>

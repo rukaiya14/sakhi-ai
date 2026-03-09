@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Analysis - SheBalance</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .analysis-page {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .page-header {
+            margin-bottom: 40px;
+        }
+        
+        .page-header h1 {
+            font-size: 32px;
+            color: #333;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .page-header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #D2B48C, #8B7355);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 115, 85, 0.3);
+        }
+        
+        .analysis-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+        
+        .overall-score-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .score-circle {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+        }
+        
+        .score-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .score-text h2 {
+            font-size: 48px;
+            color: #8B7355;
+            margin: 0;
+        }
+        
+        .score-text p {
+            font-size: 18px;
+            color: #666;
+            margin: 0;
+        }
+        
+        .breakdown-card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .breakdown-card h3 {
+            font-size: 24px;
+            color: #333;
+            margin: 0 0 24px 0;
+        }
+        
+        .breakdown-item {
+            margin-bottom: 24px;
+        }
+        
+        .breakdown-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .breakdown-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .breakdown-bar {
+            width: 100%;
+            height: 16px;
+            background: #F5F5DC;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .breakdown-fill {
+            height: 100%;
+            border-radius: 8px;
+            transition: width 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .analysis-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="analysis-page">
+        <a href="skills.html" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back to Skills
+        </a>
+        
+        <div class="page-header">
+            <h1><i class="fas fa-chart-line"></i> Skill Level Analysis</h1>
+            <p>Comprehensive breakdown of your skill proficiency across different areas</p>
+        </div>
+        
+        <div class="analysis-container">
+            <div class="overall-score-card">
+                <div class="score-circle">
+                    <svg width="200" height="200">
+                        <circle cx="100" cy="100" r="90" fill="none" stroke="#F5F5DC" stroke-width="20"/>
+                        <circle cx="100" cy="100" r="90" fill="none" stroke="#8B7355" stroke-width="20" 
+                                stroke-dasharray="565" stroke-dashoffset="85" transform="rotate(-90 100 100)"/>
+                    </svg>
+                    <div class="score-text">
+                        <h2>85%</h2>
+                        <p>Overall</p>
+                    </div>
+                </div>
+                <p style="color: #666; margin-top: 20px;">Your overall skill proficiency across all active skills</p>
+            </div>
+            
+            <div class="breakdown-card">
+                <h3>Skill Breakdown</h3>
+                
+                <div class="breakdown-item">
+                    <div class="breakdown-label">
+                        <span>Technical Skills</span>
+                        <span>90%</span>
+                    </div>
+                    <div class="breakdown-bar">
+                        <div class="breakdown-fill" style="width: 90%; background: linear-gradient(135deg, #2E7D32, #1B5E20);"></div>
+                    </div>
+                </div>
+                
+                <div class="breakdown-item">
+                    <div class="breakdown-label">
+                        <span>Creativity</span>
+                        <span>85%</span>
+                    </div>
+                    <div class="breakdown-bar">
+                        <div class="breakdown-fill" style="width: 85%; background: linear-gradient(135deg, #1565C0, #0D47A1);"></div>
+                    </div>
+                </div>
+                
+                <div class="breakdown-item">
+                    <div class="breakdown-label">
+                        <span>Speed & Efficiency</span>
+                        <span>78%</span>
+                    </div>
+                    <div class="breakdown-bar">
+                        <div class="breakdown-fill" style="width: 78%; background: linear-gradient(135deg, #f57c00, #E65100);"></div>
+                    </div>
+                </div>
+                
+                <div class="breakdown-item">
+                    <div class="breakdown-label">
+                        <span>Quality & Precision</span>
+                        <span>88%</span>
+                    </div>
+                    <div class="breakdown-bar">
+                        <div class="breakdown-fill" style="width: 88%; background: linear-gradient(135deg, #7b1fa2, #4A148C);"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

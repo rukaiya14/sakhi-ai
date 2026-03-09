@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test AI Sakhi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>🤖 AI Sakhi Backend Test</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Chat</h2>
+        <button onclick="testChat()">Test Chat</button>
+        <div id="chat-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Update Bulk Order</h2>
+        <button onclick="testBulkOrder()">Test Bulk Order Update</button>
+        <div id="order-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: Report Health Issue</h2>
+        <button onclick="testHealthIssue()">Test Health Issue</button>
+        <div id="health-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 4: Request Advance Payment</h2>
+        <button onclick="testAdvancePayment()">Test Advance Payment</button>
+        <div id="advance-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 5: Request Payment</h2>
+        <button onclick="testPaymentRequest()">Test Payment Request</button>
+        <div id="payment-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 6: Contact Support</h2>
+        <button onclick="testSupport()">Test Support</button>
+        <div id="support-result" class="result"></div>
+    </div>
+
+    <script>
+        const API_URL = 'https://7f9gp1fuwc.execute-api.us-east-1.amazonaws.com/prod/sakhi';
+
+        async function testChat() {
+            const resultDiv = document.getElementById('chat-result');
+            resultDiv.textContent = 'Testing...';
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'chat',
+                        artisan_id: 'test_001',
+                        message: 'Hello Sakhi, how can you help me?'
+                    })
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `<span class="success">✅ Success!</span>\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">❌ Error:</span>\n${error.message}`;
+            }
+        }
+
+        async function testBulkOrder() {
+            const resultDiv = document.getElementById('order-result');
+            resultDiv.textContent = 'Testing...';
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'update_bulk_order',
+                        artisan_id: 'test_001',
+                        data: {
+                            order_id: 'ORD123',
+                            progress: 75,
+                            notes: 'Almost done with the embroidery work'
+                        }
+                    })
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `<span class="success">✅ Success!</span>\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">❌ Error:</span>\n${error.message}`;
+            }
+        }
+
+        async function testHealthIssue() {
+            const resultDiv = document.getElementById('health-result');
+            resultDiv.textContent = 'Testing...';
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'report_health_issue',
+                        artisan_id: 'test_001',
+                        data: {
+                            issue_type: 'illness',
+                            severity: 'medium',
+                            description: 'Feeling unwell, need rest'
+                        }
+                    })
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `<span class="success">✅ Success!</span>\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">❌ Error:</span>\n${error.message}`;
+            }
+        }
+
+        async function testAdvancePayment() {
+            const resultDiv = document.getElementById('advance-result');
+            resultDiv.textContent = 'Testing...';
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'request_advance_payment',
+                        artisan_id: 'test_001',
+                        data: {
+                            amount: 5000,
+                            reason: 'Need to buy materials for new order',
+                            urgency: 'normal'
+                        }
+                    })
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `<span class="success">✅ Success!</span>\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">❌ Error:</span>\n${error.message}`;
+            }
+        }
+
+        async function testPaymentRequest() {
+            const resultDiv = document.getElementById('payment-result');
+            resultDiv.textContent = 'Testing...';
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'request_payment',
+                        artisan_id: 'test_001',
+                        data: {
+                            order_id: 'ORD123',
+                            amount: 15000,
+                            work_description: 'Completed 50 embroidered sarees'
+                        }
+                    })
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `<span class="success">✅ Success!</span>\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">❌ Error:</span>\n${error.message}`;
+            }
+        }
+
+        async function testSupport() {
+            const resultDiv = document.getElementById('support-result');
+            resultDiv.textContent = 'Testing...';
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'contact_support',
+                        artisan_id: 'test_001',
+                        message: 'I need help understanding the payment process'
+                    })
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `<span class="success">✅ Success!</span>\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">❌ Error:</span>\n${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

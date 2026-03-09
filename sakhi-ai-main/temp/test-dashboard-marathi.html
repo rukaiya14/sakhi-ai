@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dashboard Marathi Translation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #5D4037;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .test-section h2 {
+            color: #5D4037;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .translation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .translation-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #8D6E63;
+        }
+        .key {
+            font-weight: bold;
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        .value {
+            color: #333;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .marathi {
+            color: #FF6F00;
+        }
+        .missing {
+            color: red;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+            padding: 15px;
+            background: #E8F5E9;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .warning {
+            color: #F57C00;
+            font-weight: bold;
+            padding: 15px;
+            background: #FFF3E0;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        button {
+            background: #FF6F00;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #E65100;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #FF6F00, #F57C00);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🇮🇳 Dashboard Marathi Translation Test</h1>
+        
+        <div class="test-section">
+            <h2>🎯 Language Selector</h2>
+            <button onclick="testLanguage('mr-IN')">🧪 Test Marathi (मराठी)</button>
+            <button onclick="testLanguage('hi-IN')">Test Hindi (हिंदी)</button>
+            <button onclick="testLanguage('en-IN')">Test English</button>
+        </div>
+        
+        <div class="test-section">
+            <h2>📊 Translation Coverage</h2>
+            <div id="translationResults"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>✨ Sample Marathi Translations</h2>
+            <div id="sampleTranslations"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔍 Key Sections Test</h2>
+            <div id="sectionsTest"></div>
+        </div>
+    </div>
+
+    <script src="SHE-BALANCE-main/SHE-Balnce-main/translations-working.js"></script>
+    <script>
+        // Required translation keys from dashboard.html
+        const requiredKeys = [
+            'sheBalance', 'dashboard', 'aiSakhi', 'mySkills', 'opportunities',
+            'foodMarketplace', 'artisanMarketplace', 'addProduct', 'community',
+            'resourceCircularity', 'invisibleLabor', 'virtualFactory', 'progress',
+            'settings', 'logout', 'greeting', 'voiceCommand', 'todaysBalance',
+            'householdWork', 'careerTime', 'selfCare', 'hours', 'thisMonthsEarnings',
+            'activeProjects', 'averageRating', 'networkConnections', 'fromLastMonth',
+            'newThisWeek', 'thisMonth', 'thisWeek', 'aiLearningMentor',
+            'aiLearningMentorDesc', 'personalizedPaths', 'trackProgress',
+            'careerGrowth', 'startLearning', 'free', 'personalized', 'aiPowered',
+            'todaysFocus', 'task1', 'task2', 'task3', 'task4', 'addNewTask',
+            'hotOpportunities', 'fashionDesignerAssistant', 'homeChefForOffice',
+            'embroideryTrainer', 'perMonth', 'perDay', 'perClass', 'remote',
+            'nearby', 'online', 'match', 'apply', 'viewAllOpportunities',
+            'activeOrders', 'rating', 'recentOrders', 'rajmaChawal',
+            'homemadeCookies', 'preparing', 'delivered', 'manageOrders',
+            'communityUpdates', 'shared', 'won', 'started', 'hoursAgo',
+            'daysAgo', 'joinCommunity', 'labourTracking', 'labourTrackingDesc',
+            'bulkOrdersManagement', 'needHelpMessage', 'actionRequired',
+            'ordersNeedUpdate', 'loadingOrders', 'needHelp', 'yourGrowthJourney',
+            'skillsImproved', 'incomeGrowth', 'timeOptimized', 'hrsPerDay',
+            'viewDetailedProgress', 'welcomeToSheBalance', 'letsSetupYourJourney',
+            'tellUsAboutYourself', 'fullName', 'enterYourFullName', 'location',
+            'cityState', 'ageGroup', 'selectAgeGroup', 'yourDailyRoutine',
+            'householdWorkHoursPerDay', 'selfCareHoursPerDay',
+            'mainHouseholdResponsibilities', 'cooking', 'cleaning', 'childcare',
+            'eldercare', 'shopping', 'laundry', 'yourSkillsAndHobbies',
+            'currentSkills', 'embroidery', 'henna', 'crochet', 'stitching',
+            'crossStitch', 'yourHobbiesAndInterests', 'reading', 'gardening',
+            'music', 'dancing', 'painting', 'yoga', 'yourAvailableTime',
+            'freeTimeForCareerPerDay', 'preferredWorkingHours', 'morning',
+            'afternoon', 'evening', 'flexible', 'monthlyIncomeGoal', 'selectGoal',
+            'trySayingInAnyLanguage', 'supportedLanguages', 'aiSakhiAssistant',
+            'quickActions', 'sakhiWelcome', 'updateBulkOrderProgress',
+            'reportWorkCompletion', 'reportHealthIssue', 'letUsKnowUnwell',
+            'requestAdvancePayment', 'needFundsForMaterials'
+        ];
+
+        const sectionKeys = {
+            'Navigation': ['dashboard', 'mySkills', 'opportunities', 'community', 'settings'],
+            'Balance': ['todaysBalance', 'householdWork', 'careerTime', 'selfCare'],
+            'Stats': ['thisMonthsEarnings', 'activeProjects', 'averageRating'],
+            'AI Features': ['aiLearningMentor', 'personalizedPaths', 'trackProgress'],
+            'Opportunities': ['hotOpportunities', 'fashionDesignerAssistant', 'apply'],
+            'Food': ['foodMarketplace', 'activeOrders', 'recentOrders'],
+            'Community': ['communityUpdates', 'joinCommunity'],
+            'Progress': ['yourGrowthJourney', 'skillsImproved', 'incomeGrowth']
+        };
+
+        function testLanguage(lang) {
+            console.log('Testing language:', lang);
+            
+            if (!window.translations || !window.translations[lang]) {
+                alert('Translations not loaded for ' + lang + '!');
+                return;
+            }
+            
+            const trans = window.translations[lang];
+            const results = document.getElementById('translationResults');
+            const samples = document.getElementById('sampleTranslations');
+            const sections = document.getElementById('sectionsTest');
+            
+            let missing = [];
+            let present = [];
+            
+            requiredKeys.forEach(key => {
+                if (trans[key]) {
+                    present.push(key);
+                } else {
+                    missing.push(key);
+                }
+            });
+            
+            const percentage = Math.round((present.length / requiredKeys.length) * 100);
+            
+            results.innerHTML = `
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Keys</div>
+                        <div class="stat-number">${requiredKeys.length}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Translated</div>
+                        <div class="stat-number">${present.length}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Coverage</div>
+                        <div class="stat-number">${percentage}%</div>
+                    </div>
+                </div>
+                ${percentage === 100 ? 
+                    '<div class="success">✅ Perfect! All translations present for ' + lang + '</div>' :
+                    '<div class="warning">⚠️ Missing ' + missing.length + ' translations</div>'
+                }
+                ${missing.length > 0 ? `
+                    <details>
+                        <summary style="cursor: pointer; padding: 10px; background: #FFF3E0; border-radius: 5px; margin-top: 10px;">
+                            <strong>Show Missing Keys (${missing.length})</strong>
+                        </summary>
+                        <ul style="margin-top: 10px;">
+                            ${missing.map(k => `<li style="color: red;">${k}</li>`).join('')}
+                        </ul>
+                    </details>
+                ` : ''}
+            `;
+            
+            // Show sample translations
+            const highlightKeys = [
+                'sheBalance', 'greeting', 'todaysBalance', 'householdWork',
+                'aiLearningMentor', 'hotOpportunities', 'yourGrowthJourney',
+                'welcomeToSheBalance', 'sakhiWelcome'
+            ];
+            
+            samples.innerHTML = '<div class="translation-grid">' + 
+                highlightKeys.map(key => `
+                    <div class="translation-item">
+                        <div class="key">${key}</div>
+                        <div class="value ${lang === 'mr-IN' ? 'marathi' : ''}">${trans[key] || '<span class="missing">MISSING</span>'}</div>
+                    </div>
+                `).join('') + '</div>';
+            
+            // Test sections
+            sections.innerHTML = Object.entries(sectionKeys).map(([section, keys]) => {
+                const sectionTrans = keys.filter(k => trans[k]).length;
+                const sectionPercent = Math.round((sectionTrans / keys.length) * 100);
+                return `
+                    <div style="margin: 10px 0; padding: 10px; background: ${sectionPercent === 100 ? '#E8F5E9' : '#FFF3E0'}; border-radius: 5px;">
+                        <strong>${section}:</strong> ${sectionTrans}/${keys.length} (${sectionPercent}%)
+                        ${sectionPercent === 100 ? ' ✅' : ' ⚠️'}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Auto-test Marathi on load
+        window.addEventListener('load', () => {
+            setTimeout(() => testLanguage('mr-IN'), 500);
+        });
+    </script>
+</body>
+</html>

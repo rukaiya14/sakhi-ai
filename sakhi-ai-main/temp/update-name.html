@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Name to Rukaiya</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #F5F5DC, #D2B48C);
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 500px;
+        }
+        h1 {
+            color: #5D4037;
+            margin-bottom: 20px;
+        }
+        button {
+            background: linear-gradient(135deg, #C97D60, #8B7355);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(201, 125, 96, 0.3);
+        }
+        .success {
+            color: #2E7D32;
+            margin-top: 20px;
+            font-weight: 600;
+            display: none;
+        }
+        .info {
+            color: #666;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        .current-name {
+            background: #F5F5F5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: 600;
+            color: #5D4037;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Update User Name</h1>
+        <p class="info">This will update your name in the SheBalance system to "Rukaiya"</p>
+        
+        <div class="current-name">
+            Current Name: <span id="currentName">Loading...</span>
+        </div>
+        
+        <button onclick="updateName()">Change Name to Rukaiya</button>
+        <button onclick="goToDashboard()">Go to Dashboard</button>
+        
+        <p class="success" id="successMsg">✓ Name successfully updated to Rukaiya!</p>
+    </div>
+
+    <script>
+        // Display current name
+        function displayCurrentName() {
+            const userData = localStorage.getItem('shebalance_user');
+            if (userData) {
+                const user = JSON.parse(userData);
+                document.getElementById('currentName').textContent = user.name || 'Not set';
+            } else {
+                document.getElementById('currentName').textContent = 'No user logged in';
+            }
+        }
+
+        // Update name to Rukaiya
+        function updateName() {
+            const userData = localStorage.getItem('shebalance_user');
+            
+            if (userData) {
+                const user = JSON.parse(userData);
+                user.name = 'Rukaiya';
+                localStorage.setItem('shebalance_user', JSON.stringify(user));
+                
+                document.getElementById('successMsg').style.display = 'block';
+                displayCurrentName();
+                
+                setTimeout(() => {
+                    alert('Name updated successfully! You can now view your certificates with the name "Rukaiya".');
+                }, 500);
+            } else {
+                alert('No user found. Please login first.');
+            }
+        }
+
+        // Go to dashboard
+        function goToDashboard() {
+            window.location.href = 'SHE-BALANCE-main/SHE-Balnce-main/dashboard.html';
+        }
+
+        // Initialize
+        displayCurrentName();
+    </script>
+</body>
+</html>

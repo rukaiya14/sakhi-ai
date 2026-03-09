@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillScan Connection Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .test-results {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .test-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #e0e0e0;
+        }
+        
+        .test-item.success {
+            border-left-color: #4caf50;
+        }
+        
+        .test-item.error {
+            border-left-color: #f44336;
+        }
+        
+        .test-item.pending {
+            border-left-color: #ff9800;
+        }
+        
+        .test-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            min-width: 30px;
+        }
+        
+        .test-content {
+            flex: 1;
+        }
+        
+        .test-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .test-message {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .response-box {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .summary h2 {
+            margin-bottom: 10px;
+        }
+        
+        .summary-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔌 SkillScan Connection Test</h1>
+        <p class="subtitle">Test your AWS backend connection and verify everything is working</p>
+        
+        <div class="input-group">
+            <label for="apiEndpoint">API Endpoint:</label>
+            <input 
+                type="text" 
+                id="apiEndpoint" 
+                placeholder="https://xxxxx.execute-api.us-east-1.amazonaws.com/prod"
+                value="https://YOUR-API-ID.execute-api.us-east-1.amazonaws.com/prod"
+            >
+            <small style="color: #666; display: block; margin-top: 5px;">
+                Get this from your deployment output (remove trailing slash)
+            </small>
+        </div>
+        
+        <div class="button-group">
+            <button class="btn-primary" onclick="runAllTests()">
+                🚀 Run All Tests
+            </button>
+            <button class="btn-secondary" onclick="clearResults()">
+                🔄 Clear Results
+            </button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        let testResults = [];
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+            testResults = [];
+        }
+        
+        function addTestResult(title, status, message, details = null) {
+            const result = { title, status, message, details };
+            testResults.push(result);
+            renderResults();
+        }
+        
+        function renderResults() {
+            const resultsDiv = document.getElementById('results');
+            
+            let html = '<div class="test-results">';
+            
+            testResults.forEach(result => {
+                const iconMap = {
+                    success: '✅',
+                    error: '❌',
+                    pending: '⏳'
+                };
+                
+                html += `
+                    <div class="test-item ${result.status}">
+                        <div class="test-icon">${iconMap[result.status]}</div>
+                        <div class="test-content">
+                            <div class="test-title">${result.title}</div>
+                            <div class="test-message">${result.message}</div>
+                            ${result.details ? `<div class="response-box">${result.details}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            
+            // Add summary
+            const successCount = testResults.filter(r => r.status === 'success').length;
+            const errorCount = testResults.filter(r => r.status === 'error').length;
+            const totalCount = testResults.length;
+            
+            if (totalCount > 0) {
+                html += `
+                    <div class="summary">
+                        <h2>Test Summary</h2>
+                        <div class="summary-stats">
+                            <div class="stat">
+                                <div class="stat-number">${totalCount}</div>
+                                <div class="stat-label">Total Tests</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${successCount}</div>
+                                <div class="stat-label">Passed</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${errorCount}</div>
+                                <div class="stat-label">Failed</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            resultsDiv.innerHTML = html;
+        }
+        
+        async function runAllTests() {
+            clearResults();
+            
+            const apiEndpoint = document.getElementById('apiEndpoint').value.trim();
+            
+            // Validate endpoint
+            if (!apiEndpoint || apiEndpoint.includes('YOUR-API-ID')) {
+                addTestResult(
+                    'Configuration Check',
+                    'error',
+                    'Please enter your actual API endpoint from deployment output'
+                );
+                return;
+            }
+            
+            // Remove trailing slash
+            const cleanEndpoint = apiEndpoint.replace(/\/$/, '');
+            
+            // Test 1: API Endpoint Reachability
+            addTestResult('API Endpoint Reachability', 'pending', 'Testing connection...');
+            renderResults();
+            
+            try {
+                const response = await fetch(`${cleanEndpoint}/skillscans`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    testResults[testResults.length - 1] = {
+                        title: 'API Endpoint Reachability',
+                        status: 'success',
+                        message: `API is reachable! Status: ${response.status}`,
+                        details: JSON.stringify(data, null, 2)
+                    };
+                } else {
+                    testResults[testResults.length - 1] = {
+                        title: 'API Endpoint Reachability',
+                        status: 'error',
+                        message: `API returned error: ${response.status} ${response.statusText}`,
+                        details: await response.text()
+                    };
+                }
+            } catch (error) {
+                testResults[testResults.length - 1] = {
+                    title: 'API Endpoint Reachability',
+                    status: 'error',
+                    message: `Failed to connect: ${error.message}`,
+                    details: 'Check if:\n1. API endpoint is correct\n2. CORS is configured\n3. API Gateway is deployed'
+                };
+            }
+            renderResults();
+            
+            // Test 2: Get SkillScans Endpoint
+            addTestResult('Get SkillScans Endpoint', 'pending', 'Testing /skillscans endpoint...');
+            renderResults();
+            
+            try {
+                const response = await fetch(`${cleanEndpoint}/skillscans?limit=5`, {
+                    method: 'GET'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    testResults[testResults.length - 1] = {
+                        title: 'Get SkillScans Endpoint',
+                        status: 'success',
+                        message: `Found ${data.count || 0} SkillScan analyses`,
+                        details: JSON.stringify(data, null, 2)
+                    };
+                } else {
+                    testResults[testResults.length - 1] = {
+                        title: 'Get SkillScans Endpoint',
+                        status: 'error',
+                        message: `Endpoint error: ${response.status}`,
+                        details: await response.text()
+                    };
+                }
+            } catch (error) {
+                testResults[testResults.length - 1] = {
+                    title: 'Get SkillScans Endpoint',
+                    status: 'error',
+                    message: `Request failed: ${error.message}`
+                };
+            }
+            renderResults();
+            
+            // Test 3: Analyze Endpoint (without images)
+            addTestResult('Analyze Endpoint', 'pending', 'Testing /analyze endpoint...');
+            renderResults();
+            
+            try {
+                const response = await fetch(`${cleanEndpoint}/analyze`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        artisan_id: 'test-user',
+                        category: 'embroidery',
+                        images: []
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.status === 400 && data.error) {
+                    // Expected error for empty images
+                    testResults[testResults.length - 1] = {
+                        title: 'Analyze Endpoint',
+                        status: 'success',
+                        message: 'Endpoint is working (validation error expected for empty images)',
+                        details: JSON.stringify(data, null, 2)
+                    };
+                } else if (response.ok) {
+                    testResults[testResults.length - 1] = {
+                        title: 'Analyze Endpoint',
+                        status: 'success',
+                        message: 'Endpoint is working!',
+                        details: JSON.stringify(data, null, 2)
+                    };
+                } else {
+                    testResults[testResults.length - 1] = {
+                        title: 'Analyze Endpoint',
+                        status: 'error',
+                        message: `Unexpected error: ${response.status}`,
+                        details: JSON.stringify(data, null, 2)
+                    };
+                }
+            } catch (error) {
+                testResults[testResults.length - 1] = {
+                    title: 'Analyze Endpoint',
+                    status: 'error',
+                    message: `Request failed: ${error.message}`
+                };
+            }
+            renderResults();
+            
+            // Final summary
+            const allSuccess = testResults.every(r => r.status === 'success');
+            
+            if (allSuccess) {
+                addTestResult(
+                    '🎉 All Tests Passed!',
+                    'success',
+                    'Your SkillScan AI backend is working correctly. You can now use it in your frontend!'
+                );
+            } else {
+                addTestResult(
+                    '⚠️ Some Tests Failed',
+                    'error',
+                    'Check the errors above and verify your deployment. See CONNECT_FRONTEND.md for troubleshooting.'
+                );
+            }
+            
+            renderResults();
+        }
+        
+        // Auto-load endpoint from config if available
+        window.addEventListener('DOMContentLoaded', () => {
+            // Try to load from skillscan-backend-integration.js if available
+            if (typeof SKILLSCAN_CONFIG !== 'undefined') {
+                document.getElementById('apiEndpoint').value = SKILLSCAN_CONFIG.API_ENDPOINT;
+            }
+        });
+    </script>
+</body>
+</html>

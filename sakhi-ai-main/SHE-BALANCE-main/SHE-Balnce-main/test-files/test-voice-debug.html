@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Debug Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .test-btn:hover {
+            background: #5568d3;
+        }
+        #console {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 500px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid #00ff00;
+            padding-left: 10px;
+        }
+        .error {
+            color: #ff4444;
+            border-left-color: #ff4444;
+        }
+        .success {
+            color: #44ff44;
+            border-left-color: #44ff44;
+        }
+        .info {
+            color: #4444ff;
+            border-left-color: #4444ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎤 Voice Command Debug Test</h1>
+    
+    <div>
+        <button class="test-btn" onclick="testVoiceAssistant()">Test Voice Assistant</button>
+        <button class="test-btn" onclick="testKeywordMatching()">Test Keyword Matching</button>
+        <button class="test-btn" onclick="clearConsole()">Clear Console</button>
+    </div>
+    
+    <div id="console"></div>
+    
+    <script src="voice-12-languages.js"></script>
+    <script>
+        function log(message, type = 'info') {
+            const consoleDiv = document.getElementById('console');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            consoleDiv.appendChild(entry);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            console.log(message);
+        }
+        
+        function clearConsole() {
+            document.getElementById('console').innerHTML = '';
+        }
+        
+        function testVoiceAssistant() {
+            log('Testing Voice Assistant...', 'info');
+            
+            if (typeof voiceAssistant === 'undefined' || !voiceAssistant) {
+                log('❌ Voice assistant not found!', 'error');
+                log('Creating new instance...', 'info');
+                try {
+                    window.voiceAssistant = new VoiceAssistant();
+                    log('✅ Voice assistant created!', 'success');
+                } catch (error) {
+                    log('❌ Error creating voice assistant: ' + error.message, 'error');
+                    return;
+                }
+            } else {
+                log('✅ Voice assistant found!', 'success');
+            }
+            
+            log('Current language: ' + voiceAssistant.currentLanguage, 'info');
+            log('Recognition available: ' + (!!voiceAssistant.recognition), 'info');
+            
+            if (voiceAssistant.recognition) {
+                log('Recognition language: ' + voiceAssistant.recognition.lang, 'info');
+            }
+        }
+        
+        function testKeywordMatching() {
+            log('Testing Keyword Matching...', 'info');
+            
+            const testCommands = [
+                'find new jobs',
+                'show my earnings',
+                'food marketplace',
+                'मुझे काम चाहिए',
+                'என் வருமானம்',
+                'help me'
+            ];
+            
+            testCommands.forEach(cmd => {
+                const lower = cmd.toLowerCase();
+                log(`Testing: "${cmd}"`, 'info');
+                
+                if (typeof matchesKeywords !== 'undefined') {
+                    const jobs = matchesKeywords(lower, 'jobs');
+                    const earnings = matchesKeywords(lower, 'earnings');
+                    const food = matchesKeywords(lower, 'food');
+                    const help = matchesKeywords(lower, 'help');
+                    
+                    if (jobs) log('  ✅ Matches: JOBS', 'success');
+                    if (earnings) log('  ✅ Matches: EARNINGS', 'success');
+                    if (food) log('  ✅ Matches: FOOD', 'success');
+                    if (help) log('  ✅ Matches: HELP', 'success');
+                    
+                    if (!jobs && !earnings && !food && !help) {
+                        log('  ❌ No match found', 'error');
+                    }
+                } else {
+                    log('  ❌ matchesKeywords function not found!', 'error');
+                }
+            });
+        }
+        
+        // Override console.log to capture all logs
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const message = args.join(' ');
+            if (message.includes('✅')) {
+                log(message, 'success');
+            } else if (message.includes('❌')) {
+                log(message, 'error');
+            } else {
+                log(message, 'info');
+            }
+        };
+        
+        // Test on load
+        window.addEventListener('DOMContentLoaded', () => {
+            log('Page loaded', 'success');
+            setTimeout(() => {
+                testVoiceAssistant();
+                setTimeout(testKeywordMatching, 1000);
+            }, 500);
+        });
+    </script>
+</body>
+</html>

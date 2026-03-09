@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Group - SheBalance Community</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #0a1014;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .whatsapp-container {
+            max-width: 500px;
+            width: 100%;
+            background: #111b21;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .whatsapp-header {
+            background: #202c33;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #2a3942;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #8696a0;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .back-btn:hover {
+            color: #d9dee2;
+        }
+
+        .header-title {
+            flex-grow: 1;
+        }
+
+        .header-title h2 {
+            color: #d9dee2;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .header-title p {
+            color: #8696a0;
+            font-size: 0.85rem;
+            margin-top: 2px;
+        }
+
+        .group-info-section {
+            background: #0b141a;
+            padding: 40px 30px;
+            text-align: center;
+            border-bottom: 8px solid #111b21;
+        }
+
+        .group-avatar-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .group-name-large {
+            color: #d9dee2;
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .group-members-large {
+            color: #8696a0;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .group-description-large {
+            color: #aebac1;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .group-details {
+            padding: 20px 30px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 18px 0;
+            border-bottom: 1px solid #2a3942;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-icon {
+            width: 45px;
+            height: 45px;
+            background: #1f2c34;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8696a0;
+            font-size: 1.2rem;
+        }
+
+        .detail-content {
+            flex-grow: 1;
+        }
+
+        .detail-label {
+            color: #d9dee2;
+            font-size: 1rem;
+            margin-bottom: 3px;
+        }
+
+        .detail-value {
+            color: #8696a0;
+            font-size: 0.9rem;
+        }
+
+        .members-preview {
+            padding: 20px 30px;
+            border-top: 8px solid #0b141a;
+        }
+
+        .members-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .members-title {
+            color: #8696a0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+        }
+
+        .member-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .member-avatar:nth-child(2n) {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .member-avatar:nth-child(3n) {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .member-info {
+            flex-grow: 1;
+        }
+
+        .member-name {
+            color: #d9dee2;
+            font-size: 1rem;
+            margin-bottom: 3px;
+        }
+
+        .member-status {
+            color: #8696a0;
+            font-size: 0.85rem;
+        }
+
+        .member-role {
+            color: #8696a0;
+            font-size: 0.85rem;
+            padding: 3px 10px;
+            background: #1f2c34;
+            border-radius: 12px;
+        }
+
+        .join-section {
+            padding: 20px 30px 30px;
+            background: #0b141a;
+            border-top: 8px solid #111b21;
+        }
+
+        .join-warning {
+            background: #1f2c34;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: start;
+        }
+
+        .join-warning i {
+            color: #25D366;
+            font-size: 1.2rem;
+            margin-top: 2px;
+        }
+
+        .join-warning-text {
+            color: #aebac1;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .join-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-join {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-join-primary {
+            background: #25D366;
+            color: white;
+        }
+
+        .btn-join-primary:hover {
+            background: #20bd5a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-join-secondary {
+            background: #1f2c34;
+            color: #8696a0;
+        }
+
+        .btn-join-secondary:hover {
+            background: #2a3942;
+            color: #d9dee2;
+        }
+
+        .chat-preview {
+            padding: 20px 30px;
+            border-top: 8px solid #0b141a;
+        }
+
+        .preview-title {
+            color: #8696a0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .chat-message {
+            background: #1f2c34;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .chat-sender {
+            color: #25D366;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .chat-text {
+            color: #d9dee2;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .chat-time {
+            color: #8696a0;
+            font-size: 0.75rem;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .whatsapp-container {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="whatsapp-container">
+        <!-- Header -->
+        <div class="whatsapp-header">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="header-title">
+                <h2>Group Invite</h2>
+                <p>SheBalance Community</p>
+            </div>
+        </div>
+
+        <!-- Group Info -->
+        <div class="group-info-section">
+            <div class="group-avatar-large" id="groupIcon">👩‍🍳</div>
+            <h1 class="group-name-large" id="groupName">Home Chefs Network</h1>
+            <p class="group-members-large" id="groupMembers">1,234 members</p>
+            <p class="group-description-large" id="groupDescription">
+                Recipe exchange, cooking tips, and business advice for home-based food entrepreneurs. Share your culinary journey!
+            </p>
+        </div>
+
+        <!-- Group Details -->
+        <div class="group-details">
+            <div class="detail-item">
+                <div class="detail-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="detail-content">
+                    <div class="detail-label">Privacy</div>
+                    <div class="detail-value">Private Group</div>
+                </div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-icon">
+                    <i class="fas fa-calendar"></i>
+                </div>
+                <div class="detail-content">
+                    <div class="detail-label">Created</div>
+                    <div class="detail-value">January 15, 2024</div>
+                </div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="detail-content">
+                    <div class="detail-label">Activity</div>
+                    <div class="detail-value">Very Active • 200+ messages daily</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Members Preview -->
+        <div class="members-preview">
+            <div class="members-header">
+                <span class="members-title">Recent Members</span>
+            </div>
+            <div class="member-item">
+                <div class="member-avatar">PK</div>
+                <div class="member-info">
+                    <div class="member-name">Priya Kapoor</div>
+                    <div class="member-status">Active now</div>
+                </div>
+                <div class="member-role">Admin</div>
+            </div>
+            <div class="member-item">
+                <div class="member-avatar">LR</div>
+                <div class="member-info">
+                    <div class="member-name">Lakshmi Reddy</div>
+                    <div class="member-status">Online</div>
+                </div>
+            </div>
+            <div class="member-item">
+                <div class="member-avatar">SM</div>
+                <div class="member-info">
+                    <div class="member-name">Sunita Mehta</div>
+                    <div class="member-status">Last seen 5 min ago</div>
+                </div>
+            </div>
+            <div class="member-item">
+                <div class="member-avatar">NK</div>
+                <div class="member-info">
+                    <div class="member-name">Neha Kumar</div>
+                    <div class="member-status">Last seen 1 hour ago</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Preview -->
+        <div class="chat-preview">
+            <div class="preview-title">Recent Messages</div>
+            <div class="chat-message">
+                <div class="chat-sender">Priya Kapoor</div>
+                <div class="chat-text">Welcome everyone! Share your best recipes today 🍳</div>
+                <div class="chat-time">10:30 AM</div>
+            </div>
+            <div class="chat-message">
+                <div class="chat-sender">Lakshmi Reddy</div>
+                <div class="chat-text">Just got a bulk order for 50 tiffins! Any tips on managing large orders?</div>
+                <div class="chat-time">11:15 AM</div>
+            </div>
+            <div class="chat-message">
+                <div class="chat-sender">Sunita Mehta</div>
+                <div class="chat-text">Congratulations Lakshmi! I can share my workflow for bulk orders 📋</div>
+                <div class="chat-time">11:20 AM</div>
+            </div>
+        </div>
+
+        <!-- Join Section -->
+        <div class="join-section">
+            <div class="join-warning">
+                <i class="fas fa-info-circle"></i>
+                <div class="join-warning-text">
+                    By joining this group, you agree to follow community guidelines. Your phone number will be visible to other members.
+                </div>
+            </div>
+            <div class="join-buttons">
+                <button class="btn-join btn-join-primary" onclick="joinGroupNow()">
+                    <i class="fab fa-whatsapp"></i>
+                    Join Group via WhatsApp
+                </button>
+                <button class="btn-join btn-join-secondary" onclick="goBack()">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get group info from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const groupType = urlParams.get('group') || 'chefs';
+
+        const groupData = {
+            embroidery: {
+                icon: '🧵',
+                name: 'Embroidery Artists',
+                members: '847 members',
+                description: 'Share your embroidery designs, learn new techniques, and connect with fellow artisans. Daily tips and pattern sharing!',
+                whatsappLink: 'https://chat.whatsapp.com/embroidery-artists-shebalance'
+            },
+            chefs: {
+                icon: '👩‍🍳',
+                name: 'Home Chefs Network',
+                members: '1,234 members',
+                description: 'Recipe exchange, cooking tips, and business advice for home-based food entrepreneurs. Share your culinary journey!',
+                whatsappLink: 'https://chat.whatsapp.com/home-chefs-network-shebalance'
+            },
+            tailoring: {
+                icon: '✂️',
+                name: 'Tailoring & Fashion',
+                members: '623 members',
+                description: 'From basic alterations to custom designs. Share patterns, get feedback, and grow your tailoring business together.',
+                whatsappLink: 'https://chat.whatsapp.com/tailoring-fashion-shebalance'
+            },
+            henna: {
+                icon: '🎨',
+                name: 'Henna Artists Circle',
+                members: '456 members',
+                description: 'Showcase your mehendi designs, learn new patterns, and book wedding season gigs. Arabic, Indian, and fusion styles!',
+                whatsappLink: 'https://chat.whatsapp.com/henna-artists-shebalance'
+            },
+            mentorship: {
+                icon: '💼',
+                name: 'Business Mentorship',
+                members: '892 members',
+                description: 'Learn from successful women entrepreneurs. Get advice on pricing, marketing, customer service, and scaling your business.',
+                whatsappLink: 'https://chat.whatsapp.com/business-mentorship-shebalance'
+            },
+            balance: {
+                icon: '⚖️',
+                name: 'Work-Life Balance',
+                members: '1,095 members',
+                description: 'Share tips on managing household work, career, and self-care. Support each other in finding the perfect balance!',
+                whatsappLink: 'https://chat.whatsapp.com/work-life-balance-shebalance'
+            }
+        };
+
+        // Load group data
+        const group = groupData[groupType];
+        if (group) {
+            document.getElementById('groupIcon').textContent = group.icon;
+            document.getElementById('groupName').textContent = group.name;
+            document.getElementById('groupMembers').textContent = group.members;
+            document.getElementById('groupDescription').textContent = group.description;
+        }
+
+        function joinGroupNow() {
+            // Show success message
+            const joinSection = document.querySelector('.join-section');
+            joinSection.innerHTML = `
+                <div style="text-align: center; padding: 40px 20px;">
+                    <div style="width: 80px; height: 80px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 2.5rem;">
+                        ✓
+                    </div>
+                    <h2 style="color: #d9dee2; margin-bottom: 10px; font-size: 1.5rem;">Successfully Joined!</h2>
+                    <p style="color: #8696a0; margin-bottom: 30px; line-height: 1.6;">
+                        You're now a member of ${group.name}. Opening WhatsApp...
+                    </p>
+                    <button class="btn-join btn-join-primary" onclick="openWhatsApp()">
+                        <i class="fab fa-whatsapp"></i>
+                        Open WhatsApp Now
+                    </button>
+                    <button class="btn-join btn-join-secondary" onclick="goBack()" style="margin-top: 12px;">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Community
+                    </button>
+                </div>
+            `;
+
+            // Simulate opening WhatsApp after 2 seconds
+            setTimeout(() => {
+                openWhatsApp();
+            }, 2000);
+        }
+
+        function openWhatsApp() {
+            // In a real implementation, this would open the actual WhatsApp group link
+            // For demo purposes, we'll show an alert
+            alert('Opening WhatsApp group chat...\n\nIn production, this would open: ' + group.whatsappLink);
+            
+            // Redirect back to community after a moment
+            setTimeout(() => {
+                window.location.href = 'community.html';
+            }, 1000);
+        }
+
+        function goBack() {
+            window.location.href = 'community.html';
+        }
+    </script>
+</body>
+</html>

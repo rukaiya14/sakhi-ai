@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test SNS WhatsApp Messaging</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h1 i {
+            color: #25D366;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .result.success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+
+        .result h3 {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result pre {
+            background: rgba(0,0,0,0.05);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info-box h4 {
+            color: #1976D2;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-box p {
+            color: #555;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .phone-hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <i class="fab fa-whatsapp"></i>
+            Test SNS WhatsApp Messaging
+        </h1>
+        <p class="subtitle">Send test WhatsApp messages via AWS SNS</p>
+
+        <div class="info-box">
+            <h4><i class="fas fa-info-circle"></i> How it works</h4>
+            <p>This will send a WhatsApp message using AWS SNS to the phone number you specify. Make sure the phone number is registered with WhatsApp and in E.164 format (e.g., +919876543210).</p>
+        </div>
+
+        <form id="snsForm">
+            <div class="form-group">
+                <label for="phoneNumber">
+                    <i class="fas fa-phone"></i> Phone Number
+                </label>
+                <input 
+                    type="tel" 
+                    id="phoneNumber" 
+                    placeholder="+919876543210" 
+                    required
+                    pattern="^\+[1-9]\d{1,14}$"
+                >
+                <div class="phone-hint">Format: +[country code][number] (e.g., +919876543210 for India)</div>
+            </div>
+
+            <div class="form-group">
+                <label for="messageType">
+                    <i class="fas fa-tag"></i> Message Type
+                </label>
+                <select id="messageType" required>
+                    <option value="reminder">Order Progress Reminder</option>
+                    <option value="custom">Custom Message</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="orderIdGroup">
+                <label for="orderId">
+                    <i class="fas fa-box"></i> Order ID (Optional)
+                </label>
+                <input 
+                    type="text" 
+                    id="orderId" 
+                    placeholder="ORD-2024-001"
+                >
+            </div>
+
+            <div class="form-group" id="customMessageGroup" style="display: none;">
+                <label for="customMessage">
+                    <i class="fas fa-comment"></i> Custom Message
+                </label>
+                <textarea 
+                    id="customMessage" 
+                    placeholder="Enter your custom message here..."
+                ></textarea>
+            </div>
+
+            <button type="submit" class="btn" id="sendBtn">
+                <i class="fas fa-paper-plane"></i>
+                Send WhatsApp Message
+            </button>
+        </form>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('snsForm');
+        const messageType = document.getElementById('messageType');
+        const orderIdGroup = document.getElementById('orderIdGroup');
+        const customMessageGroup = document.getElementById('customMessageGroup');
+        const sendBtn = document.getElementById('sendBtn');
+        const resultDiv = document.getElementById('result');
+
+        // Toggle message type fields
+        messageType.addEventListener('change', (e) => {
+            if (e.target.value === 'custom') {
+                orderIdGroup.style.display = 'none';
+                customMessageGroup.style.display = 'block';
+                document.getElementById('customMessage').required = true;
+            } else {
+                orderIdGroup.style.display = 'block';
+                customMessageGroup.style.display = 'none';
+                document.getElementById('customMessage').required = false;
+            }
+        });
+
+        // Handle form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const type = document.getElementById('messageType').value;
+            const orderId = document.getElementById('orderId').value;
+            const customMessage = document.getElementById('customMessage').value;
+
+            // Disable button and show loading
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<div class="spinner"></div> Sending...';
+            resultDiv.style.display = 'none';
+
+            try {
+                // Prepare request body
+                const requestBody = {
+                    phoneNumber: phoneNumber,
+                    messageType: type
+                };
+
+                if (type === 'reminder' && orderId) {
+                    requestBody.orderId = orderId;
+                } else if (type === 'custom') {
+                    requestBody.message = customMessage;
+                }
+
+                // Send request to backend
+                const response = await fetch('http://localhost:5000/api/sns/send-whatsapp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('shebalance_token') || ''}`
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await response.json();
+
+                // Show result
+                if (response.ok) {
+                    showResult('success', 'Message Sent Successfully!', data);
+                } else {
+                    showResult('error', 'Failed to Send Message', data);
+                }
+
+            } catch (error) {
+                showResult('error', 'Error', {
+                    error: error.message,
+                    details: 'Make sure the backend server is running on port 5000'
+                });
+            } finally {
+                // Re-enable button
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send WhatsApp Message';
+            }
+        });
+
+        function showResult(type, title, data) {
+            resultDiv.className = `result ${type}`;
+            resultDiv.style.display = 'block';
+            
+            const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+            
+            resultDiv.innerHTML = `
+                <h3><i class="fas fa-${icon}"></i> ${title}</h3>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
+
+            // Scroll to result
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>

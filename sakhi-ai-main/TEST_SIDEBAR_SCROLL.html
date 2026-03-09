@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Sidebar Scroll</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* ✅ SCROLLING ENABLED */
+            overflow-x: hidden;
+        }
+
+        /* Custom scrollbar - RIGHT SIDE */
+        .sidebar::-webkit-scrollbar {
+            width: 10px; /* Wider for better visibility */
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #6366f1; /* Primary color - more visible */
+            border-radius: 5px;
+            border: 2px solid #f1f1f1;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #4f46e5; /* Darker on hover */
+        }
+
+        /* Firefox support */
+        .sidebar {
+            scrollbar-width: thin;
+            scrollbar-color: #6366f1 #f1f1f1;
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #6B5444;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            color: #6b7280;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: #f9fafb;
+            color: #6366f1;
+            border-left-color: #6366f1;
+        }
+
+        .nav-item.active {
+            background: #f9fafb;
+            color: #6366f1;
+            border-left-color: #6366f1;
+            font-weight: 600;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .badge {
+            background: #f59e0b;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .add-product-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            margin: 10px 15px;
+            border-radius: 10px;
+        }
+
+        .sidebar-footer {
+            padding: 20px 0;
+            border-top: 1px solid #e5e7eb;
+            flex-shrink: 0;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 40px;
+        }
+
+        .test-info {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-info h1 {
+            color: #6366f1;
+            margin-bottom: 20px;
+        }
+
+        .test-info ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .test-info li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .test-info li:before {
+            content: "✅ ";
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .warning {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .warning h3 {
+            color: #d97706;
+            margin-bottom: 10px;
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                🌸 SheBalance
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-robot"></i>
+                <span>AI Sakhi Assistant</span>
+                <span class="badge">NEW</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-star"></i>
+                <span>My Skills</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-briefcase"></i>
+                <span>Opportunities</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-utensils"></i>
+                <span>Food Marketplace</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-store"></i>
+                <span>Artisan Marketplace</span>
+            </a>
+            <a href="#" class="nav-item add-product-btn">
+                <i class="fas fa-plus-circle"></i>
+                <span>Add Product</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Community</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-recycle"></i>
+                <span>Resource Circularity</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-clock"></i>
+                <span>Invisible Labor</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-industry"></i>
+                <span>Virtual Factory</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Progress</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="#" class="nav-item">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="test-info">
+            <h1>🎉 Sidebar Scroll Test</h1>
+            
+            <div class="warning">
+                <h3>⚠️ If you can't see the scrollbar:</h3>
+                <p><strong>Clear your browser cache!</strong></p>
+                <ul style="margin-top: 10px;">
+                    <li>Windows: Press <code>Ctrl + Shift + R</code></li>
+                    <li>Or: Press <code>Ctrl + F5</code></li>
+                    <li>Or: Press <code>F12</code> → Right-click refresh → "Empty Cache and Hard Reload"</li>
+                </ul>
+            </div>
+
+            <h2>✅ What You Should See:</h2>
+            <ul>
+                <li>Hover over the sidebar - a scrollbar should appear</li>
+                <li>Scroll down to see all menu items</li>
+                <li>All items from "Dashboard" to "Logout" should be accessible</li>
+                <li>The scrollbar should be 8px wide, gray, with rounded corners</li>
+                <li>Smooth scrolling experience</li>
+            </ul>
+
+            <h2 style="margin-top: 30px;">📋 Test Checklist:</h2>
+            <ul>
+                <li>Can you see "Dashboard" at the top? ✅</li>
+                <li>Can you see "Virtual Factory" when you scroll? ✅</li>
+                <li>Can you see "Progress" when you scroll? ✅</li>
+                <li>Can you see "Settings" when you scroll? ✅</li>
+                <li>Can you see "Logout" at the bottom? ✅</li>
+                <li>Does the scrollbar appear when hovering? ✅</li>
+            </ul>
+
+            <h2 style="margin-top: 30px;">🔧 Technical Details:</h2>
+            <ul>
+                <li>CSS Property: <code>overflow-y: auto</code></li>
+                <li>Scrollbar Width: 8px</li>
+                <li>Scrollbar Color: Gray (#888)</li>
+                <li>Hover Color: Dark Gray (#555)</li>
+                <li>Browser Support: All modern browsers</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillScan Test - LIVE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 36px;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .status.live {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .info-box {
+            background: #f0f7ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .endpoint {
+            background: #1e1e1e;
+            color: #4caf50;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+        
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 10px 10px 0;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #45a049;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        .result.success {
+            border-left: 4px solid #4caf50;
+        }
+        
+        .result.error {
+            border-left: 4px solid #f44336;
+        }
+        
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        
+        .links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .link-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+        }
+        
+        .link-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .link-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 SkillScan AI is LIVE!</h1>
+        <span class="status live">✅ Deployed & Running</span>
+        
+        <div class="info-box">
+            <h3>🚀 Your API Endpoint:</h3>
+            <div class="endpoint">https://5tpjo9oswc.execute-api.us-east-1.amazonaws.com/prod</div>
+            <p style="margin-top: 10px; color: #666;">
+                <strong>Status:</strong> Active and ready to use!<br>
+                <strong>Region:</strong> us-east-1<br>
+                <strong>Model:</strong> Claude 3.5 Sonnet v2
+            </p>
+        </div>
+        
+        <div class="test-section">
+            <h3>🧪 Quick API Test</h3>
+            <p style="margin-bottom: 15px; color: #666;">Test if your backend is responding correctly:</p>
+            <button class="btn-primary" onclick="testAPI()">
+                🔍 Test API Connection
+            </button>
+            <div id="testResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📱 Test Pages</h3>
+            <p style="margin-bottom: 15px; color: #666;">Open these pages to test SkillScan:</p>
+            <div class="links">
+                <a href="http://localhost:8000/skills.html" class="link-card" target="_blank">
+                    <h3>🎨 Skills Page</h3>
+                    <p>Test SkillScan with images</p>
+                </a>
+                <a href="http://localhost:8000/test-connection.html" class="link-card" target="_blank">
+                    <h3>🔌 Connection Test</h3>
+                    <p>Automated connection tests</p>
+                </a>
+                <a href="http://localhost:8000/admin-dashboard.html" class="link-card" target="_blank">
+                    <h3>👨‍💼 Admin Dashboard</h3>
+                    <p>View all analyses</p>
+                </a>
+            </div>
+        </div>
+        
+        <div class="info-box" style="background: #fff3e0; border-left-color: #ff9800;">
+            <h3>📝 Next Steps:</h3>
+            <ol style="margin-left: 20px; line-height: 1.8;">
+                <li>Click "Test API Connection" above to verify backend</li>
+                <li>Open <strong>Skills Page</strong> to test image analysis</li>
+                <li>Select a category (embroidery, cooking, etc.)</li>
+                <li>Upload 1-3 images from "Buyer Images" folder</li>
+                <li>Click "Analyze My Skills"</li>
+                <li>Get AI analysis in 5-10 seconds!</li>
+            </ol>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Deployment Details</h3>
+            <pre>Account ID: 065538523474
+Region: us-east-1
+Stack: SkillScanStack
+DynamoDB: SheBalance-SkillScan
+S3 Bucket: shebalance-skillscan-images-065538523474
+Lambda: SheBalance-SkillScan-Analysis
+Status: ✅ All resources created successfully</pre>
+        </div>
+    </div>
+
+    <script>
+        const API_ENDPOINT = 'https://5tpjo9oswc.execute-api.us-east-1.amazonaws.com/prod';
+        
+        async function testAPI() {
+            const resultDiv = document.getElementById('testResult');
+            resultDiv.innerHTML = '<div class="result"><p>Testing API... <span class="loading"></span></p></div>';
+            
+            try {
+                const response = await fetch(`${API_ENDPOINT}/skillscans`);
+                const data = await response.json();
+                
+                if (response.ok && data.success !== undefined) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            <h4>✅ API is Working!</h4>
+                            <p><strong>Status:</strong> ${response.status} OK</p>
+                            <p><strong>Analyses Found:</strong> ${data.count || 0}</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h4>⚠️ Unexpected Response</h4>
+                            <p><strong>Status:</strong> ${response.status}</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h4>❌ Connection Failed</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p>Check if the API endpoint is correct and accessible.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Auto-test on load
+        window.addEventListener('load', () => {
+            setTimeout(testAPI, 1000);
+        });
+    </script>
+</body>
+</html>

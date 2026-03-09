@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Circularity - Data Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .test-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section h2 {
+            color: #10b981;
+            margin-top: 0;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .status.warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .match-preview {
+            background: #f9fafb;
+            padding: 15px;
+            border-left: 4px solid #10b981;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .match-preview h4 {
+            margin: 0 0 10px 0;
+            color: #1f2937;
+        }
+        .match-preview p {
+            margin: 5px 0;
+            color: #6b7280;
+        }
+        .detail-item {
+            display: inline-block;
+            background: #e5e7eb;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 3px;
+            font-size: 0.9rem;
+        }
+        button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #059669;
+        }
+        button.secondary {
+            background: #6b7280;
+        }
+        button.secondary:hover {
+            background: #4b5563;
+        }
+        pre {
+            background: #1f2937;
+            color: #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+        }
+        .instructions {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e40af;
+        }
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin: 8px 0;
+            color: #1e3a8a;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔍 Resource Circularity - Data Diagnostic Test</h1>
+        <p>Testing if backend returns all 12 matches with detailed information</p>
+    </div>
+
+    <div class="test-section">
+        <h2>📋 Test Instructions</h2>
+        <div class="instructions">
+            <h3>Before Testing:</h3>
+            <ol>
+                <li><strong>Login first:</strong> Go to <a href="http://localhost:8080/login.html" target="_blank">login.html</a></li>
+                <li><strong>Use Rukaiya's credentials:</strong>
+                    <ul>
+                        <li>Email: rukaiya@example.com</li>
+                        <li>Password: password123</li>
+                    </ul>
+                </li>
+                <li><strong>Come back to this page</strong> and click "Test Backend API"</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🧪 Run Test</h2>
+        <button onclick="testBackendAPI()">🚀 Test Backend API</button>
+        <button onclick="clearCache()" class="secondary">🗑️ Clear Browser Cache</button>
+        <button onclick="location.reload(true)" class="secondary">🔄 Hard Refresh Page</button>
+        <div id="testResults"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 Test Results</h2>
+        <div id="results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔧 If Matches Don't Show Detailed Info</h2>
+        <div class="instructions">
+            <h3>Browser Cache Issue - Try These Solutions:</h3>
+            <ol>
+                <li><strong>Hard Refresh:</strong> Press <code>Ctrl + Shift + R</code> (Windows) or <code>Cmd + Shift + R</code> (Mac)</li>
+                <li><strong>Clear Cache:</strong>
+                    <ul>
+                        <li>Press F12 to open Developer Tools</li>
+                        <li>Right-click the refresh button</li>
+                        <li>Select "Empty Cache and Hard Reload"</li>
+                    </ul>
+                </li>
+                <li><strong>Incognito Mode:</strong> Open <code>Ctrl + Shift + N</code> and test there</li>
+                <li><strong>Different Browser:</strong> Try Chrome, Edge, or Firefox</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5000/api';
+
+        function getAuthToken() {
+            return localStorage.getItem('shebalance_token') || localStorage.getItem('token');
+        }
+
+        async function testBackendAPI() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="status warning">⏳ Testing backend API...</div>';
+
+            const token = getAuthToken();
+            if (!token) {
+                resultsDiv.innerHTML = `
+                    <div class="status error">
+                        ❌ No authentication token found!<br>
+                        Please <a href="http://localhost:8080/login.html" target="_blank">login first</a> with Rukaiya's credentials.
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/resource-circularity/find-matches`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        wasteType: 'Fabric Scraps',
+                        quantity: '2.5kg',
+                        location: 'Delhi',
+                        skill: 'Tailoring'
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                displayResults(data);
+
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="status error">
+                        ❌ Test Failed: ${error.message}<br><br>
+                        <strong>Possible Issues:</strong><br>
+                        • Backend server not running (should be on port 5000)<br>
+                        • Not logged in (need valid token)<br>
+                        • Network error
+                    </div>
+                `;
+            }
+        }
+
+        function displayResults(data) {
+            const resultsDiv = document.getElementById('results');
+            
+            if (!data.matches || data.matches.length === 0) {
+                resultsDiv.innerHTML = `
+                    <div class="status error">
+                        ❌ No matches returned from backend
+                    </div>
+                `;
+                return;
+            }
+
+            const totalMatches = data.matches.length;
+            const matchesWithDetails = data.matches.filter(m => m.artisanLocation).length;
+            const matchesWithPhone = data.matches.filter(m => m.artisanPhone).length;
+            const matchesWithRating = data.matches.filter(m => m.artisanRating).length;
+
+            let html = `
+                <div class="status success">
+                    ✅ Backend API Working!<br>
+                    📊 Total Matches: ${totalMatches}<br>
+                    📍 With Location: ${matchesWithDetails}<br>
+                    📞 With Phone: ${matchesWithPhone}<br>
+                    ⭐ With Rating: ${matchesWithRating}
+                </div>
+            `;
+
+            if (matchesWithDetails === totalMatches) {
+                html += `
+                    <div class="status success">
+                        🎉 PERFECT! All ${totalMatches} matches have complete detailed information!<br><br>
+                        <strong>If you don't see this on the main page:</strong><br>
+                        It's a browser cache issue. Press Ctrl+Shift+R to hard refresh.
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="status warning">
+                        ⚠️ Only ${matchesWithDetails} out of ${totalMatches} matches have detailed information.<br>
+                        Backend may need to be restarted.
+                    </div>
+                `;
+            }
+
+            // Show first 3 matches as preview
+            html += '<h3>📋 First 3 Matches Preview:</h3>';
+            data.matches.slice(0, 3).forEach((match, index) => {
+                html += `
+                    <div class="match-preview">
+                        <h4>Match ${index + 1}: ${match.targetSkill} (${match.matchScore}%)</h4>
+                        <p><strong>Usage:</strong> ${match.usage.substring(0, 150)}...</p>
+                        <p><strong>Savings:</strong> ₹${match.savings.toLocaleString()}</p>
+                        ${match.artisanName ? `<span class="detail-item">🏢 ${match.artisanName}</span>` : ''}
+                        ${match.artisanLocation ? `<span class="detail-item">📍 ${match.artisanLocation}</span>` : ''}
+                        ${match.artisanPhone ? `<span class="detail-item">📞 ${match.artisanPhone}</span>` : ''}
+                        ${match.artisanRating ? `<span class="detail-item">⭐ ${match.artisanRating}/5.0</span>` : ''}
+                        ${match.quantityNeeded ? `<span class="detail-item">📦 ${match.quantityNeeded}</span>` : ''}
+                        ${match.urgency ? `<span class="detail-item">⏰ ${match.urgency}</span>` : ''}
+                    </div>
+                `;
+            });
+
+            // Show raw JSON
+            html += `
+                <h3>🔍 Raw API Response (First Match):</h3>
+                <pre>${JSON.stringify(data.matches[0], null, 2)}</pre>
+            `;
+
+            resultsDiv.innerHTML = html;
+        }
+
+        function clearCache() {
+            if (confirm('This will clear localStorage and reload the page. Continue?')) {
+                localStorage.clear();
+                location.reload(true);
+            }
+        }
+
+        // Auto-test on page load if logged in
+        window.addEventListener('DOMContentLoaded', () => {
+            const token = getAuthToken();
+            if (token) {
+                document.getElementById('results').innerHTML = `
+                    <div class="status success">
+                        ✅ Authentication token found!<br>
+                        Click "Test Backend API" to run the test.
+                    </div>
+                `;
+            } else {
+                document.getElementById('results').innerHTML = `
+                    <div class="status warning">
+                        ⚠️ Not logged in yet.<br>
+                        Please <a href="http://localhost:8080/login.html" target="_blank">login first</a>.
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

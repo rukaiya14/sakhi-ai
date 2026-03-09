@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Voice Command - All Sidebar Items</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        .success { background: #e8f5e9; color: #4caf50; }
+        .error { background: #ffebee; color: #f44336; }
+        .info { background: #e3f2fd; color: #2196f3; }
+        button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .commands {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        .command-item {
+            padding: 8px;
+            margin: 5px 0;
+            background: white;
+            border-left: 4px solid #667eea;
+            padding-left: 15px;
+        }
+        .command-item strong {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-card">
+        <h1>🎤 Voice Command Test - All Sidebar Items</h1>
+        <p>Test voice recognition for ALL 14 sidebar menu items</p>
+        
+        <div class="status info" id="status">
+            Click "Start Voice Test" and speak one of the commands below
+        </div>
+        
+        <button onclick="startVoiceTest()">🎤 Start Voice Test</button>
+        <button onclick="location.href='SHE-BALANCE-main/SHE-Balnce-main/dashboard.html'">🏠 Go to Dashboard</button>
+        
+        <div class="commands">
+            <h3>✅ Supported Commands (English & Hindi):</h3>
+            <div class="command-item"><strong>Dashboard:</strong> "dashboard", "home", "डैशबोर्ड", "होम"</div>
+            <div class="command-item"><strong>AI Sakhi:</strong> "ai sakhi", "assistant", "help", "एआई सखी", "मदद"</div>
+            <div class="command-item"><strong>Skills:</strong> "skills", "my skills", "कौशल", "हुनर"</div>
+            <div class="command-item"><strong>Opportunities:</strong> "opportunities", "jobs", "work", "अवसर", "नौकरी"</div>
+            <div class="command-item"><strong>Food:</strong> "food marketplace", "खाना", "बाजार"</div>
+            <div class="command-item"><strong>Artisan:</strong> "artisan marketplace", "कारीगर"</div>
+            <div class="command-item"><strong>Add Product:</strong> "add product", "upload", "जोड़ें उत्पाद"</div>
+            <div class="command-item"><strong>Community:</strong> "community", "group", "समुदाय"</div>
+            <div class="command-item"><strong>Resource:</strong> "resource circularity", "recycle", "संसाधन"</div>
+            <div class="command-item"><strong>Invisible Labor:</strong> "invisible labor", "अदृश्य श्रम"</div>
+            <div class="command-item"><strong>Virtual Factory:</strong> "virtual factory", "वर्चुअल फैक्ट्री"</div>
+            <div class="command-item"><strong>Progress:</strong> "progress", "growth", "प्रगति"</div>
+            <div class="command-item"><strong>Settings:</strong> "settings", "सेटिंग्स"</div>
+            <div class="command-item"><strong>Earnings:</strong> "earnings", "income", "show me earnings", "कमाई", "शो मी अर्निंग्स"</div>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        function startVoiceTest() {
+            const statusEl = document.getElementById('status');
+            const resultsEl = document.getElementById('results');
+            
+            // Check browser support
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            if (!SpeechRecognition) {
+                statusEl.className = 'status error';
+                statusEl.textContent = '❌ Speech Recognition not supported. Use Chrome or Edge.';
+                return;
+            }
+            
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'hi-IN'; // Hindi
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 3;
+            
+            statusEl.className = 'status info';
+            statusEl.textContent = '🎤 Listening... Speak now!';
+            
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                const confidence = event.results[0][0].confidence;
+                
+                console.log('📝 Heard:', transcript);
+                console.log('📊 Confidence:', confidence);
+                
+                // Detect intent
+                const intent = detectIntent(transcript);
+                
+                if (intent) {
+                    statusEl.className = 'status success';
+                    statusEl.innerHTML = `✅ SUCCESS!<br>Heard: "${transcript}"<br>Confidence: ${(confidence * 100).toFixed(1)}%<br>Intent: ${intent}`;
+                    
+                    resultsEl.innerHTML = `
+                        <div class="test-card" style="background: #e8f5e9;">
+                            <h3>✅ Voice Command Recognized!</h3>
+                            <p><strong>Transcript:</strong> ${transcript}</p>
+                            <p><strong>Confidence:</strong> ${(confidence * 100).toFixed(1)}%</p>
+                            <p><strong>Detected Intent:</strong> ${intent}</p>
+                            <p><strong>Would navigate to:</strong> ${getPageForIntent(intent)}</p>
+                        </div>
+                    `;
+                } else {
+                    statusEl.className = 'status error';
+                    statusEl.innerHTML = `❌ NOT RECOGNIZED<br>Heard: "${transcript}"<br>Confidence: ${(confidence * 100).toFixed(1)}%<br>No matching command found`;
+                    
+                    resultsEl.innerHTML = `
+                        <div class="test-card" style="background: #ffebee;">
+                            <h3>❌ Command Not Recognized</h3>
+                            <p><strong>Transcript:</strong> ${transcript}</p>
+                            <p>Please try one of the supported commands above</p>
+                        </div>
+                    `;
+                }
+            };
+            
+            recognition.onerror = (event) => {
+                statusEl.className = 'status error';
+                statusEl.textContent = `❌ Error: ${event.error}`;
+            };
+            
+            recognition.onend = () => {
+                console.log('🛑 Recognition ended');
+            };
+            
+            recognition.start();
+        }
+        
+        function detectIntent(transcript) {
+            const lower = transcript.toLowerCase();
+            
+            if (lower.includes('dashboard') || lower.includes('home') || lower.includes('डैशबोर्ड') || lower.includes('होम')) return 'dashboard';
+            if (lower.includes('ai') || lower.includes('sakhi') || lower.includes('assistant') || lower.includes('help') || lower.includes('एआई') || lower.includes('सखी') || lower.includes('मदद')) return 'aisakhi';
+            if (lower.includes('skill') || lower.includes('कौशल') || lower.includes('हुनर')) return 'skills';
+            if (lower.includes('opportunit') || lower.includes('job') || lower.includes('work') || lower.includes('अवसर') || lower.includes('नौकरी')) return 'opportunities';
+            if (lower.includes('food') || lower.includes('खाना') || lower.includes('बाजार')) return 'food';
+            if (lower.includes('artisan') || lower.includes('craft') || lower.includes('कारीगर')) return 'artisan';
+            if (lower.includes('add') || lower.includes('product') || lower.includes('जोड़ें') || lower.includes('उत्पाद')) return 'addproduct';
+            if (lower.includes('community') || lower.includes('group') || lower.includes('समुदाय')) return 'community';
+            if (lower.includes('resource') || lower.includes('recycle') || lower.includes('संसाधन')) return 'resource';
+            if (lower.includes('invisible') || lower.includes('labor') || lower.includes('अदृश्य') || lower.includes('श्रम')) return 'invisible';
+            if (lower.includes('virtual') || lower.includes('factory') || lower.includes('वर्चुअल') || lower.includes('फैक्ट्री')) return 'virtual';
+            if (lower.includes('progress') || lower.includes('growth') || lower.includes('प्रगति')) return 'progress';
+            if (lower.includes('setting') || lower.includes('सेटिंग')) return 'settings';
+            if (lower.includes('earning') || lower.includes('income') || lower.includes('money') || lower.includes('कमाई') || lower.includes('अर्निंग')) return 'earnings';
+            
+            return null;
+        }
+        
+        function getPageForIntent(intent) {
+            const pages = {
+                'dashboard': 'dashboard.html',
+                'aisakhi': 'AI Sakhi Panel (opens on dashboard)',
+                'skills': 'skills.html',
+                'opportunities': 'opportunities.html',
+                'food': 'food-marketplace.html',
+                'artisan': 'artisan-marketplace.html',
+                'addproduct': 'artisan-marketplace.html#add-product',
+                'community': 'community.html',
+                'resource': 'resource-circularity.html',
+                'invisible': 'invisible-labor.html',
+                'virtual': 'virtual-factory.html',
+                'progress': 'progress.html',
+                'settings': 'settings.html',
+                'earnings': 'Scroll to earnings section on dashboard'
+            };
+            return pages[intent] || 'Unknown';
+        }
+    </script>
+</body>
+</html>

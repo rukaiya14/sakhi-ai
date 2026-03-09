@@ -1,0 +1,13 @@
+{
+  "name": "ai-sakhi-intent-lambda",
+  "version": "1.0.0",
+  "description": "AI Sakhi Intent Detection Lambda",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["ai", "intent", "nlp"],
+  "author": "SHE-BALANCE",
+  "license": "MIT",
+  "dependencies": {}
+}

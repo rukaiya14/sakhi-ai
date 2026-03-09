@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 50px;
+            text-align: center;
+        }
+        button {
+            padding: 20px 40px;
+            font-size: 18px;
+            cursor: pointer;
+            background: #5D4037;
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+        button:hover {
+            background: #CC5500;
+        }
+        #status {
+            margin: 20px 0;
+            font-size: 16px;
+            min-height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Voice Assistant Test</h1>
+    <div id="status">Click button to test</div>
+    <button onclick="testVoice()">Test Voice</button>
+    
+    <script>
+        function testVoice() {
+            const status = document.getElementById('status');
+            status.textContent = 'Testing...';
+            
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                status.textContent = '❌ Speech Recognition not supported in this browser';
+                return;
+            }
+            
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            
+            recognition.onstart = () => {
+                status.textContent = '🎤 Listening... Say something!';
+            };
+            
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                status.textContent = `✅ You said: "${transcript}"`;
+                
+                // Speak back
+                const utterance = new SpeechSynthesisUtterance(`You said ${transcript}`);
+                window.speechSynthesis.speak(utterance);
+            };
+            
+            recognition.onerror = (event) => {
+                status.textContent = `❌ Error: ${event.error}`;
+            };
+            
+            recognition.start();
+        }
+    </script>
+</body>
+</html>

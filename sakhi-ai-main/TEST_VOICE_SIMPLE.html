@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Voice Test</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .voice-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+            margin: 20px 0;
+            transition: transform 0.2s;
+        }
+        .voice-btn:hover {
+            transform: scale(1.05);
+        }
+        .voice-btn:active {
+            transform: scale(0.95);
+        }
+        #status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            min-height: 50px;
+        }
+        .listening {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 2px solid #bee5eb;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .commands {
+            text-align: left;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .commands h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        .commands ul {
+            list-style: none;
+            padding: 0;
+        }
+        .commands li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .commands li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1><i class="fas fa-microphone"></i> Voice Command Test</h1>
+        <p>Click the button and speak a command in Hindi or English</p>
+        
+        <button class="voice-btn" onclick="startVoice()" id="voiceBtn">
+            <i class="fas fa-microphone"></i> Start Listening
+        </button>
+        
+        <div id="status"></div>
+        
+        <div class="commands">
+            <h3>Try These Commands:</h3>
+            <ul>
+                <li>🇬🇧 <strong>English:</strong> "Show earnings" or "Find jobs"</li>
+                <li>🇮🇳 <strong>Hindi:</strong> "कमाई दिखाओ" or "काम चाहिए"</li>
+                <li>🇮🇳 <strong>Tamil:</strong> "வருமானம் காட்டு" or "வேலை வேண்டும்"</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let recognition = null;
+        
+        function startVoice() {
+            const statusDiv = document.getElementById('status');
+            const btn = document.getElementById('voiceBtn');
+            
+            // Check browser support
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            if (!SpeechRecognition) {
+                statusDiv.className = 'error';
+                statusDiv.innerHTML = `
+                    <i class="fas fa-exclamation-circle"></i>
+                    <strong>Not Supported</strong><br>
+                    Please use Google Chrome or Microsoft Edge
+                `;
+                return;
+            }
+            
+            try {
+                recognition = new SpeechRecognition();
+                recognition.lang = 'hi-IN'; // Hindi
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.maxAlternatives = 3;
+                
+                statusDiv.className = 'listening pulse';
+                statusDiv.innerHTML = `
+                    <i class="fas fa-microphone" style="font-size: 32px;"></i><br>
+                    <strong>Listening...</strong><br>
+                    Speak now in Hindi or English
+                `;
+                btn.disabled = true;
+                
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    const confidence = event.results[0][0].confidence;
+                    
+                    console.log('Heard:', transcript);
+                    console.log('Confidence:', confidence);
+                    
+                    // Detect intent
+                    const intent = detectIntent(transcript);
+                    
+                    statusDiv.className = 'success';
+                    statusDiv.innerHTML = `
+                        <i class="fas fa-check-circle" style="font-size: 32px; color: #28a745;"></i><br>
+                        <strong>You said:</strong> "${transcript}"<br>
+                        <strong>Confidence:</strong> ${(confidence * 100).toFixed(1)}%<br>
+                        <strong>Detected:</strong> ${intent || 'Unknown command'}
+                    `;
+                    
+                    if (intent) {
+                        setTimeout(() => {
+                            statusDiv.innerHTML += '<br><br><strong>✅ Would navigate to: ' + intent + '</strong>';
+                        }, 1000);
+                    }
+                    
+                    btn.disabled = false;
+                };
+                
+                recognition.onerror = (event) => {
+                    console.error('Error:', event.error);
+                    
+                    let errorMsg = 'An error occurred';
+                    if (event.error === 'no-speech') {
+                        errorMsg = 'No speech detected. Please try again.';
+                    } else if (event.error === 'not-allowed') {
+                        errorMsg = 'Microphone access denied. Please allow microphone access in browser settings.';
+                    } else if (event.error === 'network') {
+                        errorMsg = 'Network error. Please check your connection.';
+                    }
+                    
+                    statusDiv.className = 'error';
+                    statusDiv.innerHTML = `
+                        <i class="fas fa-exclamation-circle"></i><br>
+                        <strong>Error:</strong> ${errorMsg}
+                    `;
+                    btn.disabled = false;
+                };
+                
+                recognition.onend = () => {
+                    console.log('Recognition ended');
+                    btn.disabled = false;
+                };
+                
+                recognition.start();
+                console.log('Started listening...');
+                
+            } catch (error) {
+                console.error('Exception:', error);
+                statusDiv.className = 'error';
+                statusDiv.innerHTML = `
+                    <i class="fas fa-exclamation-circle"></i><br>
+                    <strong>Error:</strong> ${error.message}
+                `;
+                btn.disabled = false;
+            }
+        }
+        
+        function detectIntent(transcript) {
+            const lower = transcript.toLowerCase();
+            
+            // Earnings
+            if (lower.includes('earning') || lower.includes('income') || lower.includes('money') || 
+                lower.includes('कमाई') || lower.includes('வருமானம்') || lower.includes('ఆదాయం')) {
+                return 'Earnings Page';
+            }
+            
+            // Jobs/Opportunities
+            if (lower.includes('job') || lower.includes('work') || lower.includes('opportunit') ||
+                lower.includes('काम') || lower.includes('வேலை') || lower.includes('పని')) {
+                return 'Opportunities Page';
+            }
+            
+            // Food
+            if (lower.includes('food') || lower.includes('marketplace') ||
+                lower.includes('खाना') || lower.includes('बाजार') || lower.includes('உணவு')) {
+                return 'Food Marketplace';
+            }
+            
+            // Progress
+            if (lower.includes('progress') || lower.includes('growth') ||
+                lower.includes('प्रगति') || lower.includes('முன்னேற்றம்')) {
+                return 'Progress Page';
+            }
+            
+            // Skills
+            if (lower.includes('skill') || lower.includes('learn') ||
+                lower.includes('कौशल') || lower.includes('सीखना') || lower.includes('திறன்')) {
+                return 'Skills Page';
+            }
+            
+            return null;
+        }
+    </script>
+</body>
+</html>

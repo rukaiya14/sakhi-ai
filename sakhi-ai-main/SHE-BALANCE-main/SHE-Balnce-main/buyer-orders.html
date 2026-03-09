@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - SheBalance</title>
+    <link rel="stylesheet" href="buyer-orders.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span>SheBalance</span>
+                <span class="buyer-badge">Buyer Portal</span>
+            </div>
+            <div class="nav-menu">
+                <a href="buyer-dashboard.html" class="nav-link">Browse Artisans</a>
+                <a href="buyer-orders.html" class="nav-link active">My Orders</a>
+                <a href="buyer-favorites.html" class="nav-link">Favorites</a>
+                <a href="index.html" class="nav-link">Home</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" onclick="toggleNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <div class="user-profile" onclick="toggleUserMenu()">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="user-name" id="userName">Loading...</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Menu Dropdown -->
+    <div id="userMenu" class="user-menu">
+        <div class="menu-item" onclick="window.location.href='#profile'">
+            <i class="fas fa-user-circle"></i>
+            <span>My Profile</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='#settings'">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </div>
+        <div class="menu-item" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="orders-container">
+        <div class="orders-header">
+            <h1>My Orders</h1>
+            <p>Track and manage your orders</p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterOrders('all')">
+                All Orders <span class="tab-count" id="allCount">0</span>
+            </button>
+            <button class="filter-tab" onclick="filterOrders('pending')">
+                Pending <span class="tab-count" id="pendingCount">0</span>
+            </button>
+            <button class="filter-tab" onclick="filterOrders('in-progress')">
+                In Progress <span class="tab-count" id="progressCount">0</span>
+            </button>
+            <button class="filter-tab" onclick="filterOrders('completed')">
+                Completed <span class="tab-count" id="completedCount">0</span>
+            </button>
+            <button class="filter-tab" onclick="filterOrders('cancelled')">
+                Cancelled <span class="tab-count" id="cancelledCount">0</span>
+            </button>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-section">
+            <div class="search-input-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search orders by ID, artisan name, or items..." id="searchInput">
+            </div>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="orders-table-container">
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Date</th>
+                        <th>Artisan</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                    <!-- Orders will be dynamically loaded -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <i class="fas fa-shopping-bag"></i>
+            <h3>No orders found</h3>
+            <p>Start browsing artisans to place your first order</p>
+            <a href="buyer-dashboard.html" class="btn-primary">Browse Artisans</a>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Order Details</h2>
+                <button class="modal-close" onclick="closeOrderModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="orderDetailsContent">
+                <!-- Order details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="buyer-orders.js"></script>
+</body>
+</html>

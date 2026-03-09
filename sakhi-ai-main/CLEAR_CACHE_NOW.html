@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clear Cache - SheBalance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        
+        .status {
+            font-size: 18px;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f0f0f0;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 2px solid #bee5eb;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .steps {
+            text-align: left;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .steps li {
+            margin: 10px 0;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🔄</div>
+        <h1>Update Rukaiya's Name</h1>
+        
+        <div class="status info" id="status">
+            <strong>Current Issue:</strong><br>
+            Dashboard shows "Rukaiya Ghadiyali" but database has "Rukaiya Khan"
+        </div>
+        
+        <div class="steps">
+            <strong>What this will do:</strong>
+            <ol>
+                <li>Clear your browser's cached login data</li>
+                <li>Redirect you to login page</li>
+                <li>After login, you'll see "Rukaiya Khan" ✅</li>
+            </ol>
+        </div>
+        
+        <button onclick="clearCacheAndRedirect()">
+            🗑️ Clear Cache & Go to Login
+        </button>
+        
+        <button onclick="manualUpdate()">
+            ⚡ Quick Fix (Update Now)
+        </button>
+        
+        <div id="result"></div>
+    </div>
+    
+    <script>
+        function clearCacheAndRedirect() {
+            const resultDiv = document.getElementById('result');
+            const statusDiv = document.getElementById('status');
+            
+            try {
+                // Clear all localStorage
+                localStorage.clear();
+                
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = '<strong>✅ Cache Cleared!</strong><br>Redirecting to login...';
+                
+                // Redirect to login after 2 seconds
+                setTimeout(() => {
+                    window.location.href = 'http://localhost:8080/login.html';
+                }, 2000);
+                
+            } catch (error) {
+                statusDiv.className = 'status';
+                statusDiv.style.background = '#f8d7da';
+                statusDiv.style.color = '#721c24';
+                statusDiv.innerHTML = '<strong>❌ Error:</strong><br>' + error.message;
+            }
+        }
+        
+        function manualUpdate() {
+            const resultDiv = document.getElementById('result');
+            const statusDiv = document.getElementById('status');
+            
+            try {
+                // Get current user data
+                const userDataStr = localStorage.getItem('shebalance_user');
+                
+                if (!userDataStr) {
+                    statusDiv.className = 'status';
+                    statusDiv.style.background = '#fff3cd';
+                    statusDiv.style.color = '#856404';
+                    statusDiv.innerHTML = '<strong>⚠️ No user data found!</strong><br>Please use "Clear Cache & Go to Login" instead.';
+                    return;
+                }
+                
+                const userData = JSON.parse(userDataStr);
+                
+                // Update the name
+                userData.name = 'Rukaiya Khan';
+                userData.fullName = 'Rukaiya Khan';
+                
+                // Save back to localStorage
+                localStorage.setItem('shebalance_user', JSON.stringify(userData));
+                
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = '<strong>✅ Name Updated!</strong><br>Redirecting to dashboard...';
+                
+                // Redirect to dashboard after 2 seconds
+                setTimeout(() => {
+                    window.location.href = 'http://localhost:8080/dashboard.html';
+                }, 2000);
+                
+            } catch (error) {
+                statusDiv.className = 'status';
+                statusDiv.style.background = '#f8d7da';
+                statusDiv.style.color = '#721c24';
+                statusDiv.innerHTML = '<strong>❌ Error:</strong><br>' + error.message;
+            }
+        }
+        
+        // Check if user is logged in
+        window.addEventListener('DOMContentLoaded', () => {
+            const userData = localStorage.getItem('shebalance_user');
+            const statusDiv = document.getElementById('status');
+            
+            if (userData) {
+                const user = JSON.parse(userData);
+                statusDiv.innerHTML = `
+                    <strong>Current User:</strong><br>
+                    Name: ${user.name || user.fullName || 'Unknown'}<br>
+                    Email: ${user.email || 'Unknown'}<br>
+                    <br>
+                    <small>Choose an option below to update to "Rukaiya Khan"</small>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+{
+  "TableName": "shebalance-reminders",
+  "KeySchema": [
+    {
+      "AttributeName": "orderId",
+      "KeyType": "HASH"
+    }
+  ],
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "orderId",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "artisanId",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "sentAt",
+      "AttributeType": "S"
+    }
+  ],
+  "GlobalSecondaryIndexes": [
+    {
+      "IndexName": "ArtisanIndex",
+      "KeySchema": [
+        {
+          "AttributeName": "artisanId",
+          "KeyType": "HASH"
+        },
+        {
+          "AttributeName": "sentAt",
+          "KeyType": "RANGE"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 5,
+        "WriteCapacityUnits": 5
+      }
+    }
+  ],
+  "BillingMode": "PROVISIONED",
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
+  },
+  "Tags": [
+    {
+      "Key": "Project",
+      "Value": "SheBalance"
+    },
+    {
+      "Key": "Purpose",
+      "Value": "Order reminder tracking"
+    }
+  ]
+}

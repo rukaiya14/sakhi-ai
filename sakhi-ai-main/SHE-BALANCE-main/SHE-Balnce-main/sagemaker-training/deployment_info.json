@@ -1,0 +1,8 @@
+{
+  "model_name": "shebalance-skill-classifier-model",
+  "endpoint_name": "shebalance-skill-classifier",
+  "endpoint_config": "shebalance-skill-classifier-config",
+  "model_data": "s3://shebalance-sagemaker-065538523474/skillscan/output/shebalance-skillscan-working/output/model.tar.gz",
+  "status": "deployed",
+  "timestamp": "2026-03-01 23:43:05"
+}

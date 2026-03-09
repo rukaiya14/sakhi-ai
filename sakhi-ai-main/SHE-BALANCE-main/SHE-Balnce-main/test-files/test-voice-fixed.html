@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Command Test - AWS Backend</title>
+    <link rel="stylesheet" href="voice-command.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 5px;
+        }
+        
+        .status-badge.success {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .status-badge.warning {
+            background: #FF9800;
+            color: white;
+        }
+        
+        .voice-btn-large {
+            display: block;
+            margin: 30px auto;
+            padding: 30px 60px;
+            font-size: 24px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .voice-btn-large:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+        }
+        
+        .voice-btn-large.recording {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        .voice-btn-large.processing {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            opacity: 0.7;
+        }
+        
+        .status-display {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            min-height: 60px;
+        }
+        
+        .status-display h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        
+        .status-display p {
+            margin: 5px 0;
+            color: #666;
+        }
+        
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .command-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .command-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .command-card h4 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+        
+        .command-card p {
+            margin: 5px 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .logs-container {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid #00ff00;
+            padding-left: 10px;
+        }
+        
+        .log-entry.error {
+            border-left-color: #ff0000;
+            color: #ff6b6b;
+        }
+        
+        .log-entry.success {
+            border-left-color: #4CAF50;
+            color: #4CAF50;
+        }
+        
+        .log-entry.info {
+            border-left-color: #2196F3;
+            color: #64B5F6;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎤 Voice Command Test</h1>
+        <p class="subtitle">AWS Transcribe + Translate + Polly Integration</p>
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+            <span class="status-badge success">✅ AWS Backend</span>
+            <span class="status-badge success">✅ Auto Language Detection</span>
+            <span class="status-badge success">✅ 9+ Languages</span>
+        </div>
+        
+        <button class="voice-btn-large" id="voiceBtn" onclick="toggleVoiceCommand()">
+            <i class="fas fa-microphone"></i>
+            <span id="btnText">Click to Speak</span>
+        </button>
+        
+        <div class="status-display" id="statusDisplay">
+            <h3>Ready to listen</h3>
+            <p>Click the button and speak in any language</p>
+        </div>
+        
+        <h3 style="margin-top: 30px;">🗣️ Try These Commands:</h3>
+        <div class="commands-grid">
+            <div class="command-card" onclick="simulateCommand('dashboard')">
+                <h4>📊 Dashboard</h4>
+                <p>English: "Dashboard"</p>
+                <p>Hindi: "डैशबोर्ड"</p>
+                <p>Bengali: "ড্যাশবোর্ড"</p>
+            </div>
+            
+            <div class="command-card" onclick="simulateCommand('ai-sakhi')">
+                <h4>🤖 AI Sakhi</h4>
+                <p>English: "AI Sakhi"</p>
+                <p>Hindi: "एआई सखी"</p>
+                <p>Tamil: "ஏஐ சகி"</p>
+            </div>
+            
+            <div class="command-card" onclick="simulateCommand('skills')">
+                <h4>⭐ Skills</h4>
+                <p>English: "Skills"</p>
+                <p>Hindi: "कौशल"</p>
+                <p>Telugu: "నైపుణ్యాలు"</p>
+            </div>
+            
+            <div class="command-card" onclick="simulateCommand('opportunities')">
+                <h4>💼 Opportunities</h4>
+                <p>English: "Opportunities"</p>
+                <p>Hindi: "अवसर"</p>
+                <p>Marathi: "संधी"</p>
+            </div>
+        </div>
+        
+        <h3>📋 System Logs:</h3>
+        <div class="logs-container" id="logsContainer">
+            <div class="log-entry info">System initialized. Ready to process voice commands.</div>
+        </div>
+    </div>
+    
+    <script>
+        let isRecording = false;
+        let mediaRecorder = null;
+        let audioChunks = [];
+        const API_URL = 'http://localhost:5000/api/voice-command';
+        
+        // Add log entry
+        function addLog(message, type = 'info') {
+            const logsContainer = document.getElementById('logsContainer');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${type}`;
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logsContainer.appendChild(logEntry);
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+        }
+        
+        // Update status display
+        function updateStatus(title, message) {
+            const statusDisplay = document.getElementById('statusDisplay');
+            statusDisplay.innerHTML = `<h3>${title}</h3><p>${message}</p>`;
+        }
+        
+        // Toggle voice command
+        async function toggleVoiceCommand() {
+            if (isRecording) {
+                await stopRecording();
+            } else {
+                await startRecording();
+            }
+        }
+        
+        // Start recording
+        async function startRecording() {
+            try {
+                addLog('Requesting microphone access...', 'info');
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        audioChunks.push(event.data);
+                    }
+                };
+                
+                mediaRecorder.start();
+                isRecording = true;
+                
+                // Update UI
+                const btn = document.getElementById('voiceBtn');
+                const btnText = document.getElementById('btnText');
+                btn.classList.add('recording');
+                btnText.textContent = 'Recording... (Click to stop)';
+                
+                updateStatus('🎤 Recording', 'Speak your command now...');
+                addLog('Recording started. Speak now!', 'success');
+                
+            } catch (error) {
+                addLog(`Error: ${error.message}`, 'error');
+                updateStatus('❌ Error', 'Failed to access microphone');
+            }
+        }
+        
+        // Stop recording
+        async function stopRecording() {
+            return new Promise((resolve) => {
+                if (!mediaRecorder || !isRecording) {
+                    resolve();
+                    return;
+                }
+                
+                mediaRecorder.onstop = async () => {
+                    // Stop all tracks
+                    mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                    
+                    // Create audio blob
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    
+                    isRecording = false;
+                    
+                    // Update UI
+                    const btn = document.getElementById('voiceBtn');
+                    const btnText = document.getElementById('btnText');
+                    btn.classList.remove('recording');
+                    btn.classList.add('processing');
+                    btnText.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                    
+                    updateStatus('⚙️ Processing', 'Sending to AWS for analysis...');
+                    addLog('Recording stopped. Processing audio...', 'info');
+                    
+                    // Process the audio
+                    await processAudio(audioBlob);
+                    
+                    // Reset UI
+                    btn.classList.remove('processing');
+                    btnText.innerHTML = '<i class="fas fa-microphone"></i> Click to Speak';
+                    
+                    resolve();
+                };
+                
+                mediaRecorder.stop();
+            });
+        }
+        
+        // Process audio with AWS backend
+        async function processAudio(audioBlob) {
+            try {
+                addLog('Converting audio to base64...', 'info');
+                const base64Audio = await blobToBase64(audioBlob);
+                
+                addLog('Sending to AWS Transcribe...', 'info');
+                updateStatus('🌍 AWS Processing', 'Detecting language and transcribing...');
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('shebalance_token') || 'test-token'}`
+                    },
+                    body: JSON.stringify({
+                        action: 'process-voice-command',
+                        audio: base64Audio
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                addLog(`✅ Transcription: "${data.transcription}"`, 'success');
+                addLog(`🌍 Detected Language: ${data.detectedLanguage}`, 'success');
+                
+                if (data.translation && data.translation !== data.transcription) {
+                    addLog(`🔄 Translation: "${data.translation}"`, 'info');
+                }
+                
+                if (data.intent && data.intent.action === 'navigate') {
+                    addLog(`🎯 Command matched: ${data.intent.target}`, 'success');
+                    updateStatus('✅ Success!', `Navigating to ${data.intent.target}...`);
+                    
+                    // Navigate after a short delay
+                    setTimeout(() => {
+                        navigateToPage(data.intent.target);
+                    }, 1500);
+                } else {
+                    addLog('⚠️ No navigation command detected', 'error');
+                    updateStatus('⚠️ Not Recognized', 'Try: Dashboard, AI Sakhi, Skills');
+                }
+                
+            } catch (error) {
+                addLog(`❌ Error: ${error.message}`, 'error');
+                updateStatus('❌ Error', error.message);
+            }
+        }
+        
+        // Navigate to page
+        function navigateToPage(target) {
+            const pageMap = {
+                'dashboard': 'dashboard.html',
+                'ai_sakhi': 'dashboard.html#ai-sakhi',
+                'skills': 'skills.html',
+                'opportunities': 'opportunities.html',
+                'food': 'food-marketplace.html',
+                'community': 'community.html',
+                'progress': 'progress.html'
+            };
+            
+            const url = pageMap[target];
+            if (url) {
+                addLog(`➡️ Navigating to: ${url}`, 'success');
+                window.location.href = url;
+            }
+        }
+        
+        // Convert blob to base64
+        function blobToBase64(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const base64 = reader.result.split(',')[1];
+                    resolve(base64);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        }
+        
+        // Simulate command (for testing without voice)
+        function simulateCommand(command) {
+            addLog(`Simulating command: ${command}`, 'info');
+            updateStatus('🎯 Simulated Command', `Navigating to ${command}...`);
+            setTimeout(() => {
+                navigateToPage(command);
+            }, 1000);
+        }
+        
+        // Initialize
+        addLog('Voice command system ready. Click button to start.', 'success');
+    </script>
+</body>
+</html>

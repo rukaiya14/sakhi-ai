@@ -1,0 +1,604 @@
+/**
+ * Growth Roadmap Component Styles
+ * Beautiful, modern roadmap for artisan skill development and career growth
+ */
+
+/* ==================== Container ==================== */
+.growth-roadmap-container {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 20px;
+    padding: 40px;
+    margin: 30px 0;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.growth-roadmap-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+/* ==================== Header ==================== */
+.roadmap-header {
+    text-align: center;
+    margin-bottom: 50px;
+    position: relative;
+    z-index: 1;
+}
+
+.roadmap-header h2 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.roadmap-header p {
+    font-size: 18px;
+    color: #7f8c8d;
+    margin: 0;
+}
+
+/* ==================== Progress Overview ==================== */
+.roadmap-progress-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 50px;
+}
+
+.progress-stat {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.progress-stat:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.progress-stat-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+}
+
+.progress-stat-icon.beginner {
+    background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+}
+
+.progress-stat-icon.intermediate {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+.progress-stat-icon.advanced {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.progress-stat-icon.expert {
+    background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+}
+
+.progress-stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.progress-stat-label {
+    font-size: 14px;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ==================== Roadmap Timeline ==================== */
+.roadmap-timeline {
+    position: relative;
+    padding: 40px 0;
+}
+
+.roadmap-timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+/* ==================== Milestone ==================== */
+.roadmap-milestone {
+    position: relative;
+    margin-bottom: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.roadmap-milestone:nth-child(odd) {
+    flex-direction: row;
+}
+
+.roadmap-milestone:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.milestone-content {
+    width: calc(50% - 40px);
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.milestone-content:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.roadmap-milestone:nth-child(odd) .milestone-content {
+    margin-right: 40px;
+}
+
+.roadmap-milestone:nth-child(even) .milestone-content {
+    margin-left: 40px;
+}
+
+/* Arrow pointing to timeline */
+.roadmap-milestone:nth-child(odd) .milestone-content::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 20px solid white;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+}
+
+.roadmap-milestone:nth-child(even) .milestone-content::before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-right: 20px solid white;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+}
+
+/* ==================== Milestone Icon ==================== */
+.milestone-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border: 5px solid white;
+}
+
+.milestone-icon.completed {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    animation: pulse 2s infinite;
+}
+
+.milestone-icon.current {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    animation: glow 2s infinite;
+}
+
+.milestone-icon.upcoming {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    opacity: 0.7;
+}
+
+.milestone-icon.locked {
+    background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
+    opacity: 0.5;
+}
+
+/* ==================== Milestone Content ==================== */
+.milestone-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.milestone-level {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.milestone-status {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+
+.milestone-status.completed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.milestone-status.current {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.milestone-status.upcoming {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.milestone-status.locked {
+    background: #e2e3e5;
+    color: #6c757d;
+}
+
+.milestone-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.milestone-description {
+    font-size: 15px;
+    color: #7f8c8d;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* ==================== Skills List ==================== */
+.milestone-skills {
+    margin-bottom: 20px;
+}
+
+.milestone-skills h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.skill-tag {
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    color: #2c3e50;
+    border: 1px solid #e0e6ed;
+    transition: all 0.3s ease;
+}
+
+.skill-tag:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: transparent;
+    transform: translateY(-2px);
+}
+
+/* ==================== Progress Bar ==================== */
+.milestone-progress {
+    margin-bottom: 20px;
+}
+
+.milestone-progress h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 10px;
+    background: #e0e6ed;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    transition: width 1s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+.progress-percentage {
+    font-size: 12px;
+    font-weight: 600;
+    color: #667eea;
+    margin-top: 5px;
+}
+
+/* ==================== Action Button ==================== */
+.milestone-action {
+    display: flex;
+    gap: 10px;
+}
+
+.milestone-btn {
+    flex: 1;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.milestone-btn.primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.milestone-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.milestone-btn.secondary {
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+}
+
+.milestone-btn.secondary:hover {
+    background: #667eea;
+    color: white;
+}
+
+.milestone-btn:disabled {
+    background: #e0e6ed;
+    color: #95a5a6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* ==================== Rewards Section ==================== */
+.milestone-rewards {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px dashed #e0e6ed;
+}
+
+.milestone-rewards h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.rewards-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.reward-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    border-radius: 20px;
+    font-size: 13px;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.reward-item i {
+    font-size: 16px;
+}
+
+/* ==================== Animations ==================== */
+@keyframes pulse {
+    0%, 100% {
+        transform: translateX(-50%) scale(1);
+    }
+    50% {
+        transform: translateX(-50%) scale(1.05);
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+    }
+    50% {
+        box-shadow: 0 5px 25px rgba(245, 87, 108, 0.8);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 768px) {
+    .growth-roadmap-container {
+        padding: 20px;
+    }
+
+    .roadmap-header h2 {
+        font-size: 28px;
+    }
+
+    .roadmap-header p {
+        font-size: 16px;
+    }
+
+    .roadmap-timeline::before {
+        left: 30px;
+    }
+
+    .roadmap-milestone {
+        flex-direction: column !important;
+        align-items: flex-start;
+        padding-left: 80px;
+    }
+
+    .milestone-content {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .roadmap-milestone:nth-child(odd) .milestone-content::after,
+    .roadmap-milestone:nth-child(even) .milestone-content::before {
+        display: none;
+    }
+
+    .milestone-icon {
+        left: 30px;
+        transform: translateX(-50%);
+    }
+
+    .progress-stat {
+        padding: 20px;
+    }
+
+    .progress-stat-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+
+    .progress-stat-value {
+        font-size: 24px;
+    }
+}
+
+/* ==================== Print Styles ==================== */
+@media print {
+    .growth-roadmap-container {
+        box-shadow: none;
+        background: white;
+    }
+
+    .milestone-btn {
+        display: none;
+    }
+
+    .roadmap-timeline::before {
+        background: #2c3e50;
+    }
+}
+
+/* ==================== Dark Mode Support ==================== */
+@media (prefers-color-scheme: dark) {
+    .growth-roadmap-container {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    }
+
+    .roadmap-header h2 {
+        color: #ecf0f1;
+    }
+
+    .roadmap-header p {
+        color: #bdc3c7;
+    }
+
+    .progress-stat,
+    .milestone-content {
+        background: #34495e;
+        color: #ecf0f1;
+    }
+
+    .milestone-title {
+        color: #ecf0f1;
+    }
+
+    .milestone-description {
+        color: #bdc3c7;
+    }
+
+    .skill-tag {
+        background: #2c3e50;
+        color: #ecf0f1;
+        border-color: #4a5f7f;
+    }
+
+    .progress-bar-container {
+        background: #2c3e50;
+    }
+}

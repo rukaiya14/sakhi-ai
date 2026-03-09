@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorites - SheBalance</title>
+    <link rel="stylesheet" href="buyer-favorites.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span>SheBalance</span>
+                <span class="buyer-badge">Buyer Portal</span>
+            </div>
+            <div class="nav-menu">
+                <a href="buyer-dashboard.html" class="nav-link">Browse Artisans</a>
+                <a href="buyer-orders.html" class="nav-link">My Orders</a>
+                <a href="buyer-favorites.html" class="nav-link active">Favorites</a>
+                <a href="index.html" class="nav-link">Home</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" onclick="toggleNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <div class="user-profile" onclick="toggleUserMenu()">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="user-name" id="userName">Loading...</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Menu Dropdown -->
+    <div id="userMenu" class="user-menu">
+        <div class="menu-item" onclick="window.location.href='#profile'">
+            <i class="fas fa-user-circle"></i>
+            <span>My Profile</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='#settings'">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </div>
+        <div class="menu-item" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="favorites-container">
+        <div class="favorites-header">
+            <h1>My Favorites</h1>
+            <p>Artisans you've saved for later</p>
+        </div>
+
+        <!-- Favorites Grid -->
+        <div class="favorites-grid" id="favoritesGrid">
+            <!-- Favorite artisan cards will be dynamically loaded -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <i class="fas fa-heart"></i>
+            <h3>No favorites yet</h3>
+            <p>Start browsing artisans and save your favorites here</p>
+            <a href="buyer-dashboard.html" class="btn-primary">Browse Artisans</a>
+        </div>
+    </div>
+
+    <script src="buyer-favorites.js"></script>
+</body>
+</html>

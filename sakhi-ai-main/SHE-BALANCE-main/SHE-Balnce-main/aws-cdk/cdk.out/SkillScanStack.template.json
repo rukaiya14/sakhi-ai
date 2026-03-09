@@ -1,0 +1,867 @@
+{
+ "Description": "SheBalance SkillScan AI with Claude 3.5 Sonnet",
+ "Resources": {
+  "SkillScanTable1FB31F50": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "artisan_id",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "analysis_id",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "timestamp",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "TimestampIndex",
+      "KeySchema": [
+       {
+        "AttributeName": "timestamp",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "artisan_id",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "analysis_id",
+      "KeyType": "RANGE"
+     }
+    ],
+    "TableName": "SheBalance-SkillScan",
+    "TimeToLiveSpecification": {
+     "AttributeName": "ttl",
+     "Enabled": true
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanTable/Resource"
+   }
+  },
+  "SkillScanImageBucketF18BE6C5": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketName": "shebalance-skillscan-images-065538523474",
+    "CorsConfiguration": {
+     "CorsRules": [
+      {
+       "AllowedHeaders": [
+        "*"
+       ],
+       "AllowedMethods": [
+        "GET",
+        "PUT",
+        "POST",
+        "DELETE"
+       ],
+       "AllowedOrigins": [
+        "*"
+       ],
+       "MaxAge": 3000
+      }
+     ]
+    },
+    "LifecycleConfiguration": {
+     "Rules": [
+      {
+       "ExpirationInDays": 365,
+       "Status": "Enabled"
+      }
+     ]
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanImageBucket/Resource"
+   }
+  },
+  "SkillScanLambdaRole7D7AF2A0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanLambdaRole/Resource"
+   }
+  },
+  "SkillScanLambdaRoleDefaultPolicy0DED0742": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "bedrock:InvokeModel",
+        "bedrock:InvokeModelWithResponseStream"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:bedrock:*::foundation-model/anthropic.claude-3-5-sonnet-*"
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "SkillScanTable1FB31F50",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "SkillScanTable1FB31F50",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "SkillScanImageBucketF18BE6C5",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "SkillScanImageBucketF18BE6C5",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "SkillScanLambdaRoleDefaultPolicy0DED0742",
+    "Roles": [
+     {
+      "Ref": "SkillScanLambdaRole7D7AF2A0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanLambdaRole/DefaultPolicy/Resource"
+   }
+  },
+  "SkillScanAnalysisFunctionF05275A3": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-065538523474-us-east-1",
+     "S3Key": "3366b7f23ca05774511d5d1b258ad82eb04e6f63f5da2e385e4c0f35e4555450.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "SKILLSCAN_TABLE": {
+       "Ref": "SkillScanTable1FB31F50"
+      },
+      "S3_BUCKET": {
+       "Ref": "SkillScanImageBucketF18BE6C5"
+      }
+     }
+    },
+    "FunctionName": "SheBalance-SkillScan-Analysis",
+    "Handler": "lambda_skillscan_analysis.lambda_handler",
+    "MemorySize": 1024,
+    "Role": {
+     "Fn::GetAtt": [
+      "SkillScanLambdaRole7D7AF2A0",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.11",
+    "Timeout": 300
+   },
+   "DependsOn": [
+    "SkillScanLambdaRoleDefaultPolicy0DED0742",
+    "SkillScanLambdaRole7D7AF2A0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanAnalysisFunction/Resource",
+    "aws:asset:path": "asset.3366b7f23ca05774511d5d1b258ad82eb04e6f63f5da2e385e4c0f35e4555450",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "GetSkillScansFunction92D2D87B": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-065538523474-us-east-1",
+     "S3Key": "3366b7f23ca05774511d5d1b258ad82eb04e6f63f5da2e385e4c0f35e4555450.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "SKILLSCAN_TABLE": {
+       "Ref": "SkillScanTable1FB31F50"
+      }
+     }
+    },
+    "FunctionName": "SheBalance-Get-SkillScans",
+    "Handler": "lambda_get_artisan_skillscans.lambda_handler",
+    "MemorySize": 512,
+    "Role": {
+     "Fn::GetAtt": [
+      "SkillScanLambdaRole7D7AF2A0",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.11",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "SkillScanLambdaRoleDefaultPolicy0DED0742",
+    "SkillScanLambdaRole7D7AF2A0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/GetSkillScansFunction/Resource",
+    "aws:asset:path": "asset.3366b7f23ca05774511d5d1b258ad82eb04e6f63f5da2e385e4c0f35e4555450",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "SkillScanAPI05A48703": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Description": "API for SkillScan AI functionality",
+    "Name": "SheBalance-SkillScan-API"
+   },
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanAPI/Resource"
+   }
+  },
+  "SkillScanAPIDeploymentB221FE379b173bed9c978030ee982abbdc6c6837": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "API for SkillScan AI functionality",
+    "RestApiId": {
+     "Ref": "SkillScanAPI05A48703"
+    }
+   },
+   "DependsOn": [
+    "SkillScanAPIanalyzeOPTIONSF568A723",
+    "SkillScanAPIanalyzePOST0CAB517B",
+    "SkillScanAPIanalyzeC6D02A68",
+    "SkillScanAPIOPTIONSCC870A99",
+    "SkillScanAPIskillscansGETA8D23C30",
+    "SkillScanAPIskillscansOPTIONS869E6F75",
+    "SkillScanAPIskillscans666A97BA"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanAPI/Deployment/Resource",
+    "aws:cdk:do-not-refactor": true
+   }
+  },
+  "SkillScanAPIDeploymentStageprod837E9A32": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "SkillScanAPIDeploymentB221FE379b173bed9c978030ee982abbdc6c6837"
+    },
+    "RestApiId": {
+     "Ref": "SkillScanAPI05A48703"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanAPI/DeploymentStage.prod/Resource"
+   }
+  },
+  "SkillScanAPIOPTIONSCC870A99": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Fn::GetAtt": [
+      "SkillScanAPI05A48703",
+      "RootResourceId"
+     ]
+    },
+    "RestApiId": {
+     "Ref": "SkillScanAPI05A48703"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanAPI/Default/OPTIONS/Resource"
+   }
+  },
+  "SkillScanAPIanalyzeC6D02A68": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "SkillScanAPI05A48703",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "analyze",
+    "RestApiId": {
+     "Ref": "SkillScanAPI05A48703"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanAPI/Default/analyze/Resource"
+   }
+  },
+  "SkillScanAPIanalyzeOPTIONSF568A723": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "SkillScanAPIanalyzeC6D02A68"
+    },
+    "RestApiId": {
+     "Ref": "SkillScanAPI05A48703"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanAPI/Default/analyze/OPTIONS/Resource"
+   }
+  },
+  "SkillScanAPIanalyzePOSTApiPermissionSkillScanStackSkillScanAPIFC68ECD0POSTanalyze21EAB2AB": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "SkillScanAnalysisFunctionF05275A3",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:065538523474:",
+       {
+        "Ref": "SkillScanAPI05A48703"
+       },
+       "/",
+       {
+        "Ref": "SkillScanAPIDeploymentStageprod837E9A32"
+       },
+       "/POST/analyze"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanAPI/Default/analyze/POST/ApiPermission.SkillScanStackSkillScanAPIFC68ECD0.POST..analyze"
+   }
+  },
+  "SkillScanAPIanalyzePOSTApiPermissionTestSkillScanStackSkillScanAPIFC68ECD0POSTanalyze007F2510": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "SkillScanAnalysisFunctionF05275A3",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:065538523474:",
+       {
+        "Ref": "SkillScanAPI05A48703"
+       },
+       "/test-invoke-stage/POST/analyze"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanAPI/Default/analyze/POST/ApiPermission.Test.SkillScanStackSkillScanAPIFC68ECD0.POST..analyze"
+   }
+  },
+  "SkillScanAPIanalyzePOST0CAB517B": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "SkillScanAnalysisFunctionF05275A3",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "SkillScanAPIanalyzeC6D02A68"
+    },
+    "RestApiId": {
+     "Ref": "SkillScanAPI05A48703"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanAPI/Default/analyze/POST/Resource"
+   }
+  },
+  "SkillScanAPIskillscans666A97BA": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "SkillScanAPI05A48703",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "skillscans",
+    "RestApiId": {
+     "Ref": "SkillScanAPI05A48703"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanAPI/Default/skillscans/Resource"
+   }
+  },
+  "SkillScanAPIskillscansOPTIONS869E6F75": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "SkillScanAPIskillscans666A97BA"
+    },
+    "RestApiId": {
+     "Ref": "SkillScanAPI05A48703"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanAPI/Default/skillscans/OPTIONS/Resource"
+   }
+  },
+  "SkillScanAPIskillscansGETApiPermissionSkillScanStackSkillScanAPIFC68ECD0GETskillscans053CB7D4": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetSkillScansFunction92D2D87B",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:065538523474:",
+       {
+        "Ref": "SkillScanAPI05A48703"
+       },
+       "/",
+       {
+        "Ref": "SkillScanAPIDeploymentStageprod837E9A32"
+       },
+       "/GET/skillscans"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanAPI/Default/skillscans/GET/ApiPermission.SkillScanStackSkillScanAPIFC68ECD0.GET..skillscans"
+   }
+  },
+  "SkillScanAPIskillscansGETApiPermissionTestSkillScanStackSkillScanAPIFC68ECD0GETskillscans8989B09A": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetSkillScansFunction92D2D87B",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:065538523474:",
+       {
+        "Ref": "SkillScanAPI05A48703"
+       },
+       "/test-invoke-stage/GET/skillscans"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanAPI/Default/skillscans/GET/ApiPermission.Test.SkillScanStackSkillScanAPIFC68ECD0.GET..skillscans"
+   }
+  },
+  "SkillScanAPIskillscansGETA8D23C30": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "GetSkillScansFunction92D2D87B",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "SkillScanAPIskillscans666A97BA"
+    },
+    "RestApiId": {
+     "Ref": "SkillScanAPI05A48703"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/SkillScanAPI/Default/skillscans/GET/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OzU7DMBCEn6V3dwmBC8cW1BuiSrlXG3sJbmI7ytpEkeV3R3aC6Gm+3dmfqaF+rqDa4cx7qfr9oFuIF4+yFzjzNarFonGqhfiJ7UDi9csWSIKfIB6D7Mnn5karHJEpCY0GYuPWpaJnN2i55HKlJAY0rUKIp2Cl185m757PNBnNrJ3ND6/ITJ7hkEXgqDv0NOMCsSH2h1GXTxu+0Ti4xZAt+e6qi8euZFqhIXZhkpRDi3fy305lc6M/d7tcOKX/domSD2nb5ZmP4Mfgk7BOEdz44aeu4fEFqt2Ntd5PwXptCJpVfwH76BUxfQEAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "SkillScanStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "SkillScanAPIEndpointB3CB39AF": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "SkillScanAPI05A48703"
+      },
+      ".execute-api.us-east-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "SkillScanAPIDeploymentStageprod837E9A32"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "APIEndpoint": {
+   "Description": "API Gateway endpoint URL",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "SkillScanAPI05A48703"
+      },
+      ".execute-api.us-east-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "SkillScanAPIDeploymentStageprod837E9A32"
+      },
+      "/"
+     ]
+    ]
+   },
+   "Export": {
+    "Name": "SkillScanAPIEndpoint"
+   }
+  },
+  "AnalyzeEndpoint": {
+   "Description": "SkillScan Analysis endpoint",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "SkillScanAPI05A48703"
+      },
+      ".execute-api.us-east-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "SkillScanAPIDeploymentStageprod837E9A32"
+      },
+      "/analyze"
+     ]
+    ]
+   }
+  },
+  "GetSkillScansEndpoint": {
+   "Description": "Get SkillScans endpoint",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "SkillScanAPI05A48703"
+      },
+      ".execute-api.us-east-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "SkillScanAPIDeploymentStageprod837E9A32"
+      },
+      "/skillscans"
+     ]
+    ]
+   }
+  },
+  "DynamoDBTableName": {
+   "Description": "DynamoDB table name",
+   "Value": {
+    "Ref": "SkillScanTable1FB31F50"
+   }
+  },
+  "S3BucketName": {
+   "Description": "S3 bucket name",
+   "Value": {
+    "Ref": "SkillScanImageBucketF18BE6C5"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

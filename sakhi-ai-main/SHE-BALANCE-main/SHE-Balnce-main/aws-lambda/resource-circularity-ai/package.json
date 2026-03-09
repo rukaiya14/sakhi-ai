@@ -1,0 +1,11 @@
+{
+  "name": "resource-circularity-ai",
+  "version": "1.0.0",
+  "description": "AI-powered resource circularity matching with Bedrock Llama 3",
+  "main": "index.js",
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.450.0",
+    "@aws-sdk/client-dynamodb": "^3.450.0",
+    "@aws-sdk/lib-dynamodb": "^3.450.0"
+  }
+}

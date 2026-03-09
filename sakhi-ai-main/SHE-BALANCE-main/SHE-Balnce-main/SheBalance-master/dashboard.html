@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SheBalance Dashboard - Your Journey to Success</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="ai-features.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="logo 7.jpg.jpeg" alt="SheBalance Logo" class="logo-image">
+                <span>SheBalance</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="skills.html" class="nav-item">
+                <i class="fas fa-star"></i>
+                <span>My Skills</span>
+            </a>
+            <a href="#opportunities" class="nav-item">
+                <i class="fas fa-briefcase"></i>
+                <span>Opportunities</span>
+            </a>
+            <a href="food-marketplace.html" class="nav-item">
+                <i class="fas fa-utensils"></i>
+                <span>Food Marketplace</span>
+            </a>
+            <a href="#community" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Community</span>
+            </a>
+            <a href="progress.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Progress</span>
+            </a>
+            <a href="#settings" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Hello, <span id="userName">User</span>!</h1>
+            </div>
+            <div class="header-right">
+                <button class="translate-btn" onclick="translateToHindi()">
+                    <i class="fas fa-language"></i>
+                    <span id="translateText">हिंदी में</span>
+                </button>
+                <button class="voice-btn" onclick="startVoiceCommand()">
+                    <i class="fas fa-microphone"></i>
+                    <span class="voice-text">Voice Command</span>
+                </button>
+                <div class="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="profile">
+                    <div class="profile-pic"></div>
+                    <span id="userNameProfile">User</span>
+                </div>
+                <button class="btn-logout" onclick="logout()" style="margin-left: 15px; padding: 8px 16px; background: #e74c3c; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <!-- Today's Balance -->
+            <div class="balance-card">
+                <h2>Today's Balance</h2>
+                <div class="balance-grid">
+                    <div class="balance-item">
+                        <div class="balance-icon household">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="balance-info">
+                            <span class="balance-label">Household Work</span>
+                            <span class="balance-time">4.5 hours</span>
+                            <div class="balance-progress">
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 75%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="balance-item">
+                        <div class="balance-icon career">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="balance-info">
+                            <span class="balance-label">Career Time</span>
+                            <span class="balance-time">2 hours</span>
+                            <div class="balance-progress">
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 40%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="balance-item">
+                        <div class="balance-icon rest">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="balance-info">
+                            <span class="balance-label">Self Care</span>
+                            <span class="balance-time">1.5 hours</span>
+                            <div class="balance-progress">
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 30%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="balance-item">
+                        <div class="balance-icon progress">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="balance-info">
+                            <span class="balance-label">Progress</span>
+                            <span class="balance-time">65%</span>
+                            <div class="balance-progress">
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 65%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number">₹12,500</span>
+                        <span class="stat-label">This Month's Earnings</span>
+                        <span class="stat-change positive">+25% from last month</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number">8</span>
+                        <span class="stat-label">Active Projects</span>
+                        <span class="stat-change positive">+3 new this week</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number">4.8</span>
+                        <span class="stat-label">Average Rating</span>
+                        <span class="stat-change positive">+0.2 this month</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number">47</span>
+                        <span class="stat-label">Network Connections</span>
+                        <span class="stat-change positive">+5 this week</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Focus & Opportunities -->
+            <div class="content-grid">
+                <div class="focus-card">
+                    <h3>🎯 Today's Focus</h3>
+                    <div class="focus-list">
+                        <div class="focus-item">
+                            <input type="checkbox" id="task1">
+                            <label for="task1">Complete embroidery course module 3</label>
+                        </div>
+                        <div class="focus-item">
+                            <input type="checkbox" id="task2" checked>
+                            <label for="task2">Apply to 2 fashion designer positions</label>
+                        </div>
+                        <div class="focus-item">
+                            <input type="checkbox" id="task3">
+                            <label for="task3">Connect with mentor Sunita Devi</label>
+                        </div>
+                        <div class="focus-item">
+                            <input type="checkbox" id="task4">
+                            <label for="task4">Upload new portfolio photos</label>
+                        </div>
+                    </div>
+                    <button class="btn-primary">Add New Task</button>
+                </div>
+
+                <div class="opportunities-card">
+                    <h3>🔥 Hot Opportunities</h3>
+                    <div class="opportunity-list">
+                        <div class="opportunity-item">
+                            <div class="opportunity-info">
+                                <h4>Fashion Designer Assistant</h4>
+                                <p>₹18,000/month • Remote</p>
+                                <span class="match-score">85% Match</span>
+                            </div>
+                            <button class="btn-apply">Apply</button>
+                        </div>
+                        <div class="opportunity-item">
+                            <div class="opportunity-info">
+                                <h4>Home Chef for Office</h4>
+                                <p>₹800/day • Nearby</p>
+                                <span class="match-score">92% Match</span>
+                            </div>
+                            <button class="btn-apply">Apply</button>
+                        </div>
+                        <div class="opportunity-item">
+                            <div class="opportunity-info">
+                                <h4>Embroidery Trainer</h4>
+                                <p>₹1,000/class • Online</p>
+                                <span class="match-score">88% Match</span>
+                            </div>
+                            <button class="btn-apply">Apply</button>
+                        </div>
+                    </div>
+                    <button class="btn-secondary">View All Opportunities</button>
+                </div>
+            </div>
+
+            <!-- Food Marketplace & Community -->
+            <div class="content-grid">
+                <div class="food-card">
+                    <h3>🍳 Food Marketplace</h3>
+                    <div class="food-stats">
+                        <div class="food-stat" onclick="window.location.href='food-marketplace.html'" style="cursor: pointer;">
+                            <span class="food-number">12</span>
+                            <span class="food-label">Active Orders</span>
+                        </div>
+                        <div class="food-stat" onclick="window.location.href='food-marketplace.html'" style="cursor: pointer;">
+                            <span class="food-number">₹3,200</span>
+                            <span class="food-label">This Week</span>
+                        </div>
+                        <div class="food-stat" onclick="window.location.href='food-marketplace.html'" style="cursor: pointer;">
+                            <span class="food-number">4.9</span>
+                            <span class="food-label">Rating</span>
+                        </div>
+                    </div>
+                    <div class="recent-orders">
+                        <h4>Recent Orders</h4>
+                        <div class="order-item" onclick="window.location.href='food-marketplace.html'" style="cursor: pointer;">
+                            <span class="order-name">Rajma Chawal (5 portions)</span>
+                            <span class="order-status pending">Preparing</span>
+                        </div>
+                        <div class="order-item" onclick="window.location.href='food-marketplace.html'" style="cursor: pointer;">
+                            <span class="order-name">Homemade Cookies (2 dozen)</span>
+                            <span class="order-status completed">Delivered</span>
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="window.location.href='food-marketplace.html'">Manage Orders</button>
+                </div>
+
+                <div class="community-card">
+                    <h3>👥 Community Updates</h3>
+                    <div class="community-updates">
+                        <div class="update-item">
+                            <div class="update-avatar"></div>
+                            <div class="update-content">
+                                <p><strong>Sunita Devi</strong> shared a new embroidery technique</p>
+                                <span class="update-time">2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="update-item">
+                            <div class="update-avatar"></div>
+                            <div class="update-content">
+                                <p><strong>Meera Patel</strong> won Balance Boss award!</p>
+                                <span class="update-time">5 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="update-item">
+                            <div class="update-avatar"></div>
+                            <div class="update-content">
+                                <p><strong>Kavya Singh</strong> started a new catering business</p>
+                                <span class="update-time">1 day ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-secondary">Join Community</button>
+                </div>
+            </div>
+
+            <!-- Progress Summary -->
+            <div class="progress-card">
+                <h3>📈 Your Growth Journey</h3>
+                <div class="progress-metrics">
+                    <div class="metric">
+                        <span class="metric-label">Skills Improved</span>
+                        <span class="metric-value">5</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Income Growth</span>
+                        <span class="metric-value">+300%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Time Optimized</span>
+                        <span class="metric-value">3.5 hrs/day</span>
+                    </div>
+                </div>
+                <div class="progress-actions">
+                    <button class="btn-secondary" onclick="window.location.href='progress.html'">
+                        <i class="fas fa-chart-line"></i>
+                        View Detailed Progress
+                    </button>
+                </div>
+            </div>
+
+            <!-- AI-Driven Features Section -->
+            <div class="ai-features-section">
+                <div class="section-header">
+                    <h2>🤖 AI-Powered Features</h2>
+                    <p>Advanced AI capabilities to enhance your artisan journey</p>
+                    <div class="ai-status-badge" id="aiStatusBadge">
+                        <i class="fas fa-robot"></i>
+                        <span>AI Core Online</span>
+                    </div>
+                </div>
+                
+                <!-- AI Features Grid -->
+                <div class="ai-features-grid" id="aiFeaturesContainer">
+                    <!-- AI features will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New User Onboarding Modal -->
+    <div id="onboardingModal" class="modal onboarding-modal">
+        <div class="modal-content onboarding-content">
+            <div class="onboarding-header">
+                <h2>Welcome to SheBalance! 🌟</h2>
+                <p>Let's set up your personalized journey</p>
+            </div>
+            
+            <div class="onboarding-steps">
+                <div class="step-indicator">
+                    <div class="step active" data-step="1">1</div>
+                    <div class="step" data-step="2">2</div>
+                    <div class="step" data-step="3">3</div>
+                    <div class="step" data-step="4">4</div>
+                </div>
+
+                <!-- Step 1: Basic Info -->
+                <div class="onboarding-step active" id="step1">
+                    <h3>Tell us about yourself</h3>
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" placeholder="City, State">
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age Group</label>
+                        <select id="age">
+                            <option value="">Select age group</option>
+                            <option value="18-25">18-25</option>
+                            <option value="26-35">26-35</option>
+                            <option value="36-45">36-45</option>
+                            <option value="46+">46+</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Step 2: Household Work & Self Care -->
+                <div class="onboarding-step" id="step2">
+                    <h3>Your Daily Routine</h3>
+                    <div class="form-group">
+                        <label for="householdHours">Household Work Hours (per day)</label>
+                        <input type="range" id="householdHours" min="1" max="12" value="6">
+                        <span class="range-value">6 hours</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="selfCareHours">Self Care Hours (per day)</label>
+                        <input type="range" id="selfCareHours" min="0.5" max="6" step="0.5" value="2">
+                        <span class="range-value">2 hours</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Main household responsibilities:</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" value="cooking"> Cooking</label>
+                            <label><input type="checkbox" value="cleaning"> Cleaning</label>
+                            <label><input type="checkbox" value="childcare"> Childcare</label>
+                            <label><input type="checkbox" value="eldercare"> Elder Care</label>
+                            <label><input type="checkbox" value="shopping"> Shopping</label>
+                            <label><input type="checkbox" value="laundry"> Laundry</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Skills & Hobbies -->
+                <div class="onboarding-step" id="step3">
+                    <h3>Your Skills & Hobbies</h3>
+                    <div class="form-group">
+                        <label>Current Skills:</label>
+                        <div class="skills-grid">
+                            <label class="skill-card">
+                                <input type="checkbox" value="embroidery">
+                                <div class="skill-icon">🧵</div>
+                                <span>Embroidery</span>
+                            </label>
+                            <label class="skill-card">
+                                <input type="checkbox" value="cooking">
+                                <div class="skill-icon">👩‍🍳</div>
+                                <span>Cooking</span>
+                            </label>
+                            <label class="skill-card">
+                                <input type="checkbox" value="henna">
+                                <div class="skill-icon">🎨</div>
+                                <span>Henna</span>
+                            </label>
+                            <label class="skill-card">
+                                <input type="checkbox" value="crochet">
+                                <div class="skill-icon">🧶</div>
+                                <span>Crochet</span>
+                            </label>
+                            <label class="skill-card">
+                                <input type="checkbox" value="stitching">
+                                <div class="skill-icon">✂️</div>
+                                <span>Stitching</span>
+                            </label>
+                            <label class="skill-card">
+                                <input type="checkbox" value="cross-stitch">
+                                <div class="skill-icon">🪡</div>
+                                <span>Cross Stitch</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Hobbies & Interests:</label>
+                        <div class="skills-grid">
+                            <label class="skill-card">
+                                <input type="checkbox" value="reading" name="hobbies">
+                                <div class="skill-icon">📚</div>
+                                <span>Reading</span>
+                            </label>
+                            <label class="skill-card">
+                                <input type="checkbox" value="gardening" name="hobbies">
+                                <div class="skill-icon">🌱</div>
+                                <span>Gardening</span>
+                            </label>
+                            <label class="skill-card">
+                                <input type="checkbox" value="music" name="hobbies">
+                                <div class="skill-icon">🎵</div>
+                                <span>Music</span>
+                            </label>
+                            <label class="skill-card">
+                                <input type="checkbox" value="dancing" name="hobbies">
+                                <div class="skill-icon">💃</div>
+                                <span>Dancing</span>
+                            </label>
+                            <label class="skill-card">
+                                <input type="checkbox" value="painting" name="hobbies">
+                                <div class="skill-icon">🎨</div>
+                                <span>Painting</span>
+                            </label>
+                            <label class="skill-card">
+                                <input type="checkbox" value="yoga" name="hobbies">
+                                <div class="skill-icon">🧘‍♀️</div>
+                                <span>Yoga</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Free Time -->
+                <div class="onboarding-step" id="step4">
+                    <h3>Your Available Time</h3>
+                    <div class="form-group">
+                        <label for="freeTimeHours">Free Time for Career (per day)</label>
+                        <input type="range" id="freeTimeHours" min="0.5" max="8" step="0.5" value="2">
+                        <span class="range-value">2 hours</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred working hours:</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" value="morning"> Morning (6-12 PM)</label>
+                            <label><input type="checkbox" value="afternoon"> Afternoon (12-6 PM)</label>
+                            <label><input type="checkbox" value="evening"> Evening (6-10 PM)</label>
+                            <label><input type="checkbox" value="flexible"> Flexible</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="incomeGoal">Monthly Income Goal</label>
+                        <select id="incomeGoal">
+                            <option value="">Select goal</option>
+                            <option value="5000">₹5,000 - ₹10,000</option>
+                            <option value="10000">₹10,000 - ₹20,000</option>
+                            <option value="20000">₹20,000 - ₹30,000</option>
+                            <option value="30000">₹30,000+</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="onboarding-actions">
+                <button class="btn-secondary" id="prevBtn" onclick="previousStep()" style="display: none;">Previous</button>
+                <button class="btn-primary" id="nextBtn" onclick="nextStep()">Next</button>
+                <button class="btn-primary" id="finishBtn" onclick="finishOnboarding()" style="display: none;">Start My Journey</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Command Modal -->
+    <div id="voiceModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeVoiceModal()">&times;</span>
+            <h2>Voice Command</h2>
+            <div class="voice-demo">
+                <div class="voice-animation">
+                    <div class="voice-circle"></div>
+                    <div class="voice-waves">
+                        <div class="wave"></div>
+                        <div class="wave"></div>
+                        <div class="wave"></div>
+                    </div>
+                </div>
+                <p id="voiceStatus">Click to start listening</p>
+                <button id="voiceBtn" class="btn-voice" onclick="toggleVoice()">
+                    <i class="fas fa-microphone"></i> Start Listening
+                </button>
+                <div class="voice-examples">
+                    <h4>Try saying:</h4>
+                    <ul>
+                        <li>"Show my earnings" - View income statistics</li>
+                        <li>"Find new jobs" - Browse opportunities</li>
+                        <li>"Check food orders" - Marketplace updates</li>
+                        <li>"Show my progress" - View growth metrics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="ai-features.js"></script>
+    <script src="ai-features-ui.js"></script>
+    <script src="dashboard-clean.js"></script>
+</body>
+</html>

@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Skills - SheBalance</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span>SheBalance</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="skills.html" class="nav-item active">
+                <i class="fas fa-star"></i>
+                <span>My Skills</span>
+            </a>
+            <a href="#opportunities" class="nav-item">
+                <i class="fas fa-briefcase"></i>
+                <span>Opportunities</span>
+            </a>
+            <a href="#food-marketplace" class="nav-item">
+                <i class="fas fa-utensils"></i>
+                <span>Food Marketplace</span>
+            </a>
+            <a href="#community" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Community</span>
+            </a>
+            <a href="progress.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Progress</span>
+            </a>
+            <a href="#settings" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>My Skills Portfolio</h1>
+            </div>
+            <div class="header-right">
+                <button class="voice-btn" onclick="startVoiceCommand()">
+                    <i class="fas fa-microphone"></i>
+                    Voice Command
+                </button>
+                <button class="btn-primary" onclick="openAIChatbot()">
+                    <i class="fas fa-robot"></i>
+                    AI Mentor
+                </button>
+                <div class="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="profile">
+                    <div class="profile-pic"></div>
+                    <span id="userNameProfile">Rukaiya Ghadiali</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Skills Content -->
+        <div class="skills-content">
+            <!-- Skills Overview -->
+            <div class="skills-overview">
+                <div class="overview-card">
+                    <div class="overview-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3>5</h3>
+                        <p>Active Skills</p>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3>3</h3>
+                        <p>Certifications</p>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3>85%</h3>
+                        <p>Avg Skill Level</p>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3>120</h3>
+                        <p>Learning Hours</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SkillScan AI Section -->
+            <div class="skillscan-section">
+                <div class="section-header">
+                    <h2>📸 SkillScan AI - Visual Skill Assessment</h2>
+                    <div class="skillscan-badge">
+                        <i class="fas fa-magic"></i>
+                        AI Powered
+                    </div>
+                </div>
+                
+                <div class="skillscan-intro">
+                    <div class="skillscan-description">
+                        <h3>Get Instant Skill Assessment from Your Work Photos</h3>
+                        <p>Upload photos of your work and let our AI analyze your skill level, provide detailed feedback, and suggest improvements. Perfect for embroidery, cooking, henna art, and crafts!</p>
+                        
+                        <div class="skillscan-features">
+                            <div class="feature-item">
+                                <i class="fas fa-camera"></i>
+                                <span>Photo Analysis</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-star"></i>
+                                <span>Skill Scoring</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-comments"></i>
+                                <span>AI Feedback</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-certificate"></i>
+                                <span>Instant Certification</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="skillscan-demo">
+                        <div class="demo-preview">
+                            <div class="demo-image">
+                                <i class="fas fa-image"></i>
+                                <span>Upload Your Work</span>
+                            </div>
+                            <div class="demo-arrow">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                            <div class="demo-result">
+                                <div class="demo-score">85%</div>
+                                <span>AI Assessment</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skillscan-upload">
+                    <div class="upload-area" id="skillscanUpload">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h4>Drop your work photos here or click to upload</h4>
+                        <p>Supports JPG, PNG, HEIC • Max 10MB per image • Up to 5 images</p>
+                        <input type="file" id="skillscanFiles" multiple accept="image/*" style="display: none;">
+                        <button class="btn-primary upload-btn" onclick="triggerFileUpload()">
+                            <i class="fas fa-camera"></i>
+                            Choose Photos
+                        </button>
+                    </div>
+                </div>
+
+                <div class="skillscan-categories">
+                    <h4>Select Your Skill Category</h4>
+                    <div class="category-grid">
+                        <div class="category-card" data-category="embroidery">
+                            <div class="category-icon">🧵</div>
+                            <span>Embroidery</span>
+                        </div>
+                        <div class="category-card" data-category="cooking">
+                            <div class="category-icon">👩‍🍳</div>
+                            <span>Cooking</span>
+                        </div>
+                        <div class="category-card" data-category="henna">
+                            <div class="category-icon">🎨</div>
+                            <span>Henna Art</span>
+                        </div>
+                        <div class="category-card" data-category="crochet">
+                            <div class="category-icon">🧶</div>
+                            <span>Crochet</span>
+                        </div>
+                        <div class="category-card" data-category="tailoring">
+                            <div class="category-icon">✂️</div>
+                            <span>Tailoring</span>
+                        </div>
+                        <div class="category-card" data-category="crafts">
+                            <div class="category-icon">🎭</div>
+                            <span>Crafts</span>
+                        </div>
+                    </div>
+                    
+                    <!-- AI Distribution Controls -->
+                    <div class="ai-controls" style="margin-top: 20px; text-align: center; padding: 15px; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-radius: 8px; border: 1px solid #bae6fd;">
+                        <h5 style="color: #1e40af; margin-bottom: 10px;">🤖 AI Distribution System</h5>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px;">
+                            <button class="btn-outline" onclick="showDistributionHealth()" style="font-size: 12px; padding: 6px 12px;">
+                                Check AI Health
+                            </button>
+                            <button class="btn-outline" onclick="resetDistributionAI()" style="font-size: 12px; padding: 6px 12px;">
+                                Reset AI Learning
+                            </button>
+                        </div>
+                        <p style="font-size: 11px; color: #1e40af; margin: 0;">AI automatically balances skill levels: 30% Beginner, 50% Intermediate, 20% Advanced</p>
+                    </div>
+                </div>
+
+                <div class="skillscan-results" id="skillscanResults" style="display: none;">
+                    <div class="results-header">
+                        <h3>🎉 SkillScan Analysis Complete!</h3>
+                        <div class="analysis-time">
+                            <i class="fas fa-clock"></i>
+                            <span>Analyzed in 2.3 seconds</span>
+                        </div>
+                    </div>
+
+                    <div class="results-grid">
+                        <div class="result-card overall-score">
+                            <div class="score-circle">
+                                <div class="score-value" id="overallScore">0</div>
+                                <div class="score-label">Overall Score</div>
+                            </div>
+                            <div class="score-details">
+                                <div class="skill-level" id="skillLevel">Advanced</div>
+                                <div class="skill-category" id="analyzedCategory">Embroidery</div>
+                            </div>
+                        </div>
+
+                        <div class="result-card breakdown">
+                            <h4>Detailed Analysis</h4>
+                            <div class="breakdown-items">
+                                <div class="breakdown-item">
+                                    <span class="item-label">Technique Quality</span>
+                                    <div class="item-score">
+                                        <div class="score-bar">
+                                            <div class="score-fill" style="width: 88%"></div>
+                                        </div>
+                                        <span class="score-number">88%</span>
+                                    </div>
+                                </div>
+                                <div class="breakdown-item">
+                                    <span class="item-label">Pattern Complexity</span>
+                                    <div class="item-score">
+                                        <div class="score-bar">
+                                            <div class="score-fill" style="width: 92%"></div>
+                                        </div>
+                                        <span class="score-number">92%</span>
+                                    </div>
+                                </div>
+                                <div class="breakdown-item">
+                                    <span class="item-label">Finishing Quality</span>
+                                    <div class="item-score">
+                                        <div class="score-bar">
+                                            <div class="score-fill" style="width: 85%"></div>
+                                        </div>
+                                        <span class="score-number">85%</span>
+                                    </div>
+                                </div>
+                                <div class="breakdown-item">
+                                    <span class="item-label">Color Coordination</span>
+                                    <div class="item-score">
+                                        <div class="score-bar">
+                                            <div class="score-fill" style="width: 90%"></div>
+                                        </div>
+                                        <span class="score-number">90%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="result-card ai-feedback">
+                            <h4>🤖 AI Feedback & Suggestions</h4>
+                            <div class="feedback-content">
+                                <div class="feedback-positive">
+                                    <h5>✅ Strengths Identified:</h5>
+                                    <ul>
+                                        <li>Excellent thread tension control</li>
+                                        <li>Complex pattern execution</li>
+                                        <li>Professional finishing techniques</li>
+                                        <li>Great color harmony</li>
+                                    </ul>
+                                </div>
+                                <div class="feedback-improvement">
+                                    <h5>🎯 Areas for Improvement:</h5>
+                                    <ul>
+                                        <li>Consider tighter edge finishing</li>
+                                        <li>Experiment with metallic threads</li>
+                                        <li>Try more intricate border patterns</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="results-actions">
+                        <button class="btn-primary" onclick="generateCertificate()">
+                            <i class="fas fa-certificate"></i>
+                            Generate Certificate
+                        </button>
+                        <button class="btn-secondary" onclick="addToPortfolio()">
+                            <i class="fas fa-plus"></i>
+                            Add to Portfolio
+                        </button>
+                        <button class="btn-outline" onclick="shareResults()">
+                            <i class="fas fa-share"></i>
+                            Share Results
+                        </button>
+                        <button class="btn-outline" onclick="resetSkillScan()">
+                            <i class="fas fa-redo"></i>
+                            Scan Another
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Skills -->
+            <div class="skills-section">
+                <div class="section-header">
+                    <h2>Your Current Skills</h2>
+                    <button class="btn-secondary" onclick="openSkillAssessment()">
+                        <i class="fas fa-plus"></i>
+                        Add New Skill
+                    </button>
+                </div>
+                
+                <div class="skills-grid">
+                    <div class="skill-card advanced">
+                        <div class="skill-header">
+                            <div class="skill-icon">🧵</div>
+                            <div class="skill-info">
+                                <h3>Embroidery</h3>
+                                <span class="skill-level">Advanced</span>
+                            </div>
+                            <div class="skill-score">92%</div>
+                        </div>
+                        <div class="skill-progress">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-details">
+                            <p>Specializes in traditional Indian embroidery techniques</p>
+                            <div class="skill-tags">
+                                <span class="tag">Hand Embroidery</span>
+                                <span class="tag">Zardozi</span>
+                                <span class="tag">Chikankari</span>
+                            </div>
+                        </div>
+                        <div class="skill-actions">
+                            <button class="btn-outline">View Portfolio</button>
+                            <button class="btn-primary">Find Jobs</button>
+                        </div>
+                    </div>
+
+                    <div class="skill-card intermediate">
+                        <div class="skill-header">
+                            <div class="skill-icon">👩‍🍳</div>
+                            <div class="skill-info">
+                                <h3>Cooking</h3>
+                                <span class="skill-level">Intermediate</span>
+                            </div>
+                            <div class="skill-score">78%</div>
+                        </div>
+                        <div class="skill-progress">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 78%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-details">
+                            <p>Home-style Indian cuisine and healthy meal prep</p>
+                            <div class="skill-tags">
+                                <span class="tag">Indian Cuisine</span>
+                                <span class="tag">Meal Prep</span>
+                                <span class="tag">Healthy Cooking</span>
+                            </div>
+                        </div>
+                        <div class="skill-actions">
+                            <button class="btn-outline">View Portfolio</button>
+                            <button class="btn-primary">Find Jobs</button>
+                        </div>
+                    </div>
+
+                    <div class="skill-card beginner">
+                        <div class="skill-header">
+                            <div class="skill-icon">🎨</div>
+                            <div class="skill-info">
+                                <h3>Henna Art</h3>
+                                <span class="skill-level">Beginner</span>
+                            </div>
+                            <div class="skill-score">45%</div>
+                        </div>
+                        <div class="skill-progress">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 45%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-details">
+                            <p>Traditional and modern henna designs</p>
+                            <div class="skill-tags">
+                                <span class="tag">Bridal Henna</span>
+                                <span class="tag">Arabic Designs</span>
+                            </div>
+                        </div>
+                        <div class="skill-actions">
+                            <button class="btn-outline">Practice More</button>
+                            <button class="btn-primary">Learn Advanced</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Opportunities -->
+            <div class="learning-section">
+                <div class="section-header">
+                    <h2>Recommended Learning Paths</h2>
+                    <button class="btn-secondary" onclick="openAIChatbot()">
+                        <i class="fas fa-robot"></i>
+                        Get AI Roadmap
+                    </button>
+                </div>
+
+                <div class="learning-grid">
+                    <div class="learning-card featured">
+                        <div class="learning-badge">🔥 Popular</div>
+                        <div class="learning-header">
+                            <div class="learning-icon">🧶</div>
+                            <h3>Advanced Crochet Mastery</h3>
+                        </div>
+                        <div class="learning-details">
+                            <p>Master complex crochet patterns and start your own business</p>
+                            <div class="learning-stats">
+                                <span><i class="fas fa-clock"></i> 6 weeks</span>
+                                <span><i class="fas fa-star"></i> 4.9 rating</span>
+                                <span><i class="fas fa-users"></i> 1,200+ students</span>
+                            </div>
+                        </div>
+                        <div class="learning-price">
+                            <span class="price">₹2,999</span>
+                            <span class="original-price">₹4,999</span>
+                            <div class="emi-option">
+                                <span class="emi-text">or ₹500/month for 6 months</span>
+                                <span class="emi-badge">0% Interest EMI</span>
+                            </div>
+                        </div>
+                        <div class="payment-options">
+                            <button class="btn-primary full-payment" onclick="enrollCourse('crochet', 'full')">Pay Full ₹2,999</button>
+                            <button class="btn-secondary emi-payment" onclick="enrollCourse('crochet', 'emi')">
+                                <i class="fas fa-calendar-alt"></i>
+                                EMI ₹500/month
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="learning-card">
+                        <div class="learning-header">
+                            <div class="learning-icon">✂️</div>
+                            <h3>Professional Tailoring</h3>
+                        </div>
+                        <div class="learning-details">
+                            <p>Learn professional tailoring techniques for custom clothing</p>
+                            <div class="learning-stats">
+                                <span><i class="fas fa-clock"></i> 8 weeks</span>
+                                <span><i class="fas fa-star"></i> 4.7 rating</span>
+                                <span><i class="fas fa-users"></i> 850+ students</span>
+                            </div>
+                        </div>
+                        <div class="learning-price">
+                            <span class="price">₹3,499</span>
+                            <div class="emi-option">
+                                <span class="emi-text">or ₹437/month for 8 months</span>
+                                <span class="emi-badge">0% Interest EMI</span>
+                            </div>
+                        </div>
+                        <div class="payment-options">
+                            <button class="btn-primary full-payment" onclick="enrollCourse('tailoring', 'full')">Pay Full ₹3,499</button>
+                            <button class="btn-secondary emi-payment" onclick="enrollCourse('tailoring', 'emi')">
+                                <i class="fas fa-calendar-alt"></i>
+                                EMI ₹437/month
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="learning-card">
+                        <div class="learning-header">
+                            <div class="learning-icon">🪡</div>
+                            <h3>Cross Stitch Artistry</h3>
+                        </div>
+                        <div class="learning-details">
+                            <p>Create beautiful cross stitch patterns and decorative pieces</p>
+                            <div class="learning-stats">
+                                <span><i class="fas fa-clock"></i> 4 weeks</span>
+                                <span><i class="fas fa-star"></i> 4.8 rating</span>
+                                <span><i class="fas fa-users"></i> 650+ students</span>
+                            </div>
+                        </div>
+                        <div class="learning-price">
+                            <span class="price">₹1,999</span>
+                            <div class="emi-option">
+                                <span class="emi-text">or ₹500/month for 4 months</span>
+                                <span class="emi-badge">0% Interest EMI</span>
+                            </div>
+                        </div>
+                        <div class="payment-options">
+                            <button class="btn-primary full-payment" onclick="enrollCourse('crossstitch', 'full')">Pay Full ₹1,999</button>
+                            <button class="btn-secondary emi-payment" onclick="enrollCourse('crossstitch', 'emi')">
+                                <i class="fas fa-calendar-alt"></i>
+                                EMI ₹500/month
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="learning-card">
+                        <div class="learning-header">
+                            <div class="learning-icon">🎨</div>
+                            <h3>Advanced Henna Techniques</h3>
+                        </div>
+                        <div class="learning-details">
+                            <p>Master intricate henna patterns and build a client base</p>
+                            <div class="learning-stats">
+                                <span><i class="fas fa-clock"></i> 5 weeks</span>
+                                <span><i class="fas fa-star"></i> 4.6 rating</span>
+                                <span><i class="fas fa-users"></i> 920+ students</span>
+                            </div>
+                        </div>
+                        <div class="learning-price">
+                            <span class="price">₹2,499</span>
+                            <div class="emi-option">
+                                <span class="emi-text">or ₹500/month for 5 months</span>
+                                <span class="emi-badge">0% Interest EMI</span>
+                            </div>
+                        </div>
+                        <div class="payment-options">
+                            <button class="btn-primary full-payment" onclick="enrollCourse('henna', 'full')">Pay Full ₹2,499</button>
+                            <button class="btn-secondary emi-payment" onclick="enrollCourse('henna', 'emi')">
+                                <i class="fas fa-calendar-alt"></i>
+                                EMI ₹500/month
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Mentor Section -->
+            <div class="ai-mentor-section">
+                <div class="mentor-card">
+                    <div class="mentor-header">
+                        <div class="mentor-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="mentor-info">
+                            <h3>Your AI Learning Mentor</h3>
+                            <p>Get personalized learning roadmaps and career guidance</p>
+                        </div>
+                    </div>
+                    <div class="mentor-features">
+                        <div class="feature">
+                            <i class="fas fa-route"></i>
+                            <span>Personalized Learning Paths</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Flexible Scheduling</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Progress Tracking</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-briefcase"></i>
+                            <span>Career Opportunities</span>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-large" onclick="openAIChatbot()">
+                        <i class="fas fa-comments"></i>
+                        Chat with AI Mentor
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Chatbot Modal -->
+    <div id="aiChatbotModal" class="modal">
+        <div class="modal-content chatbot-content">
+            <div class="chatbot-header">
+                <div class="chatbot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="chatbot-info">
+                    <h3>SheBalance AI Mentor</h3>
+                    <p>Your personalized learning companion</p>
+                </div>
+                <span class="close" onclick="closeAIChatbot()">&times;</span>
+            </div>
+            
+            <div class="chatbot-messages" id="chatMessages">
+                <div class="message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Hello! I'm your AI mentor. I can help you create personalized learning roadmaps, suggest skill improvements, and find career opportunities. What would you like to work on today?</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chatbot-suggestions">
+                <button class="suggestion-btn" onclick="sendSuggestion('Create a learning roadmap for advanced embroidery')">
+                    📚 Create Learning Roadmap
+                </button>
+                <button class="suggestion-btn" onclick="sendSuggestion('How can I improve my cooking skills?')">
+                    👩‍🍳 Improve Cooking Skills
+                </button>
+                <button class="suggestion-btn" onclick="sendSuggestion('Find job opportunities for my skills')">
+                    💼 Find Job Opportunities
+                </button>
+                <button class="suggestion-btn" onclick="sendSuggestion('Help me balance household work and career')">
+                    ⚖️ Work-Life Balance Tips
+                </button>
+            </div>
+            
+            <div class="chatbot-input">
+                <input type="text" id="chatInput" placeholder="Type your message or question...">
+                <button onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script src="skills.js"></script>
+</body>
+</html>

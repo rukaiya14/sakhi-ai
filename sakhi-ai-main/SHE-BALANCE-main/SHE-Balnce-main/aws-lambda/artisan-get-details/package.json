@@ -1,0 +1,12 @@
+{
+  "name": "shebalance-artisan-get-details",
+  "version": "1.0.0",
+  "description": "Get artisan details Lambda function for SHE-BALANCE platform",
+  "main": "index.js",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.450.0",
+    "@aws-sdk/lib-dynamodb": "^3.450.0"
+  },
+  "author": "SHE-BALANCE Team",
+  "license": "MIT"
+}

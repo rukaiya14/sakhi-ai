@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            color: #065f46;
+        }
+        .error {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+        }
+        .info {
+            background: #e0e7ff;
+            border: 2px solid #667eea;
+            color: #3730a3;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        pre {
+            background: #f9fafb;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Login API</h1>
+        
+        <div class="info">
+            <strong>Test Credentials:</strong><br>
+            Email: priya@example.com<br>
+            Password: artisan123
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" value="priya@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" value="artisan123" required>
+            </div>
+
+            <button type="submit" id="submitBtn">Test Login</button>
+        </form>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const resultDiv = document.getElementById('result');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Testing...';
+            resultDiv.style.display = 'none';
+
+            try {
+                console.log('Testing login API...');
+                console.log('Email:', email);
+                console.log('Password:', password);
+
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+                console.log('Response:', data);
+
+                if (response.ok) {
+                    // Success
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <strong>✅ Login Successful!</strong><br><br>
+                        <strong>User:</strong> ${data.user.fullName}<br>
+                        <strong>Email:</strong> ${data.user.email}<br>
+                        <strong>Role:</strong> ${data.user.role}<br>
+                        <strong>Status:</strong> ${data.user.status}<br><br>
+                        <strong>Token:</strong><br>
+                        <pre>${data.token.substring(0, 50)}...</pre>
+                        <br>
+                        <button onclick="goToDashboard('${data.user.role}', '${data.token}', '${JSON.stringify(data.user).replace(/"/g, '&quot;')}')">
+                            Go to Dashboard
+                        </button>
+                    `;
+                    resultDiv.style.display = 'block';
+                } else {
+                    // Error
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `
+                        <strong>❌ Login Failed</strong><br><br>
+                        <strong>Error:</strong> ${data.error || 'Unknown error'}<br><br>
+                        <strong>Response:</strong><br>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                    resultDiv.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <strong>❌ Connection Error</strong><br><br>
+                    <strong>Error:</strong> ${error.message}<br><br>
+                    <strong>Possible causes:</strong><br>
+                    • Backend server not running<br>
+                    • CORS issue<br>
+                    • Network error<br><br>
+                    <strong>Check:</strong><br>
+                    • Is backend running on port 5000?<br>
+                    • Open browser console for details
+                `;
+                resultDiv.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Test Login';
+            }
+        });
+
+        function goToDashboard(role, token, userStr) {
+            // Save to localStorage
+            localStorage.setItem('shebalance_token', token);
+            localStorage.setItem('shebalance_user', userStr);
+
+            // Redirect based on role
+            let url = 'dashboard.html';
+            switch(role) {
+                case 'admin':
+                    url = 'admin-dashboard.html';
+                    break;
+                case 'buyer':
+                    url = 'buyer-dashboard.html';
+                    break;
+                case 'corporate':
+                    url = 'corporate-dashboard.html';
+                    break;
+            }
+
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>

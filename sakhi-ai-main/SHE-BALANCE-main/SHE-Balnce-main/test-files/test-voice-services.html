@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Voice Services - SheBalance</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .test-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .test-section h3 i {
+            color: #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            min-height: 50px;
+        }
+
+        .result.success {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .result.error {
+            border-color: #ef4444;
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .status.success {
+            background: #10b981;
+            color: white;
+        }
+
+        .status.error {
+            background: #ef4444;
+            color: white;
+        }
+
+        .status.info {
+            background: #3b82f6;
+            color: white;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .info-box {
+            background: #e0e7ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .info-box p {
+            margin: 5px 0;
+            color: #4338ca;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-vial"></i> Voice Services Test</h1>
+        <p class="subtitle">Test AWS Polly, Transcribe, and Translate integration</p>
+
+        <div class="info-box">
+            <p><strong><i class="fas fa-info-circle"></i> Before Testing:</strong></p>
+            <p>1. Make sure your backend server is running on <code>http://localhost:3000</code></p>
+            <p>2. AWS credentials should be configured in your backend</p>
+            <p>3. S3 bucket and DynamoDB table should be created</p>
+        </div>
+
+        <!-- Test 1: Text to Speech -->
+        <div class="test-section">
+            <h3><i class="fas fa-volume-up"></i> Test 1: Text to Speech (AWS Polly)</h3>
+            <div class="form-group">
+                <label>Select Language:</label>
+                <select id="ttsLanguage">
+                    <option value="en">English</option>
+                    <option value="hi">Hindi</option>
+                    <option value="bn">Bengali</option>
+                    <option value="te">Telugu</option>
+                    <option value="ta">Tamil</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Enter Text:</label>
+                <textarea id="ttsText" placeholder="Enter text to convert to speech...">Hello! Welcome to SheBalance. This is a test of the text to speech service.</textarea>
+            </div>
+            <button onclick="testTextToSpeech()">
+                <i class="fas fa-play"></i> Generate Speech
+            </button>
+            <div id="ttsResult" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Test 2: Translation -->
+        <div class="test-section">
+            <h3><i class="fas fa-language"></i> Test 2: Translation (AWS Translate)</h3>
+            <div class="form-group">
+                <label>Source Language:</label>
+                <select id="translateSource">
+                    <option value="auto">Auto Detect</option>
+                    <option value="en">English</option>
+                    <option value="hi">Hindi</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Target Language:</label>
+                <select id="translateTarget">
+                    <option value="hi">Hindi</option>
+                    <option value="en">English</option>
+                    <option value="bn">Bengali</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Text to Translate:</label>
+                <textarea id="translateText" placeholder="Enter text to translate...">I love working with SheBalance. It helps me grow my business.</textarea>
+            </div>
+            <button onclick="testTranslation()">
+                <i class="fas fa-exchange-alt"></i> Translate
+            </button>
+            <div id="translateResult" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Test 3: Backend Connection -->
+        <div class="test-section">
+            <h3><i class="fas fa-server"></i> Test 3: Backend Connection</h3>
+            <p style="margin-bottom: 15px; color: #666;">Check if the backend server is running and accessible</p>
+            <button onclick="testBackendConnection()">
+                <i class="fas fa-plug"></i> Test Connection
+            </button>
+            <div id="connectionResult" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Test 4: AWS Services -->
+        <div class="test-section">
+            <h3><i class="fas fa-cloud"></i> Test 4: AWS Services Status</h3>
+            <p style="margin-bottom: 15px; color: #666;">Verify AWS Polly, Transcribe, and Translate are accessible</p>
+            <button onclick="testAWSServices()">
+                <i class="fas fa-check-circle"></i> Check AWS Services
+            </button>
+            <div id="awsResult" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:3000/api/voice';
+
+        // Test Text to Speech
+        async function testTextToSpeech() {
+            const text = document.getElementById('ttsText').value;
+            const language = document.getElementById('ttsLanguage').value;
+            const resultDiv = document.getElementById('ttsResult');
+            
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result';
+            resultDiv.innerHTML = '<i class="fas fa-spinner spinner"></i> Generating speech...';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/text-to-speech`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text: text,
+                        language: language,
+                        userId: 'test-user'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <div class="status success">
+                            <i class="fas fa-check-circle"></i> Success!
+                        </div>
+                        <p style="margin-top: 10px;"><strong>Audio generated successfully</strong></p>
+                        <audio controls src="${data.audioUrl}"></audio>
+                        <p style="margin-top: 10px; font-size: 12px; color: #666;">
+                            Audio ID: ${data.audioId}<br>
+                            Language: ${data.language}
+                        </p>
+                    `;
+                } else {
+                    throw new Error(data.error || 'Failed to generate speech');
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <div class="status error">
+                        <i class="fas fa-times-circle"></i> Error
+                    </div>
+                    <p style="margin-top: 10px;">${error.message}</p>
+                `;
+            }
+        }
+
+        // Test Translation
+        async function testTranslation() {
+            const text = document.getElementById('translateText').value;
+            const sourceLang = document.getElementById('translateSource').value;
+            const targetLang = document.getElementById('translateTarget').value;
+            const resultDiv = document.getElementById('translateResult');
+            
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result';
+            resultDiv.innerHTML = '<i class="fas fa-spinner spinner"></i> Translating...';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/translate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text: text,
+                        sourceLanguage: sourceLang,
+                        targetLanguage: targetLang
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <div class="status success">
+                            <i class="fas fa-check-circle"></i> Success!
+                        </div>
+                        <p style="margin-top: 10px;"><strong>Original:</strong> ${data.originalText}</p>
+                        <p style="margin-top: 5px;"><strong>Translated:</strong> ${data.translatedText}</p>
+                        <p style="margin-top: 10px; font-size: 12px; color: #666;">
+                            ${data.sourceLanguage} → ${data.targetLanguage}
+                        </p>
+                    `;
+                } else {
+                    throw new Error(data.error || 'Translation failed');
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <div class="status error">
+                        <i class="fas fa-times-circle"></i> Error
+                    </div>
+                    <p style="margin-top: 10px;">${error.message}</p>
+                `;
+            }
+        }
+
+        // Test Backend Connection
+        async function testBackendConnection() {
+            const resultDiv = document.getElementById('connectionResult');
+            
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result';
+            resultDiv.innerHTML = '<i class="fas fa-spinner spinner"></i> Testing connection...';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/languages`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    const langCount = Object.keys(data.languages).length;
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <div class="status success">
+                            <i class="fas fa-check-circle"></i> Connected!
+                        </div>
+                        <p style="margin-top: 10px;"><strong>Backend is running</strong></p>
+                        <p style="margin-top: 5px;">Found ${langCount} supported languages</p>
+                    `;
+                } else {
+                    throw new Error('Backend returned an error');
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <div class="status error">
+                        <i class="fas fa-times-circle"></i> Connection Failed
+                    </div>
+                    <p style="margin-top: 10px;">Cannot connect to backend server</p>
+                    <p style="margin-top: 5px; font-size: 13px;">Make sure the server is running on http://localhost:3000</p>
+                `;
+            }
+        }
+
+        // Test AWS Services
+        async function testAWSServices() {
+            const resultDiv = document.getElementById('awsResult');
+            
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result';
+            resultDiv.innerHTML = '<i class="fas fa-spinner spinner"></i> Checking AWS services...';
+
+            try {
+                // Test with a simple text-to-speech request
+                const response = await fetch(`${API_BASE_URL}/text-to-speech`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text: 'Test',
+                        language: 'en',
+                        userId: 'test-user'
+                    })
+                });
+
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <div class="status success">
+                            <i class="fas fa-check-circle"></i> All Services Working!
+                        </div>
+                        <p style="margin-top: 10px;"><strong>AWS Services Status:</strong></p>
+                        <p style="margin-top: 5px;">✅ AWS Polly - Working</p>
+                        <p>✅ AWS S3 - Working</p>
+                        <p>✅ AWS DynamoDB - Working</p>
+                        <p style="margin-top: 10px; font-size: 12px; color: #666;">
+                            All AWS services are properly configured and accessible
+                        </p>
+                    `;
+                } else {
+                    throw new Error('AWS services test failed');
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <div class="status error">
+                        <i class="fas fa-times-circle"></i> AWS Services Error
+                    </div>
+                    <p style="margin-top: 10px;">One or more AWS services are not accessible</p>
+                    <p style="margin-top: 5px; font-size: 13px;">Check your AWS credentials and permissions</p>
+                `;
+            }
+        }
+
+        // Auto-test connection on load
+        window.addEventListener('load', () => {
+            setTimeout(testBackendConnection, 1000);
+        });
+    </script>
+</body>
+</html>

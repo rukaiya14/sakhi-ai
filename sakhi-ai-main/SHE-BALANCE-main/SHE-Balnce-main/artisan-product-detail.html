@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - SheBalance</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #F5F5DC;
+            --beige: #E8DCC4;
+            --deep-brown: #4B3621;
+            --chocolate: #6B4423;
+            --terracotta: #C97D60;
+            --wheat: #D4A574;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--cream);
+            color: var(--deep-brown);
+        }
+        
+        /* Navigation */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 15px rgba(75, 54, 33, 0.1);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--deep-brown);
+        }
+        
+        .back-btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid var(--chocolate);
+            background: none;
+            color: var(--chocolate);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-btn:hover {
+            background: var(--chocolate);
+            color: white;
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+        
+        .product-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(75, 54, 33, 0.1);
+        }
+        
+        /* Image Gallery */
+        .image-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .main-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 2px solid var(--beige);
+        }
+        
+        .thumbnail-container {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid var(--beige);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .thumbnail:hover,
+        .thumbnail.active {
+            border-color: var(--chocolate);
+            transform: scale(1.05);
+        }
+        
+        /* Product Info */
+        .product-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--deep-brown);
+            margin-bottom: 15px;
+        }
+        
+        .badges {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .badge-handmade {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+        
+        .badge-sustainable {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+        
+        .price-section {
+            margin-bottom: 25px;
+        }
+        
+        .price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--deep-brown);
+            margin-bottom: 10px;
+        }
+        
+        .stock-info {
+            color: var(--chocolate);
+            font-size: 0.95rem;
+        }
+        
+        /* Size Selection */
+        .size-section {
+            margin-bottom: 25px;
+        }
+        
+        .section-label {
+            font-weight: 600;
+            color: var(--deep-brown);
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .size-options {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .size-option {
+            padding: 12px 20px;
+            border: 2px solid var(--beige);
+            border-radius: 25px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .size-option:hover,
+        .size-option.active {
+            border-color: var(--chocolate);
+            background: var(--chocolate);
+            color: white;
+        }
+        
+        /* Add to Cart Button */
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 165, 0, 0.3);
+        }
+        
+        .sku {
+            color: var(--chocolate);
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+        
+        /* Expandable Sections */
+        .expandable-section {
+            border-bottom: 1px solid var(--beige);
+            margin-bottom: 0;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s;
+        }
+        
+        .section-header:hover {
+            color: var(--chocolate);
+        }
+        
+        .section-header h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--deep-brown);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .section-header i {
+            color: var(--chocolate);
+            transition: transform 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .section-header.active i {
+            transform: rotate(180deg);
+        }
+        
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .section-content.active {
+            max-height: 2000px;
+            padding-bottom: 20px;
+        }
+        
+        .section-content p {
+            color: var(--chocolate);
+            line-height: 1.8;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        
+        .section-content strong {
+            color: var(--deep-brown);
+            font-weight: 600;
+        }
+        
+        /* Invisible Labor Section */
+        .labor-breakdown {
+            background: linear-gradient(135deg, #FFF9E6, #FFE4B5);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .labor-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 165, 0, 0.2);
+        }
+        
+        .labor-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .labor-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--deep-brown);
+        }
+        
+        .labor-value {
+            font-weight: 600;
+            color: var(--deep-brown);
+        }
+        
+        /* Reviews */
+        .review-item {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--beige);
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .reviewer-name {
+            font-weight: 600;
+            color: var(--deep-brown);
+        }
+        
+        .review-date {
+            color: var(--chocolate);
+            font-size: 0.85rem;
+        }
+        
+        .stars {
+            color: #FFD700;
+            margin-bottom: 8px;
+        }
+        
+        .review-text {
+            color: var(--chocolate);
+            line-height: 1.5;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .product-detail {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .main-image {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">SHEBALANCE</div>
+        <a href="artisan-marketplace.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Marketplace
+        </a>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="product-detail">
+            <!-- Image Gallery -->
+            <div class="image-gallery">
+                <img id="mainImage" src="" alt="Product" class="main-image">
+                <div class="thumbnail-container" id="thumbnailContainer">
+                    <!-- Thumbnails will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="product-info">
+                <h1 class="product-title" id="productTitle"></h1>
+                
+                <div class="badges">
+                    <span class="badge badge-handmade">
+                        <i class="fas fa-hand-sparkles"></i> Handmade
+                    </span>
+                    <span class="badge badge-sustainable">
+                        <i class="fas fa-leaf"></i> Sustainable
+                    </span>
+                </div>
+                
+                <div class="price-section">
+                    <div class="price" id="productPrice">₹0.00</div>
+                    <div class="stock-info">Size available: <span id="sizeInfo"></span></div>
+                </div>
+                
+                <div class="size-section">
+                    <label class="section-label">SIZE</label>
+                    <div class="size-options" id="sizeOptions">
+                        <!-- Size options will be inserted here -->
+                    </div>
+                </div>
+                
+                <button class="add-to-cart-btn" id="addToCartBtn">
+                    ADD TO CART
+                </button>
+                
+                <div class="sku">SKU: <span id="productSKU"></span></div>
+                
+                <!-- Expandable Sections -->
+                <div class="expandable-sections">
+                    <!-- Description -->
+                    <div class="expandable-section">
+                        <div class="section-header" data-toggle="section">
+                            <h3>DESCRIPTION</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="section-content">
+                            <p id="productDescription"></p>
+                            <p><strong>Artisan:</strong> <span id="artisanName"></span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Invisible Labor & Price Justification -->
+                    <div class="expandable-section">
+                        <div class="section-header" data-toggle="section">
+                            <h3>💎 INVISIBLE LABOR & PRICE JUSTIFICATION</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="section-content">
+                            <div class="labor-breakdown" id="laborBreakdown">
+                                <!-- Labor breakdown will be inserted here -->
+                            </div>
+                            <p style="font-style: italic; color: var(--chocolate); margin-top: 15px;">
+                                <i class="fas fa-heart"></i> Your purchase supports fair wages, preserves traditional crafts, 
+                                and recognizes the invisible labor that goes into every handmade piece.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Shipping & Delivery -->
+                    <div class="expandable-section">
+                        <div class="section-header" data-toggle="section">
+                            <h3>SHIPPING & DELIVERY</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="section-content">
+                            <p><strong>Delivery Time:</strong> 5-7 business days</p>
+                            <p><strong>Shipping Cost:</strong> ₹50 (Free shipping on orders above ₹1000)</p>
+                            <p><strong>Tracking:</strong> Available once shipped</p>
+                            <p><strong>International Shipping:</strong> Available on request</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Exchange and Returns -->
+                    <div class="expandable-section">
+                        <div class="section-header" data-toggle="section">
+                            <h3>EXCHANGE AND RETURNS</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="section-content">
+                            <p><strong>Return Period:</strong> 7 days from delivery</p>
+                            <p><strong>Condition:</strong> Product must be unused and in original packaging</p>
+                            <p><strong>Process:</strong> Contact us to initiate return/exchange</p>
+                            <p><strong>Refund:</strong> Processed within 5-7 business days</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Product Care -->
+                    <div class="expandable-section">
+                        <div class="section-header" data-toggle="section">
+                            <h3>PRODUCT CARE</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="section-content">
+                            <p><strong>Cleaning:</strong> Hand wash with mild detergent</p>
+                            <p><strong>Drying:</strong> Air dry in shade, avoid direct sunlight</p>
+                            <p><strong>Storage:</strong> Store in a cool, dry place</p>
+                            <p><strong>Ironing:</strong> Use low heat if needed</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Ask a Question -->
+                    <div class="expandable-section">
+                        <div class="section-header" data-toggle="section">
+                            <h3>ASK A QUESTION</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="section-content">
+                            <p>Have questions about this product? We're here to help!</p>
+                            <p><strong>Email:</strong> support@shebalance.com</p>
+                            <p><strong>Phone:</strong> +91 1234567890</p>
+                            <p><strong>Response Time:</strong> Within 24 hours</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Reviews -->
+                    <div class="expandable-section">
+                        <div class="section-header" data-toggle="section">
+                            <h3>REVIEWS</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="section-content">
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <span class="reviewer-name">Priya S.</span>
+                                    <span class="review-date">2 weeks ago</span>
+                                </div>
+                                <div class="stars">★★★★★</div>
+                                <p class="review-text">Beautiful craftsmanship! The quality is exceptional and you can really see the care that went into making this.</p>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <span class="reviewer-name">Anjali M.</span>
+                                    <span class="review-date">1 month ago</span>
+                                </div>
+                                <div class="stars">★★★★★</div>
+                                <p class="review-text">Love supporting women artisans! The product exceeded my expectations.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get product ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = parseInt(urlParams.get('id'));
+        
+        // Default products data
+        const defaultProducts = [
+            {
+                id: 1,
+                name: 'Embroidered Designer Frock',
+                category: 'embroidery',
+                artisan: 'Rukaiya',
+                description: 'Exquisite designer frock featuring intricate hand-embroidered patterns that showcase the finest traditional needlework. This stunning piece combines contemporary silhouette with timeless embroidery techniques, where each stitch is carefully placed to create mesmerizing floral and geometric motifs. The delicate threadwork flows gracefully across the fabric, creating a harmonious blend of colors and textures. Perfect for special occasions, weddings, or festive celebrations, this frock represents countless hours of skilled craftsmanship and artistic dedication. Available in multiple color variations, each piece is unique and tells its own story of heritage artistry.',
+                image: 'embroidery-images/Screenshot 2026-03-04 111048.png',
+                images: [
+                    'embroidery-images/Screenshot 2026-03-04 111048.png',
+                    'embroidery-images/Screenshot 2026-03-04 111121.png'
+                ],
+                variants: [
+                    { color: 'Pink & Gold', pattern: 'Floral Embroidery', image: 'embroidery-images/Screenshot 2026-03-04 111048.png' },
+                    { color: 'Peach & Maroon', pattern: 'Traditional Motifs', image: 'embroidery-images/Screenshot 2026-03-04 111121.png' }
+                ],
+                materialCost: 800,
+                effortCost: 1200,
+                invisibleLabor: {
+                    designHours: 12,
+                    heritageValue: 500,
+                    sourcingEffort: 200,
+                    qualityControl: 300
+                },
+                price: 3000
+            },
+            {
+                id: 2,
+                name: 'Traditional Embroidered Kurta Set',
+                category: 'embroidery',
+                artisan: 'Rukaiya',
+                description: 'Elegant traditional kurta set adorned with exquisite hand embroidery that reflects the rich cultural heritage of Indian craftsmanship. This beautiful ensemble features intricate needlework along the neckline, sleeves, and hemline, with delicate patterns inspired by centuries-old designs. The embroidery showcases a perfect balance of traditional motifs and contemporary aesthetics, making it versatile for both casual and formal occasions. Each thread is carefully selected for its quality and color fastness, ensuring the piece maintains its beauty for years. The comfortable fit and breathable fabric make it ideal for all-day wear, while the stunning embroidery adds a touch of sophistication and elegance.',
+                image: 'embroidery-images/Screenshot 2026-03-04 111154.png',
+                materialCost: 600,
+                effortCost: 900,
+                invisibleLabor: {
+                    designHours: 10,
+                    heritageValue: 400,
+                    sourcingEffort: 150,
+                    qualityControl: 250
+                },
+                price: 2300
+            },
+            {
+                id: 3,
+                name: 'Embroidered Ethnic Dress',
+                category: 'embroidery',
+                artisan: 'Rukaiya',
+                description: 'Stunning ethnic dress featuring elaborate hand-embroidered designs that celebrate the artistry of traditional needlework. This masterpiece showcases intricate patterns meticulously crafted with premium quality threads, creating a visual symphony of colors and textures. The embroidery work includes delicate floral motifs, paisley patterns, and geometric designs that flow seamlessly across the fabric. Every stitch represents hours of dedicated craftsmanship, with the artisan carefully planning and executing each element to perfection. The dress combines comfort with elegance, making it perfect for weddings, festivals, and special celebrations. The timeless design ensures it remains a cherished piece in your wardrobe for years to come.',
+                image: 'embroidery-images/Screenshot 2026-03-04 111208.png',
+                materialCost: 700,
+                effortCost: 1000,
+                invisibleLabor: {
+                    designHours: 11,
+                    heritageValue: 450,
+                    sourcingEffort: 180,
+                    qualityControl: 270
+                },
+                price: 2600
+            },
+            {
+                id: 4,
+                name: 'Premium Embroidered Anarkali',
+                category: 'embroidery',
+                artisan: 'Rukaiya',
+                description: 'Luxurious Anarkali dress featuring breathtaking hand embroidery that exemplifies the pinnacle of traditional Indian craftsmanship. This regal piece showcases an intricate tapestry of embroidered patterns, with each motif carefully designed and executed to create a harmonious visual masterpiece. The embroidery work includes elaborate floral designs, traditional paisleys, and ornate borders that enhance the flowing silhouette of the Anarkali. Premium quality threads in complementary colors create depth and dimension, while the strategic placement of embroidery accentuates the dress\'s elegant lines. Perfect for grand celebrations, weddings, and formal events, this piece represents the culmination of artistic vision and skilled execution.',
+                image: 'embroidery-images/Screenshot 2026-03-04 111428.png',
+                materialCost: 900,
+                effortCost: 1400,
+                invisibleLabor: {
+                    designHours: 15,
+                    heritageValue: 600,
+                    sourcingEffort: 250,
+                    qualityControl: 350
+                },
+                price: 3500
+            },
+            {
+                id: 5,
+                name: 'Handcrafted Embroidered Gown',
+                category: 'embroidery',
+                artisan: 'Rukaiya',
+                description: 'Magnificent handcrafted gown adorned with spectacular hand embroidery that transforms fabric into wearable art. This exceptional piece features an extensive array of embroidered elements, from delicate floral sprays to bold geometric patterns, all meticulously stitched by skilled artisan hands. The embroidery work demonstrates mastery of various traditional techniques, including chain stitch, satin stitch, and French knots, creating rich textures and visual interest. The color palette is carefully curated to complement the base fabric while allowing the embroidery to shine. This gown is perfect for brides, special occasions, or anyone seeking a truly unique and luxurious garment that celebrates the beauty of handcrafted artistry.',
+                image: 'embroidery-images/Screenshot 2026-03-04 111616.png',
+                materialCost: 1000,
+                effortCost: 1600,
+                invisibleLabor: {
+                    designHours: 18,
+                    heritageValue: 700,
+                    sourcingEffort: 300,
+                    qualityControl: 400
+                },
+                price: 4000
+            },
+            {
+                id: 6,
+                name: 'Crochet Baby Blanket',
+                category: 'crochet',
+                artisan: 'Priya Sharma',
+                description: 'Soft, breathable baby blanket lovingly crocheted with premium cotton yarn in soothing pastel colors. Every loop and stitch is crafted with care to ensure maximum comfort and warmth for your little one. The hypoallergenic material and gentle texture make it perfect for sensitive baby skin, while the durable construction ensures it becomes a cherished keepsake for years to come. This handmade blanket represents hours of patient work and maternal care woven into every row.',
+                image: 'https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=400',
+                materialCost: 400,
+                effortCost: 1000,
+                invisibleLabor: {
+                    designHours: 8,
+                    heritageValue: 250,
+                    sourcingEffort: 100,
+                    qualityControl: 150
+                },
+                price: 1900
+            },
+            {
+                id: 7,
+                name: 'Traditional Henna Design Service',
+                category: 'henna',
+                artisan: 'Fatima Khan',
+                description: 'Exquisite traditional henna artistry for weddings, festivals, and special celebrations. Using 100% natural, chemical-free henna paste, each design is customized to reflect your personal style while honoring centuries-old patterns and symbolism. From intricate bridal mehndi to contemporary fusion designs, experience the ancient art of henna application with modern elegance and precision. Every design tells a story and carries blessings for prosperity and happiness.',
+                image: 'https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=400',
+                materialCost: 200,
+                effortCost: 600,
+                invisibleLabor: {
+                    designHours: 3,
+                    heritageValue: 400,
+                    sourcingEffort: 50,
+                    qualityControl: 100
+                },
+                price: 1350
+            },
+            {
+                id: 8,
+                name: 'Handwoven Cotton Table Runner',
+                category: 'weaving',
+                artisan: 'Lakshmi Devi',
+                description: 'Stunning handwoven table runner crafted on a traditional loom using 100% organic cotton threads. The geometric patterns are inspired by ancient tribal motifs, with each thread carefully selected and woven to create a harmonious blend of colors and textures. This versatile piece adds warmth and character to any dining space while celebrating sustainable, eco-friendly craftsmanship. The traditional weaving techniques used have been passed down through generations.',
+                image: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=400',
+                materialCost: 300,
+                effortCost: 700,
+                invisibleLabor: {
+                    designHours: 4,
+                    heritageValue: 350,
+                    sourcingEffort: 120,
+                    qualityControl: 180
+                },
+                price: 1650
+            },
+            {
+                id: 9,
+                name: 'Beaded Necklace Set',
+                category: 'jewelry',
+                artisan: 'Anjali Patel',
+                description: 'Elegant handcrafted necklace and earring set featuring carefully selected glass beads, semi-precious stones, and metallic accents. Each bead is individually strung and secured with precision, creating a stunning piece that transitions seamlessly from day to evening wear. The lightweight design ensures comfort while the intricate beadwork showcases traditional jewelry-making techniques with a contemporary twist. This versatile set complements both traditional and modern attire.',
+                image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400',
+                materialCost: 600,
+                effortCost: 500,
+                invisibleLabor: {
+                    designHours: 6,
+                    heritageValue: 200,
+                    sourcingEffort: 180,
+                    qualityControl: 220
+                },
+                price: 1700
+            },
+            {
+                id: 10,
+                name: 'Handmade Clay Pottery Set',
+                category: 'pottery',
+                artisan: 'Meera Reddy',
+                description: 'Authentic terracotta pottery set of 4 pieces, hand-thrown on a potter\'s wheel and fired in a traditional kiln. Each pot features unique hand-carved patterns inspired by regional folk art, with a natural earthy finish that celebrates the raw beauty of clay. Perfect for serving traditional dishes, storing spices, or as decorative pieces that bring rustic charm to your home. The ancient pottery techniques used create pieces that are both functional and artistic.',
+                image: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=400',
+                materialCost: 250,
+                effortCost: 900,
+                invisibleLabor: {
+                    designHours: 7,
+                    heritageValue: 300,
+                    sourcingEffort: 100,
+                    qualityControl: 250
+                },
+                price: 1800
+            }
+        ];
+        
+        // Load product data from localStorage or use defaults
+        const products = JSON.parse(localStorage.getItem('artisanProducts')) || defaultProducts;
+        const product = products.find(p => p.id === productId);
+        
+        if (product) {
+            // Set product details
+            document.getElementById('productTitle').textContent = product.name;
+            document.getElementById('productPrice').textContent = `₹${product.price.toFixed(2)}`;
+            document.getElementById('sizeInfo').textContent = '2x3 ft';
+            document.getElementById('productSKU').textContent = `MTWB${product.id}`;
+            document.getElementById('productDescription').textContent = product.description;
+            document.getElementById('artisanName').textContent = product.artisan;
+            
+            // Set main image
+            document.getElementById('mainImage').src = product.image;
+            document.getElementById('mainImage').onerror = function() {
+                this.src = 'https://via.placeholder.com/500x500?text=Artisan+Product';
+            };
+            
+            // Create thumbnails
+            const thumbnailContainer = document.getElementById('thumbnailContainer');
+            const imagesToShow = product.images || [product.image];
+            imagesToShow.forEach((img, i) => {
+                const thumb = document.createElement('img');
+                thumb.src = img;
+                thumb.className = 'thumbnail' + (i === 0 ? ' active' : '');
+                thumb.dataset.imageUrl = img;
+                thumb.addEventListener('click', function() {
+                    document.getElementById('mainImage').src = this.dataset.imageUrl;
+                    document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+                thumb.onerror = function() {
+                    this.src = 'https://via.placeholder.com/80x80?text=Product';
+                };
+                thumbnailContainer.appendChild(thumb);
+            });
+            
+            // Create size/variant options
+            const sizeOptions = document.getElementById('sizeOptions');
+            if (product.variants && product.variants.length > 0) {
+                // Show color/pattern variants
+                document.querySelector('.section-label').textContent = 'COLOR & PATTERN';
+                product.variants.forEach((variant, index) => {
+                    const option = document.createElement('button');
+                    option.className = 'size-option' + (index === 0 ? ' active' : '');
+                    option.textContent = `${variant.color}\n${variant.pattern}`;
+                    option.dataset.variantImage = variant.image;
+                    option.addEventListener('click', function() {
+                        document.querySelectorAll('.size-option').forEach(o => o.classList.remove('active'));
+                        this.classList.add('active');
+                        document.getElementById('mainImage').src = this.dataset.variantImage;
+                    });
+                    sizeOptions.appendChild(option);
+                });
+            } else {
+                // Show default size
+                const size = document.createElement('button');
+                size.className = 'size-option active';
+                size.textContent = 'One Size';
+                sizeOptions.appendChild(size);
+            }
+            
+            // Create labor breakdown
+            const laborBreakdown = document.getElementById('laborBreakdown');
+            const totalInvisibleLabor = 
+                product.invisibleLabor.heritageValue +
+                product.invisibleLabor.sourcingEffort +
+                product.invisibleLabor.qualityControl;
+            
+            laborBreakdown.innerHTML = `
+                <div class="labor-item">
+                    <div class="labor-label">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>Raw Materials</span>
+                    </div>
+                    <div class="labor-value">₹${product.materialCost.toFixed(2)}</div>
+                </div>
+                <div class="labor-item">
+                    <div class="labor-label">
+                        <i class="fas fa-hands"></i>
+                        <span>Artisan Effort</span>
+                    </div>
+                    <div class="labor-value">₹${product.effortCost.toFixed(2)}</div>
+                </div>
+                <div class="labor-item">
+                    <div class="labor-label">
+                        <i class="fas fa-pencil-ruler"></i>
+                        <span>Design & Planning (${product.invisibleLabor.designHours} hours)</span>
+                    </div>
+                    <div class="labor-value">Time Investment</div>
+                </div>
+                <div class="labor-item">
+                    <div class="labor-label">
+                        <i class="fas fa-landmark"></i>
+                        <span>Heritage & Traditional Skills</span>
+                    </div>
+                    <div class="labor-value">₹${product.invisibleLabor.heritageValue.toFixed(2)}</div>
+                </div>
+                <div class="labor-item">
+                    <div class="labor-label">
+                        <i class="fas fa-search"></i>
+                        <span>Material Sourcing Effort</span>
+                    </div>
+                    <div class="labor-value">₹${product.invisibleLabor.sourcingEffort.toFixed(2)}</div>
+                </div>
+                <div class="labor-item">
+                    <div class="labor-label">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Quality Control & Finishing</span>
+                    </div>
+                    <div class="labor-value">₹${product.invisibleLabor.qualityControl.toFixed(2)}</div>
+                </div>
+                <div class="labor-item">
+                    <div class="labor-label">
+                        <i class="fas fa-heart"></i>
+                        <span>Total Product Value</span>
+                    </div>
+                    <div class="labor-value">₹${product.price.toFixed(2)}</div>
+                </div>
+            `;
+        } else {
+            alert('Product not found!');
+            window.location.href = 'artisan-marketplace.html';
+        }
+        
+        // Add event listeners for section toggles
+        document.querySelectorAll('[data-toggle="section"]').forEach(header => {
+            header.addEventListener('click', function() {
+                toggleSection(this);
+            });
+        });
+        
+        // Add event listener for add to cart button
+        const addToCartBtn = document.getElementById('addToCartBtn');
+        if (addToCartBtn) {
+            addToCartBtn.addEventListener('click', addToCart);
+        }
+        
+        // Toggle expandable sections
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            const isActive = header.classList.contains('active');
+            
+            // Close all sections
+            document.querySelectorAll('.section-header').forEach(h => h.classList.remove('active'));
+            document.querySelectorAll('.section-content').forEach(c => c.classList.remove('active'));
+            
+            // Open clicked section if it wasn't active
+            if (!isActive) {
+                header.classList.add('active');
+                content.classList.add('active');
+            }
+        }
+        
+        // Add to cart function
+        function addToCart() {
+            let cart = JSON.parse(localStorage.getItem('artisanCart')) || [];
+            const existingItem = cart.find(item => item.id === product.id);
+            
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            
+            localStorage.setItem('artisanCart', JSON.stringify(cart));
+            alert('Product added to cart!');
+        }
+    </script>
+</body>
+</html>

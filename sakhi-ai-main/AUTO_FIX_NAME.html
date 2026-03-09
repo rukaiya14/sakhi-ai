@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Fix Name</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        .loading {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 2px solid #bee5eb;
+        }
+        .countdown {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon" id="icon">⏳</div>
+        <h1>Fixing Dashboard Name...</h1>
+        
+        <div class="status loading" id="status">
+            Updating name to "Rukaiya Khan"...
+        </div>
+        
+        <div class="countdown" id="countdown"></div>
+    </div>
+    
+    <script>
+        // Auto-execute on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const statusDiv = document.getElementById('status');
+            const countdownDiv = document.getElementById('countdown');
+            const iconDiv = document.getElementById('icon');
+            
+            setTimeout(() => {
+                try {
+                    // Get current user data
+                    const userDataStr = localStorage.getItem('shebalance_user');
+                    
+                    if (!userDataStr) {
+                        iconDiv.textContent = '⚠️';
+                        statusDiv.className = 'status error';
+                        statusDiv.innerHTML = '<strong>No user data found!</strong><br><br>Please login first at:<br><a href="http://localhost:8080/login.html" style="color: #667eea; text-decoration: none; font-weight: bold;">http://localhost:8080/login.html</a>';
+                        return;
+                    }
+                    
+                    const userData = JSON.parse(userDataStr);
+                    const oldName = userData.name || userData.fullName || 'Unknown';
+                    
+                    // Update the name
+                    userData.name = 'Rukaiya Khan';
+                    userData.fullName = 'Rukaiya Khan';
+                    
+                    // Save back to localStorage
+                    localStorage.setItem('shebalance_user', JSON.stringify(userData));
+                    
+                    // Success!
+                    iconDiv.textContent = '✅';
+                    statusDiv.className = 'status success';
+                    statusDiv.innerHTML = `
+                        <strong>✅ NAME UPDATED SUCCESSFULLY!</strong><br><br>
+                        <strong>Before:</strong> <s>${oldName}</s><br>
+                        <strong>After:</strong> <span style="color: green; font-weight: bold;">Rukaiya Khan</span><br><br>
+                        Redirecting to dashboard...
+                    `;
+                    
+                    // Countdown and redirect
+                    let seconds = 3;
+                    countdownDiv.textContent = `Redirecting in ${seconds}...`;
+                    
+                    const interval = setInterval(() => {
+                        seconds--;
+                        if (seconds > 0) {
+                            countdownDiv.textContent = `Redirecting in ${seconds}...`;
+                        } else {
+                            clearInterval(interval);
+                            countdownDiv.textContent = 'Redirecting now...';
+                            // Redirect to dashboard
+                            window.location.href = 'http://localhost:8080/dashboard.html';
+                        }
+                    }, 1000);
+                    
+                } catch (error) {
+                    iconDiv.textContent = '❌';
+                    statusDiv.className = 'status error';
+                    statusDiv.innerHTML = `
+                        <strong>❌ Error occurred!</strong><br><br>
+                        ${error.message}<br><br>
+                        Please try logging out and logging in again.
+                    `;
+                }
+            }, 500); // Small delay for visual effect
+        });
+    </script>
+</body>
+</html>
